@@ -1,0 +1,10 @@
+0.3.1
+ - Added quick board generation.
+ - Added simple user accounts to demo protected routes and further features
+ - Added MongoDB as possible storage.
+ - Updated server-app from netcore2.1.0 to netcore 2.1.2
+
+0.3.0
+ - Added JWT authentification and Refresh tokens.
+ - Updated server-app from netcore2.0 to netcore 2.1 
+ - Updated client app to use signalr 1.0.0
