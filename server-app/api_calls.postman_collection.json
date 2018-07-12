@@ -1,0 +1,215 @@
+{
+	"info": {
+		"_postman_id": "731d1962-d868-46bc-9235-b48666ff8d04",
+		"name": "bShip",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth/Token",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\tAccessToken : \"EAAWtlGIldtwBAPZAdWWwQ2ZB625I2kLownH5LZAQhLRfYltuR5ZBHe758qnpGrxY5r7wTiVvzrlxlCpWUIxzmM7MOXKiGjfVUPj7z2c3AWdzyWO8nax3o0aBi3EF7ZAXhMk4TmKt2g91yeDz7kG6zZBF2BmWo75LMqoRnZC6FVWikC9jT3955lf1fg3Y6pJT2sZD\"\n}\n"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/externalauth/facebook",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"externalauth",
+						"facebook"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Auth/Refresh",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"token\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGRvbWFpbi5jb20iLCJlbWFpbCI6InVzZXJAZG9tYWluLmNvbSIsImp0aSI6ImQ2ZTRiZDViLWMzNTctNGQzMC1hZTJlLTg4MmU5MDMwMGQ0MiIsImV4cCI6MTUzMTQwMTExMSwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo2MzM1NC8iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjYzMzU0LyJ9.COqdldAspXlTnfrebAb4GvN3ebbioJXMKwePLvcefk8\",\r\n  \"refreshToken\": \"FbdlTMMUN4cuEnkPYpkuVOgw56LJcEi2cTN1OTwoh6k=\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/Auth/Refresh",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Auth",
+						"Refresh"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Account/Register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"USER@domain.com\",\r\n  \"password\": \"password\",\r\n  \"firstName\": \"Test\",\r\n  \"lastName\": \"User\"\r\n}"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/Account/Register",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Account",
+						"Register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game/ValidateBoard",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJ1c2VyQGRvbWFpbi5jb20iLCJlbWFpbCI6InVzZXJAZG9tYWluLmNvbSIsImp0aSI6IjM5ZjYyODNmLThlMTQtNDUzNS04YzExLTE2MGY5MjEzYTE4YyIsImV4cCI6MTUzMTIzMTAwMCwiaXNzIjoiaHR0cDovL2xvY2FsaG9zdDo2MzM1NC8iLCJhdWQiOiJodHRwOi8vbG9jYWxob3N0OjYzMzU0LyJ9.Y86E1GO3v4Ys6X6CT8Um4a0dcPSJla6MLYDn6-6HnyA",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"title\":\"4X\",\"vertical\":false,\"cells\":[null,null,null,null],\"hits\":0},\n\t{\"title\":\"3X\",\"vertical\":false,\"cells\":[null,null,null],\"hits\":0},\n\t{\"title\":\"3X\",\"vertical\":false,\"cells\":[null,null,null],\"hits\":0},\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[null,null],\"hits\":0},\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[null,null],\"hits\":0},\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[null,null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0}\n]"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/Game/ValidateBoard",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Game",
+						"ValidateBoard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game/GenerateBoard",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\n\t{\"title\":\"4X\",\"vertical\":false,\"cells\":[null,null,null,null],\"hits\":0},\n\t{\"title\":\"3X\",\"vertical\":false,\"cells\":[null,null,null],\"hits\":0},\n\t{\"title\":\"3X\",\"vertical\":false,\"cells\":[null,null,null],\"hits\":0},\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[null,null],\"hits\":0},\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[null,null],\"hits\":0},\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[null,null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0},\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[null],\"hits\":0}\n]"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/Game/GenerateBoard",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Game",
+						"GenerateBoard"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game/StartNewGame",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "connectionId"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/Game/StartNewGame",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Game",
+						"StartNewGame"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Game/StopGame",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n\"gameId\":\"ca8d6ee6-f084-4d8b-bd09-e26fb5c9886a\",\r\n\"ships\":[\r\n\t{\"title\":\"4X\",\"vertical\":false,\"cells\":[3,4,5,6],\"hits\":4},\r\n\t{\"title\":\"3X\",\"vertical\":false,\"cells\":[26,27,28],\"hits\":3},\r\n\t{\"title\":\"3X\",\"vertical\":false,\"cells\":[30,31,32],\"hits\":3},\r\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[55,56],\"hits\":1},\r\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[81,82],\"hits\":1},\r\n\t{\"title\":\"2X\",\"vertical\":false,\"cells\":[88,89],\"hits\":0},\r\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[58],\"hits\":0},\r\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[61],\"hits\":0},\r\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[24],\"hits\":0},\r\n\t{\"title\":\"1X\",\"vertical\":false,\"cells\":[85],\"hits\":0}\r\n\t]\r\n}"
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/Game/StopGame",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Game",
+						"StopGame"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}

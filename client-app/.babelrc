@@ -1,0 +1,9 @@
+{
+  "presets": ["react","es2015","stage-3"],
+  "plugins": ["emotion","syntax-async-functions"],
+  "env": {
+    "development": {
+      "presets": ["react-hmre"]
+    }
+  }
+}                              

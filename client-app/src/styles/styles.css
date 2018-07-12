@@ -1,0 +1,149 @@
+body {
+}
+
+ol, ul {
+    padding-left: 30px;
+}
+
+.board-row:after {
+    clear: both;
+    content: "";
+    display: table;
+}
+
+.status {
+    margin-bottom: 10px;
+}
+
+.cell, .cell-selected {
+    background: #fff;
+    float: left;
+    font-size: 24px;
+    font-weight: bold;
+    line-height: 4px;
+    height: 40px;
+    margin-right: -1px;
+    margin-top: -1px;
+    padding: 0;
+    text-align: center;
+    width: 40px;
+}
+
+  .cell:focus {
+      outline: none;
+  }
+
+.cell{
+  border: 1px solid #999;
+}
+
+.cell-selected {
+  border: 4px solid #000;
+}
+.cell-highlight{
+  background: #F89900;
+}
+
+.kbd-navigation .square:focus {
+  background: #ddd;
+}
+
+
+.game-board{
+  margin-top: 10px;
+  min-width: 400px
+}
+.game-info {
+  margin-left: 20px;
+}
+
+.game-menu{
+  margin: 20px 0 20px 0;
+}
+
+.control-button{
+  margin-left:10px
+}
+
+.round-button {
+  border: none;
+  color: white;
+  padding: 20px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 16px;
+  margin: 4px 2px;
+  border-radius: 50%;
+}
+.round-button::active {
+  background-color: #F89900;
+  outline: none;
+  border: none;
+}
+.round-button:focus {
+  outline:0;
+}
+.round-button:hover {
+  cursor: pointer;
+  background-color: #F89900;
+}
+.ship-button-active{
+  background-color: #F89900 !important;
+  outline: none;
+}
+.ship-button-assigned{
+  background-color: #4CAF50;
+  outline: none;
+}
+
+.centered{
+  margin: 0 auto;
+}
+
+.form-signin {
+  max-width: 330px;
+  padding: 15px;
+  margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+  margin-bottom: 10px;
+}
+.form-signin .checkbox {
+  font-weight: 400;
+}
+.form-signin .form-control {
+  position: relative;
+  box-sizing: border-box;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+.form-signin .form-control:focus {
+  z-index: 2;
+}
+.form-signin input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+.form-signin input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.welcome-div{
+  margin: auto;
+  width: 50%;
+  text-align: center;
+  padding: 10px;
+}
+
+.bar-loader{
+  margin: auto;
+  width: 100px;
+  text-align: center;
+  padding: 10px;
+}

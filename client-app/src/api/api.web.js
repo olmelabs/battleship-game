@@ -1,0 +1,125 @@
+import {API_URL} from './api.config';
+
+class GameApi {
+  static validateBoard(ships) {
+    return postDataReturnJsonWithRefreshAsync('Game/ValidateBoard/', ships);
+  }
+  static generateBoard() {
+    return postDataReturnJsonWithRefreshAsync('Game/GenerateBoard/');
+  }
+  static startNewGame(connectionId) {
+    return postDataReturnJsonWithRefreshAsync('Game/StartNewGame/', connectionId);
+  }
+
+  static stopGame(gameId) {
+    return postDataReturnJsonWithRefreshAsync('Game/StopGame/', gameId);
+  }
+
+  static fireCannon(shotData) {
+    return postDataReturnJsonWithRefreshAsync('Game/FireCannon/', shotData);
+  }
+
+  static fireCannonResponse(shotResult){
+    return postDataReturnJsonWithRefreshAsync('Game/FireCannonProcessResult', shotResult);
+  }
+
+  static login(email, password) {
+    return postDataReturnJson('Auth/Token', {email, password});
+  }
+
+  static register(user) {
+    return postDataReturnJson('Account/Register', user);
+  }
+}
+
+//https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+function postData(url, data) {
+  // Default options are marked with *
+  return fetch(API_URL + url, {
+    body: JSON.stringify(data), // must match 'Content-Type' header
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, same-origin, *omit
+    headers: addHeaders(),
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, cors, *same-origin
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // *client, no-referrer
+  });
+}
+
+function postDataReturnJson(url, data) {
+  return postData(url, data)
+    .then(response => response.json());
+}
+
+async function postDataAsync(url, data) {
+  // Default options are marked with *
+  return await fetch(API_URL + url, {
+    body: JSON.stringify(data), // must match 'Content-Type' header
+    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: 'same-origin', // include, same-origin, *omit
+    headers: addHeaders(),
+    method: 'POST', // *GET, POST, PUT, DELETE, etc.
+    mode: 'cors', // no-cors, cors, *same-origin
+    redirect: 'follow', // manual, *follow, error
+    referrer: 'no-referrer', // *client, no-referrer
+  });
+}
+
+async function postDataReturnJsonWithRefreshAsync(url, data){
+  let response = await postDataAsync(url, data);
+  if(response.ok) {
+    return response.json();
+  }
+  if (response.status === 401){
+    let res = await refreshToken();
+    if (res){
+      response = await postDataAsync(url, data);
+      if(response.ok) {
+        return response.json();
+      } else {
+        return response.blob;
+      }
+    }
+  }
+  return response.blob;
+}
+
+async function refreshToken(){
+  const user = JSON.parse(localStorage.getItem('user'));
+  let response = await postDataAsync('Auth/Refresh', {token: user.token, refreshToken: user.refreshToken});
+  if(response.ok) {
+    let newUser = await response.json();
+    localStorage.setItem('user', JSON.stringify(newUser));
+    return true;
+  }
+  if (response.status === 401){
+    return false;
+  }
+}
+
+function addHeaders()
+{
+  let headers = {
+    'Accept': 'application/json',
+    'Content-Type': 'application/json'
+  };
+
+  let auth = addAuthHeader();
+  if (auth !== null){
+    headers = Object.assign({}, headers, auth);
+  }
+
+  return headers;
+}
+
+function addAuthHeader(){
+  const user = JSON.parse(localStorage.getItem('user'));
+  if (user && user.token) {
+      return { 'Authorization': 'Bearer ' + user.token };
+  } else {
+      return null;
+  }
+}
+
+export default GameApi;

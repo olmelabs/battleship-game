@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  olmelabs.battleship.api:
+    image: ${DOCKER_REGISTRY}olmelabsbattleshipapi
+    build:
+      context: .
+      dockerfile: olmelabs.battleship.api/Dockerfile
