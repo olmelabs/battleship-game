@@ -257,6 +257,7 @@ namespace olmelabs.battleship.api.Logic
             else
             {
                 int j;
+                currentShip.Sort();
                 int i = currentShip.Last();
                 int k = currentShip.Skip(currentShip.Count - 2).Take(1).First();
                 if (Math.Abs(i - k) == 10) //vertical

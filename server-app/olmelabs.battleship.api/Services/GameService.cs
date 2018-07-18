@@ -98,7 +98,6 @@ namespace olmelabs.battleship.api.Services
             if (g == null)
                 return -1;
 
-
             ClientStatistics stat = null;
             if (_options.UseStatistics)
             {
