@@ -1,5 +1,8 @@
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
 using olmelabs.battleship.api.Logic;
+using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
 using olmelabs.battleship.api.Services;
@@ -19,8 +22,9 @@ namespace olmelabs.battleship.api.tests
             GameState game;
             IGameLogic gameLogic = new GameLogic();
             IStorage storage = new InMemoryStaticStorage();
+            var optAccessor = new Mock<IOptions<GameOptions>>().Object;
 
-            GameService svc = new GameService(storage, gameLogic);
+            GameService svc = new GameService(storage, gameLogic, null, optAccessor);
             game = await svc.StartNewGameAsync("connectionid");
 
             dbObj = await storage.FindActiveGameAsync(game.GameId);
@@ -38,13 +42,14 @@ namespace olmelabs.battleship.api.tests
             GameState game;
             IGameLogic gameLogic = new GameLogic();
             IStorage storage = new InMemoryStaticStorage();
+            var optAccessor = new Mock<IOptions<GameOptions>>().Object;
             List<ShipInfo> ships = new List<ShipInfo>{
                 new ShipInfo(false, new []{3,4,5,6}),
                 new ShipInfo(false, new []{26,27,28}),
                 new ShipInfo(false, new []{30,31,32}),
             };
 
-            GameService svc = new GameService(storage, gameLogic);
+            GameService svc = new GameService(storage, gameLogic, null, optAccessor);
             game = await svc.StartNewGameAsync("connectionid");
             game = await svc.StopGameAsync(game.GameId, ships);
 
@@ -62,8 +67,9 @@ namespace olmelabs.battleship.api.tests
             FireResult res1, res2, res3, res4, res5;
             IGameLogic gameLogic = new GameLogic();
             IStorage storage = new InMemoryStaticStorage();
+            IOptions<GameOptions> opt = new Mock<IOptions<GameOptions>>().Object;
 
-            GameService svc = new GameService(storage, gameLogic);
+            GameService svc = new GameService(storage, gameLogic, null, opt);
 
             game = await svc.StartNewGameAsync("connectionid");
 

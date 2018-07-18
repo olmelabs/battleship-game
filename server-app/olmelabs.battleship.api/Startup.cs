@@ -7,7 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
-using olmelabs.battleship.api.BackgroundPlayer;
+using olmelabs.battleship.api.BackgroundServices;
 using olmelabs.battleship.api.Logic;
 using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Repositories;
@@ -65,13 +65,15 @@ namespace olmelabs.battleship.api
             {
                 throw new InvalidOperationException("Storage is not configured.");
             }
+            services.AddTransient<IGameStatisticsService, GameStatisticsService>();
 
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IGameLogic, GameLogic>();
-            
-            services.AddSingleton<IHostedService, BackgroundPlayerService>();
+
+            services.AddSingleton<IHostedService, PlayerService>();
+            services.AddSingleton<IHostedService, StatisticsCollectorService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>

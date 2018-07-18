@@ -13,6 +13,7 @@ namespace olmelabs.battleship.api.Services
         {
             _storage = storage;
         }
+
         public Task<User> FindUserAsync(string email)
         {
             return _storage.FindUserAsync(email);

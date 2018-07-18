@@ -14,18 +14,25 @@ namespace olmelabs.battleship.api.Repositories
         private static ConcurrentDictionary<string, User> _users;
         //token - email
         private static ConcurrentDictionary<string, RefreshToken> _refreshTokens;
+        //dummy - ClientStatistics - only one record for now
+        private static ConcurrentDictionary<string, ClientStatistics> _clientStatistics;
+
 
         static InMemoryStaticStorage()
         {
             _games = new ConcurrentDictionary<string, GameState>();
             _users = new ConcurrentDictionary<string, User>();
             _refreshTokens = new ConcurrentDictionary<string, RefreshToken>();
+            _clientStatistics = new ConcurrentDictionary<string, ClientStatistics>();
         }
 
         public Task Prepare()
         {
-            var user = new User { FirstName = "John", LastName = "Doe", Email = "user@domain.com", PasswordHash= "AQAAAAEAACcQAAAAEEI1y09DRnWeVEUmJfBSYoLkYp6Ps+yQZTdxGB3PKWzX/GNs/P8BxIyqGOc/VGIEDA==", IsEmailConfirmed = true };
+            var user = new User { FirstName = "John", LastName = "Doe", Email = "user@domain.com", PasswordHash = "AQAAAAEAACcQAAAAEEI1y09DRnWeVEUmJfBSYoLkYp6Ps+yQZTdxGB3PKWzX/GNs/P8BxIyqGOc/VGIEDA==", IsEmailConfirmed = true };
             _users.AddOrUpdate(user.Email, user, (key, val) => user);
+
+            ClientStatistics stat = ClientStatistics.CreateNew();
+            _clientStatistics.GetOrAdd(typeof(ClientStatistics).ToString(), stat);
 
             return Task.FromResult(0);
         }
@@ -99,5 +106,15 @@ namespace olmelabs.battleship.api.Repositories
             return Task.FromResult(0);
         }
 
+        public Task<ClientStatistics> GetClientStatisticsAsync()
+        {
+            return Task.FromResult(_clientStatistics.First().Value);
+        }
+
+        public Task UpdateClientStatisticsAsync(ClientStatistics statistics)
+        {
+            _clientStatistics.AddOrUpdate(typeof(ClientStatistics).ToString(), statistics, (key, value) => statistics);
+            return Task.FromResult(0);
+        }
     }
 }

@@ -8,7 +8,7 @@ namespace olmelabs.battleship.api
     {
         BoardInfo GenerateBoad();
 
-        int ChooseNextClientCell(BoardInfo clientBoard, List<int> currentShip);
+        int ChooseNextClientCell(BoardInfo clientBoard, List<int> currentShip, ClientStatistics statistics);
         
         bool ValidateClientBoard(List<ClientShipDto> ships);
 

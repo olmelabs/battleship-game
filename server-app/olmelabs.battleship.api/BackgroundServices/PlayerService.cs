@@ -13,23 +13,23 @@ using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Services;
 using olmelabs.battleship.api.SignalRHubs;
 
-namespace olmelabs.battleship.api.BackgroundPlayer
+namespace olmelabs.battleship.api.BackgroundServices
 {
     /// <summary>
     /// Background worker using IHostedServide
     /// https://docs.microsoft.com/en-us/dotnet/standard/microservices-architecture/multi-container-microservice-net-applications/background-tasks-with-ihostedservice
     /// </summary>
-    public class BackgroundPlayerService : BackgroundService
+    public class PlayerService : BackgroundService
     {
-        private readonly ILogger<BackgroundPlayerService> _logger;
+        private readonly ILogger<PlayerService> _logger;
         private readonly GameOptions _options;
         private readonly IHubContext<GameHub> _gameHubContext;
         private readonly IGameService _gameSvc;
 
-        public BackgroundPlayerService(IGameService gameSvc,
+        public PlayerService(IGameService gameSvc,
             IHubContext<GameHub> gameHubContext,
             IOptions<GameOptions> optionsAccessor,
-            ILogger<BackgroundPlayerService> logger)
+            ILogger<PlayerService> logger)
         {
             _logger = logger;
             _options = optionsAccessor.Value;
@@ -39,10 +39,10 @@ namespace olmelabs.battleship.api.BackgroundPlayer
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
-            _logger.LogDebug($"BackgroundPlayerService is starting.");
+            _logger.LogDebug($"PlayerService is starting.");
 
             //something to be called on cancellation
-            stoppingToken.Register(() => _logger.LogDebug($"BackgroundPlayerService is stopping."));
+            stoppingToken.Register(() => _logger.LogDebug($"PlayerService is stopping."));
 
             while (!stoppingToken.IsCancellationRequested)
             {
@@ -56,7 +56,7 @@ namespace olmelabs.battleship.api.BackgroundPlayer
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, $"BackgroundPlayerService.MakeMove exception. Game: {game.GameId}");
+                        _logger.LogError(ex, $"PlayerService.MakeMove exception. Game: {game.GameId}");
                     }
                 });
                 

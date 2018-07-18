@@ -26,5 +26,9 @@ namespace olmelabs.battleship.api.Repositories
         Task AddRefreshTokenAsync(RefreshToken token);
 
         Task DeleteRefreshTokenAsync(string refreshToken);
-            }
+
+        Task<ClientStatistics> GetClientStatisticsAsync();
+
+        Task UpdateClientStatisticsAsync(ClientStatistics statistics);
+    }
 }

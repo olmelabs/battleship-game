@@ -13,7 +13,7 @@ namespace olmelabs.battleship.api.Controllers
     [ApiController]
     public class AccountController : ControllerBase
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly IAccountService _accountSvc;
 

@@ -36,6 +36,12 @@ namespace olmelabs.battleship.api.Repositories
             var keysGame = Builders<GameState>.IndexKeys.Ascending("GameId");
             CreateIndexModel<GameState> gameIndex = new CreateIndexModel<GameState>(keysGame);
             await Games.Indexes.CreateOneAsync(gameIndex);
+
+            var statistics = await GetClientStatisticsAsync();
+            if (statistics == null)
+            {
+                await Statistics.InsertOneAsync(ClientStatistics.CreateNew());
+            }
         }
 
         public virtual IMongoCollection<User> Users => _database.GetCollection<User>("user");
@@ -44,6 +50,7 @@ namespace olmelabs.battleship.api.Repositories
 
         public virtual IMongoCollection<RefreshToken> RefreshTokens => _database.GetCollection<RefreshToken>("refresh_token");
 
+        public virtual IMongoCollection<ClientStatistics> Statistics => _database.GetCollection<ClientStatistics>("statistics");
 
         public async Task<GameState> AddGameAsync(GameState game)
         {
@@ -96,6 +103,16 @@ namespace olmelabs.battleship.api.Repositories
         public async Task DeleteRefreshTokenAsync(string refreshToken)
         {
             await RefreshTokens.DeleteOneAsync(t => t.Token == refreshToken);
+        }
+
+        public async Task<ClientStatistics> GetClientStatisticsAsync()
+        {
+            return await Statistics.Find(_ => true).SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateClientStatisticsAsync(ClientStatistics statistics)
+        {
+            await Statistics.FindOneAndReplaceAsync(_ => true, statistics);
         }
     }
 }

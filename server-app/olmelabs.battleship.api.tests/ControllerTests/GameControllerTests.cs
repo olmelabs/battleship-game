@@ -21,7 +21,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             gameService.Setup(x => x.ValidateClientBoard(It.IsAny<List<ClientShipDto>>()))
                 .Returns(true);
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = controller.ValidateBoard(new ClientShipDto[] {});
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
@@ -39,7 +39,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             gameService.Setup(x => x.GenerateClientBoard())
                 .Returns(new BoardInfo());
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = controller.GenerateBoard();
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
@@ -62,7 +62,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             gameService.Setup(x => x.StartNewGameAsync(It.IsAny<string>()))
                 .ReturnsAsync(game);
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = await controller.StartNewGame("connectionid");
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
@@ -87,7 +87,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             gameService.Setup(x => x.StopGameAsync(It.IsAny<string>(), It.IsAny<List<ShipInfo>>()))
                 .ReturnsAsync(game);
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = await controller.StopGame(new GameOverClientDto() { GameId = "dummy"});
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
@@ -103,7 +103,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             gameService.Setup(x => x.StopGameAsync(It.IsAny<string>(), It.IsAny<List<ShipInfo>>()))
                 .ReturnsAsync(game);
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = await controller.StopGame(new GameOverClientDto() { GameId = "dummy" });
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
@@ -118,7 +118,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var inputDto = new FireCannonDto { CellId = 1, GameId = "" };
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = await controller.FireCannon(inputDto);
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
@@ -135,7 +135,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var inputDto = new FireCannonDto { CellId = 1, GameId = "" };
 
-            var controller = new GameController(gameService.Object, _mapper);
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
             var output = await controller.FireCannon(inputDto);
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
