@@ -349,7 +349,9 @@ namespace olmelabs.battleship.api.Logic
         }
         private int? GetStatisticalCellIndex(int[] board, ClientStatistics statistics)
         {
+            //TODO: Add Games Count
             var sortedStat = statistics.CellHits.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
             for (int i = 0; i < 20; i++)
             {
                 int cellIdx = sortedStat.Keys.ElementAt(i);
