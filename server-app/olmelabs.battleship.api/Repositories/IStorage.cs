@@ -19,6 +19,8 @@ namespace olmelabs.battleship.api.Repositories
       
         Task<User> FindUserAsync(string email);
 
+        Task<User> UpdateUserAsync(User user);
+
         Task<User> RegisterUserAsync(User user);
 
         Task<RefreshToken> GetEmailByRefreshTokenAsync(string refreshToken);
@@ -30,5 +32,17 @@ namespace olmelabs.battleship.api.Repositories
         Task<ClientStatistics> GetClientStatisticsAsync();
 
         Task UpdateClientStatisticsAsync(ClientStatistics statistics);
+
+        Task<string> GetEmailByResetPasswordCodeAsync(string code);
+
+        Task AddResetPasswordCodeAsync(string code, string email);
+
+        Task DeleteResetPasswordCodeAsync(string code);
+
+        Task<string> GetEmailByConfirmationCodeAsync(string code);
+
+        Task AddEmailConfirmationCodeCodeAsync(string code, string email);
+
+        Task DeleteEmailConfirmationCodeAsync(string code);
     }
 }

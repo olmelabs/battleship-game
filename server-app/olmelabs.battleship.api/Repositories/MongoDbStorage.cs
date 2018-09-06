@@ -114,5 +114,40 @@ namespace olmelabs.battleship.api.Repositories
         {
             await Statistics.FindOneAndReplaceAsync(_ => true, statistics);
         }
+
+        public Task<string> GetEmailByResetPasswordCodeAsync(string token)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddResetPasswordCodeAsync(string code, string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteResetPasswordCodeAsync(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<User> UpdateUserAsync(User user)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<string> GetEmailByConfirmationCodeAsync(string code)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task AddEmailConfirmationCodeCodeAsync(string code, string email)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task DeleteEmailConfirmationCodeAsync(string code)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -64,7 +64,7 @@ export function sendResetPasswordLink(email){
 
     dispatch(ajaxCallStart());
 
-    return gameApi.resetPassword(email).then(() => {
+    return gameApi.sendResetPasswordLink(email).then(() => {
       dispatch(ajaxCallSuccess());
     }).catch(error => {
       dispatch(ajaxCallError(error));

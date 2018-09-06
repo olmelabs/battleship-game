@@ -65,13 +65,15 @@ namespace olmelabs.battleship.api
             {
                 throw new InvalidOperationException("Storage is not configured.");
             }
+            services.AddTransient<IRazorViewRendererService, RazorViewRendererService>();
             services.AddTransient<IGameStatisticsService, GameStatisticsService>();
-
+            services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IGameService, GameService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IGameLogic, GameLogic>();
 
+            services.AddSingleton<IHostedService, MailerService>();
             services.AddSingleton<IHostedService, PlayerService>();
             services.AddSingleton<IHostedService, StatisticsCollectorService>();
 

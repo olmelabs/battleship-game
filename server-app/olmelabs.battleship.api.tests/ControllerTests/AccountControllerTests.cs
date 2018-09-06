@@ -20,7 +20,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             accountService.Setup(x => x.FindUserAsync(It.IsAny<string>()))
                 .ReturnsAsync((User)null);
 
-            var controller = new AccountController(null, accountService.Object, _mapper);
+            var controller = new AccountController(null, accountService.Object, _mapper, _notificationServiceMock.Object);
             var output = await controller.Register(new RegisterModelDto());
 
             accountService.Verify(m => m.RegisterUserAsync(It.IsAny<User>()), Times.Once());
@@ -28,9 +28,9 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
 
             dynamic dto = ((OkObjectResult)output).Value;
-            Assert.AreEqual(dto.GetType(), typeof(RegisterResponseDto));
+            Assert.AreEqual(dto.GetType(), typeof(SimpleResponseDto));
 
-            var res = (RegisterResponseDto)dto;
+            var res = (SimpleResponseDto)dto;
             Assert.IsTrue(res.Success);
         }
 
@@ -41,7 +41,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             accountService.Setup(x => x.FindUserAsync(It.IsAny<string>()))
                 .ReturnsAsync(new User { Email = "user@domain.com" });
 
-            var controller = new AccountController(null, accountService.Object, _mapper);
+            var controller = new AccountController(null, accountService.Object, _mapper, _notificationServiceMock.Object);
             var output = await controller.Register(new RegisterModelDto());
             
             accountService.Verify(m => m.RegisterUserAsync(It.IsAny<User>()), Times.Never());
@@ -49,9 +49,9 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
 
             dynamic dto = ((OkObjectResult)output).Value;
-            Assert.AreEqual(dto.GetType(), typeof(RegisterResponseDto));
+            Assert.AreEqual(dto.GetType(), typeof(SimpleResponseDto));
 
-            var res = (RegisterResponseDto)dto;
+            var res = (SimpleResponseDto)dto;
             Assert.IsFalse(res.Success);
         }
     }

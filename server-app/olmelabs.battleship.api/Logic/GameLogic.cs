@@ -219,12 +219,13 @@ namespace olmelabs.battleship.api.Logic
             //if no current ship just fire random cell
             if (currentShip.Count == 0)
             {
-                if (statistics != null)
-                {
-                    int? cellIndex = GetStatisticalCellIndex(clientBoard.Board, statistics);
-                    if (cellIndex.HasValue)
-                        return cellIndex.Value;
-                }
+                //TODO: This is a try to get most frequently used cells from statistics. Comment it for now.
+                //if (statistics != null)
+                //{
+                //    int? cellIndex = GetStatisticalCellIndex(clientBoard.Board, statistics);
+                //    if (cellIndex.HasValue)
+                //        return cellIndex.Value;
+                //}
                 return GetRandomCellIndex(clientBoard.Board);
             }
             //if only one cell of ship is marked - try to find if it is horizontal or vertical

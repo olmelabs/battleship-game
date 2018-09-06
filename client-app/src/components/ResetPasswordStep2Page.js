@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
+import { Link } from 'react-router-dom';
 
 class ResetPasswordStep2Page extends React.Component {
   constructor(props, context){
@@ -50,7 +51,7 @@ class ResetPasswordStep2Page extends React.Component {
     let msg = "";
     if (this.props.resetPasswordDone){
       msg = this.props.resetPasswordSuccess ?
-        (<div className="alert alert-success" role="alert"><i className="far fa-check-circle"/>   Password reset. Please Login</div>) :
+        (<div className="alert alert-success" role="alert"><i className="far fa-check-circle"/>   Password reset. Please <Link to="login">Login</Link></div>) :
         (<div className="alert alert-warning" role="alert">{this.props.resetPasswordMessage}</div>);
     } else if (!this.state.submitted && this.state.message) {
       msg = <div className="alert alert-warning" role="alert">{this.state.message}</div>;

@@ -14,6 +14,7 @@ import ProfilePage from './ProfilePage';
 import RegisterPage from './RegisterPage';
 import HeaderControl from './HeaderControl';
 import FooterControl from './FooterControl';
+import ConfirmEmailPage from './ConfirmEmailPage';
 import _NotFound from './_NotFound';
 
 import toastr from 'toastr';
@@ -50,6 +51,7 @@ class App extends React.Component {
                   <Route exact path="/register" component={RegisterPage} />
                   <Route exact path="/password_reset_link" component={ResetPasswordStep1Page} />
                   <Route exact path="/password_reset" component={ResetPasswordStep2Page} />
+                  <Route exact path="/confirm_email" component={ConfirmEmailPage} />
                   <Route exact path="/game" component={GamePage} />
                   <PrivateRoute exact path="/profile" component={ProfilePage} />
                   <Route component={_NotFound} />

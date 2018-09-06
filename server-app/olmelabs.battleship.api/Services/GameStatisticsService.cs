@@ -31,8 +31,7 @@ namespace olmelabs.battleship.api.Services
 
         public List<int> TryDequeueGameStatistics()
         {
-            List<int> cells;
-            bool res = _queue.TryDequeue(out cells);
+            bool res = _queue.TryDequeue(out List<int> cells);
             if (res)
                 return cells;
             return null;

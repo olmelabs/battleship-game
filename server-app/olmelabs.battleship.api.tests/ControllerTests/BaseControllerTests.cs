@@ -11,6 +11,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
     {
         protected Mapper _mapper;
         protected Mock<IGameStatisticsService> _statisticsSvcMock;
+        protected Mock<INotificationService> _notificationServiceMock;
 
         [TestInitialize()]
         public void Initialize()
@@ -20,6 +21,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             _mapper = new Mapper(configuration);
 
             _statisticsSvcMock = new Mock<IGameStatisticsService>();
+            _notificationServiceMock = new Mock<INotificationService>();
         }
 
     }
