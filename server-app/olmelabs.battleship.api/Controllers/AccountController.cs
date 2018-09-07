@@ -59,7 +59,7 @@ namespace olmelabs.battleship.api.Controllers
         {
             SimpleResponseDto respDto = new SimpleResponseDto();
 
-            User user = await _accountSvc.GetUserByResetPasswordTokenAsync(code);
+            User user = await _accountSvc.GetUserByEmailConfirmationCodeAsync(code);
 
             if (user == null || user.IsEmailConfirmed)
             {

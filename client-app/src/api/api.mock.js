@@ -112,6 +112,18 @@ class GameApi {
     });
   }
 
+  static confirmEmail(code) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (code === "IDDQD"){
+          resolve(Object.assign({}, {success: true, message: null}));
+        } else{
+          resolve(Object.assign({}, {success: false, message: 'Something went wrong.'}));
+        }
+      }, delay);
+    });
+  }
+
 }
 
 export default GameApi;

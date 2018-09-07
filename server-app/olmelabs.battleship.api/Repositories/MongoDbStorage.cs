@@ -52,6 +52,10 @@ namespace olmelabs.battleship.api.Repositories
 
         public virtual IMongoCollection<ClientStatistics> Statistics => _database.GetCollection<ClientStatistics>("statistics");
 
+        public virtual IMongoCollection<KeyValuePair> ResetPasswordCodes => _database.GetCollection<KeyValuePair>("reset_password_code");
+
+        public virtual IMongoCollection<KeyValuePair> ConfirmEmailCodes => _database.GetCollection<KeyValuePair>("confirm_email_code");
+
         public async Task<GameState> AddGameAsync(GameState game)
         {
             await Games.InsertOneAsync(game);
@@ -83,6 +87,13 @@ namespace olmelabs.battleship.api.Repositories
             return user;
         }
 
+        public async Task<User> UpdateUserAsync(User user)
+        {
+            var filter = Builders<User>.Filter.Where(u => u.Email.ToLower() == user.Email.ToLower());
+            await Users.ReplaceOneAsync(filter, user);
+            return user;
+        }
+
         public async Task<User> RegisterUserAsync(User user)
         {
             await Users.InsertOneAsync(user);
@@ -91,8 +102,8 @@ namespace olmelabs.battleship.api.Repositories
 
         public async Task<RefreshToken> GetEmailByRefreshTokenAsync(string refreshToken)
         {
-            var token = await RefreshTokens.Find(t => t.Token == refreshToken).FirstOrDefaultAsync();
-            return token;
+            var email = await RefreshTokens.Find(t => t.Token == refreshToken).FirstOrDefaultAsync();
+            return email;
         }
 
         public async Task AddRefreshTokenAsync(RefreshToken token)
@@ -115,39 +126,36 @@ namespace olmelabs.battleship.api.Repositories
             await Statistics.FindOneAndReplaceAsync(_ => true, statistics);
         }
 
-        public Task<string> GetEmailByResetPasswordCodeAsync(string token)
+        public async Task<string> GetEmailByResetPasswordCodeAsync(string code)
         {
-            throw new NotImplementedException();
+            var kvp = await ResetPasswordCodes.Find(t => t.Key == code).FirstOrDefaultAsync();
+            return kvp?.Value;
         }
 
-        public Task AddResetPasswordCodeAsync(string code, string email)
+        public async Task AddResetPasswordCodeAsync(string code, string email)
         {
-            throw new NotImplementedException();
+            await ResetPasswordCodes.InsertOneAsync(new KeyValuePair { Key = code, Value = email});
         }
 
-        public Task DeleteResetPasswordCodeAsync(string code)
+        public async Task DeleteResetPasswordCodeAsync(string code)
         {
-            throw new NotImplementedException();
+            await ResetPasswordCodes.DeleteOneAsync(t => t.Key == code);
         }
 
-        public Task<User> UpdateUserAsync(User user)
+        public async Task<string> GetEmailByConfirmationCodeAsync(string code)
         {
-            throw new NotImplementedException();
+            var kvp = await ConfirmEmailCodes.Find(t => t.Key == code).FirstOrDefaultAsync();
+            return kvp?.Value;
         }
 
-        public Task<string> GetEmailByConfirmationCodeAsync(string code)
+        public async Task AddEmailConfirmationCodeCodeAsync(string code, string email)
         {
-            throw new NotImplementedException();
+            await ConfirmEmailCodes.InsertOneAsync(new KeyValuePair { Key = code, Value = email });
         }
 
-        public Task AddEmailConfirmationCodeCodeAsync(string code, string email)
+        public async Task DeleteEmailConfirmationCodeAsync(string code)
         {
-            throw new NotImplementedException();
-        }
-
-        public Task DeleteEmailConfirmationCodeAsync(string code)
-        {
-            throw new NotImplementedException();
+            await ConfirmEmailCodes.DeleteOneAsync(t => t.Key == code);
         }
     }
 }
