@@ -100,7 +100,7 @@ namespace olmelabs.battleship.api.Controllers
 
             User user = await _accountSvc.GetUserByResetPasswordTokenAsync(dto.Code);
 
-            if (user == null || dto.Password != dto.Password2)
+            if (user == null || string.IsNullOrWhiteSpace(dto.Password) || dto.Password != dto.Password2)
             {
                 respDto.Success = false;
                 respDto.Message = "Reset password fail.";
