@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
-import { Link } from 'react-router-dom';
 
 class ResetPasswordStep1Page extends React.Component {
   constructor(props, context){
@@ -46,7 +45,6 @@ class ResetPasswordStep1Page extends React.Component {
 
           {warning}
           <button className="btn btn-lg btn-primary btn-block" type="submit">Send Reset Link</button>
-          <p><Link to="password_reset?code=IDDQD">Test Reset</Link></p>
         </form>
       </React.Fragment>
       );
