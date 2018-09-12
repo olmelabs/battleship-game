@@ -14,11 +14,13 @@ namespace olmelabs.battleship.api.Controllers
     {
         private readonly IGameService _gameSvc;
         private readonly IMapper _mapper;
+        private readonly IGameStatisticsService _statisticsSvc;
 
-        public GameController(IGameService gameSvc, IMapper mapper)
+        public GameController(IGameService gameSvc, IMapper mapper, IGameStatisticsService statisticsSvc)
         {
             _gameSvc = gameSvc;
             _mapper = mapper;
+            _statisticsSvc = statisticsSvc;
         }
 
         [HttpPost]
@@ -63,6 +65,8 @@ namespace olmelabs.battleship.api.Controllers
 
             if (game == null)
                 return BadRequest();
+
+            _statisticsSvc.EnqueueGameStatistics(clientShips);
 
             GameOverDto respDto = _mapper.Map<GameOverDto>(game);
 

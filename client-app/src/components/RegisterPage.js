@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
+import { Link } from 'react-router-dom';
 
 class RegisterPage extends React.Component {
   constructor(props, context){
@@ -51,7 +52,7 @@ class RegisterPage extends React.Component {
     let msg = "";
     if (this.props.registrationDone){
       msg = this.props.registrationSuccess ?
-        (<div className="alert alert-success" role="alert"><i className="far fa-check-circle"/>   Registration successful.</div>) :
+        (<div className="alert alert-success" role="alert"><i className="far fa-check-circle"/>   Registration successful. Confirmation email sent to your account.</div>) :
         (<div className="alert alert-warning" role="alert">{this.props.registrationMessage}</div>);
     } else if (!this.state.submitted && this.state.message) {
       msg = <div className="alert alert-warning" role="alert">{this.state.message}</div>;
@@ -87,7 +88,7 @@ class RegisterPage extends React.Component {
                 value={this.state.lastName} onChange={this.handleChange} />
           </div>
           {msg}
-          <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+          <button className="btn btn-lg btn-primary btn-block" type="submit" disabled={this.state.submitted && this.props.registrationSuccess}>Register</button>
         </form>
         </div>
       </div>

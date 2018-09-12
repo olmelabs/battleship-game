@@ -14,18 +14,31 @@ namespace olmelabs.battleship.api.Repositories
         private static ConcurrentDictionary<string, User> _users;
         //token - email
         private static ConcurrentDictionary<string, RefreshToken> _refreshTokens;
+        //code - email
+        private static ConcurrentDictionary<string, string> _resetPasswordCodes;
+        //code - email
+        private static ConcurrentDictionary<string, string> _confirmEmailCodes;
+        //dummy - ClientStatistics - only one record for now
+        private static ConcurrentDictionary<string, ClientStatistics> _clientStatistics;
+
 
         static InMemoryStaticStorage()
         {
             _games = new ConcurrentDictionary<string, GameState>();
             _users = new ConcurrentDictionary<string, User>();
             _refreshTokens = new ConcurrentDictionary<string, RefreshToken>();
+            _clientStatistics = new ConcurrentDictionary<string, ClientStatistics>();
+            _resetPasswordCodes = new ConcurrentDictionary<string, string>();
+            _confirmEmailCodes = new ConcurrentDictionary<string, string>();
         }
 
         public Task Prepare()
         {
-            var user = new User { FirstName = "John", LastName = "Doe", Email = "user@domain.com", PasswordHash= "AQAAAAEAACcQAAAAEEI1y09DRnWeVEUmJfBSYoLkYp6Ps+yQZTdxGB3PKWzX/GNs/P8BxIyqGOc/VGIEDA==", IsEmailConfirmed = true };
+            var user = new User { FirstName = "John", LastName = "Doe", Email = "user@domain.com", PasswordHash = "AQAAAAEAACcQAAAAEEI1y09DRnWeVEUmJfBSYoLkYp6Ps+yQZTdxGB3PKWzX/GNs/P8BxIyqGOc/VGIEDA==", IsEmailConfirmed = true };
             _users.AddOrUpdate(user.Email, user, (key, val) => user);
+
+            ClientStatistics stat = ClientStatistics.CreateNew();
+            _clientStatistics.GetOrAdd(typeof(ClientStatistics).ToString(), stat);
 
             return Task.FromResult(0);
         }
@@ -65,6 +78,13 @@ namespace olmelabs.battleship.api.Repositories
             User user = _users.FirstOrDefault(u => u.Key == email).Value;
             return Task.FromResult(user);
         }
+        
+        public Task<User> UpdateUserAsync(User user)
+        {
+            User oldUser = _users.FirstOrDefault(u => u.Key == user.Email).Value;
+            var res = _users.TryUpdate(user.Email, user, oldUser);
+            return Task.FromResult(user);
+        }
 
         public Task<User> RegisterUserAsync(User user)
         {
@@ -99,5 +119,59 @@ namespace olmelabs.battleship.api.Repositories
             return Task.FromResult(0);
         }
 
+        public Task<ClientStatistics> GetClientStatisticsAsync()
+        {
+            return Task.FromResult(_clientStatistics.First().Value);
+        }
+
+        public Task UpdateClientStatisticsAsync(ClientStatistics statistics)
+        {
+            _clientStatistics.AddOrUpdate(typeof(ClientStatistics).ToString(), statistics, (key, value) => statistics);
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetEmailByResetPasswordCodeAsync(string code)
+        {
+            string email = null;
+            if (_resetPasswordCodes.ContainsKey(code))
+            {
+                email = _resetPasswordCodes[code];
+            }
+            return Task.FromResult(email);
+        }
+
+        public Task AddResetPasswordCodeAsync(string code, string email)
+        {
+            _resetPasswordCodes.AddOrUpdate(code, email, (key, val) => email);
+            return Task.FromResult(0);
+        }
+
+        public Task DeleteResetPasswordCodeAsync(string code)
+        {
+            _resetPasswordCodes.TryRemove(code, out _);
+            return Task.FromResult(0);
+        }
+
+        public Task<string> GetEmailByConfirmationCodeAsync(string code)
+        {
+            string email = null;
+            if (_confirmEmailCodes.ContainsKey(code))
+            {
+                email = _confirmEmailCodes[code];
+            }
+            return Task.FromResult(email);
+        }
+
+        public Task AddEmailConfirmationCodeCodeAsync(string code, string email)
+        {
+            _confirmEmailCodes.AddOrUpdate(code, email, (key, val) => email);
+            return Task.FromResult(0);
+        }
+
+        public Task DeleteEmailConfirmationCodeAsync(string code)
+        {
+            _confirmEmailCodes.TryRemove(code, out _);
+            return Task.FromResult(0);
+        }
     }
 }

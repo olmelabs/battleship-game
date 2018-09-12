@@ -92,6 +92,38 @@ class GameApi {
     });
   }
 
+  static sendResetPasswordLink(email){
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve(Object.assign({}, {success: true}));
+      }, delay);
+    });
+  }
+
+  static resetPassword(code, password, password2){
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (code === "IDDQD"){
+          resolve(Object.assign({}, {success: true, message: null}));
+        } else{
+          resolve(Object.assign({}, {success: false, message: 'Reset password failed.'}));
+        }
+      }, delay);
+    });
+  }
+
+  static confirmEmail(code) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        if (code === "IDDQD"){
+          resolve(Object.assign({}, {success: true, message: null}));
+        } else{
+          resolve(Object.assign({}, {success: false, message: 'Something went wrong.'}));
+        }
+      }, delay);
+    });
+  }
+
 }
 
 export default GameApi;

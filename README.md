@@ -9,7 +9,8 @@ Shows:
  - Switching Storage based on configuration (InMemory, MongoDb)
 
 ### requirements
-Requires .NET Core 2.1.2 and VS2017 15.7 to run the project. 
+Requires .NET Core 2.1.3 and VS2017 15.8 to run the project. 
+Requires Mailtrap.io free account to get sample emails.
 If MongoDB will be used as storage - requires Mongo Server v4.
 
 ### storage
@@ -17,7 +18,9 @@ By default InMemory storage is used. It does not require any DB to be installed,
 This is for easy start. To switch to persistent storage - specify MongoDb in appsettings.json.
 
 ### starting from VS 2017
-Open solution in VS2017. If you do not have docker running, you will receive error message - just disregard it.
+Open solution in VS2017. 
+Create user secret file in VS. Sample data are placed in "secret.json.template" 
+If you do not have docker running, you will receive error message - just disregard it.
 Run (F5) it from VS.
 If everything is ok, you will see api swagger on http://localhost:63354/swagger
 
@@ -31,6 +34,7 @@ dotnet run --project olmelabs.battleship.api\olmelabs.battleship.api.csproj
 If everything is ok, you will see api swagger on http://localhost:63354/swagger
 
 ### starting in docker on windows platform
+Rename file "appsettings.Production.json.template" to "appsettings.Production.json" and add mailtrap.io credentilas to get your development emails.
 Run
 ```
 docker-compose build
@@ -38,6 +42,10 @@ docker-compose build
 Open powershell and run  
 ```
 .\docker.run.ps1
+```
+or to start dettached from docker compose
+```
+docker-compose up -d
 ```
 You should see swagger on http://localhost:8091/swagger
 

@@ -1,4 +1,4 @@
-version: '3.4'
+version: '3.7'
 
 services:
   olmelabs.battleship.api:
@@ -6,3 +6,12 @@ services:
     build:
       context: .
       dockerfile: olmelabs.battleship.api/Dockerfile
+    ports:
+      - "8091:80"
+    #volumes:     
+      # In case you need to share folder with host.  
+      # Make sure drive sharing and credentials are properly configured on windows. Docker > Settings > Shared Drives.
+      #- ${APPDATA}/Microsoft/UserSecrets/${USER_SECRETS_ID}:/root/.microsoft/usersecrets/${USER_SECRETS_ID}
+
+
+

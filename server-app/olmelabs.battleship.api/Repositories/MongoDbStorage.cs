@@ -36,6 +36,12 @@ namespace olmelabs.battleship.api.Repositories
             var keysGame = Builders<GameState>.IndexKeys.Ascending("GameId");
             CreateIndexModel<GameState> gameIndex = new CreateIndexModel<GameState>(keysGame);
             await Games.Indexes.CreateOneAsync(gameIndex);
+
+            var statistics = await GetClientStatisticsAsync();
+            if (statistics == null)
+            {
+                await Statistics.InsertOneAsync(ClientStatistics.CreateNew());
+            }
         }
 
         public virtual IMongoCollection<User> Users => _database.GetCollection<User>("user");
@@ -44,6 +50,11 @@ namespace olmelabs.battleship.api.Repositories
 
         public virtual IMongoCollection<RefreshToken> RefreshTokens => _database.GetCollection<RefreshToken>("refresh_token");
 
+        public virtual IMongoCollection<ClientStatistics> Statistics => _database.GetCollection<ClientStatistics>("statistics");
+
+        public virtual IMongoCollection<KeyValuePair> ResetPasswordCodes => _database.GetCollection<KeyValuePair>("reset_password_code");
+
+        public virtual IMongoCollection<KeyValuePair> ConfirmEmailCodes => _database.GetCollection<KeyValuePair>("confirm_email_code");
 
         public async Task<GameState> AddGameAsync(GameState game)
         {
@@ -76,6 +87,13 @@ namespace olmelabs.battleship.api.Repositories
             return user;
         }
 
+        public async Task<User> UpdateUserAsync(User user)
+        {
+            var filter = Builders<User>.Filter.Where(u => u.Email.ToLower() == user.Email.ToLower());
+            await Users.ReplaceOneAsync(filter, user);
+            return user;
+        }
+
         public async Task<User> RegisterUserAsync(User user)
         {
             await Users.InsertOneAsync(user);
@@ -84,8 +102,8 @@ namespace olmelabs.battleship.api.Repositories
 
         public async Task<RefreshToken> GetEmailByRefreshTokenAsync(string refreshToken)
         {
-            var token = await RefreshTokens.Find(t => t.Token == refreshToken).FirstOrDefaultAsync();
-            return token;
+            var email = await RefreshTokens.Find(t => t.Token == refreshToken).FirstOrDefaultAsync();
+            return email;
         }
 
         public async Task AddRefreshTokenAsync(RefreshToken token)
@@ -96,6 +114,48 @@ namespace olmelabs.battleship.api.Repositories
         public async Task DeleteRefreshTokenAsync(string refreshToken)
         {
             await RefreshTokens.DeleteOneAsync(t => t.Token == refreshToken);
+        }
+
+        public async Task<ClientStatistics> GetClientStatisticsAsync()
+        {
+            return await Statistics.Find(_ => true).SingleOrDefaultAsync();
+        }
+
+        public async Task UpdateClientStatisticsAsync(ClientStatistics statistics)
+        {
+            await Statistics.FindOneAndReplaceAsync(_ => true, statistics);
+        }
+
+        public async Task<string> GetEmailByResetPasswordCodeAsync(string code)
+        {
+            var kvp = await ResetPasswordCodes.Find(t => t.Key == code).FirstOrDefaultAsync();
+            return kvp?.Value;
+        }
+
+        public async Task AddResetPasswordCodeAsync(string code, string email)
+        {
+            await ResetPasswordCodes.InsertOneAsync(new KeyValuePair { Key = code, Value = email});
+        }
+
+        public async Task DeleteResetPasswordCodeAsync(string code)
+        {
+            await ResetPasswordCodes.DeleteOneAsync(t => t.Key == code);
+        }
+
+        public async Task<string> GetEmailByConfirmationCodeAsync(string code)
+        {
+            var kvp = await ConfirmEmailCodes.Find(t => t.Key == code).FirstOrDefaultAsync();
+            return kvp?.Value;
+        }
+
+        public async Task AddEmailConfirmationCodeCodeAsync(string code, string email)
+        {
+            await ConfirmEmailCodes.InsertOneAsync(new KeyValuePair { Key = code, Value = email });
+        }
+
+        public async Task DeleteEmailConfirmationCodeAsync(string code)
+        {
+            await ConfirmEmailCodes.DeleteOneAsync(t => t.Key == code);
         }
     }
 }
