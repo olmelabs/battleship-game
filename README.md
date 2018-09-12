@@ -33,6 +33,13 @@ dotnet run --project olmelabs.battleship.api\olmelabs.battleship.api.csproj
 ```
 If everything is ok, you will see api swagger on http://localhost:63354/swagger
 
+### getting server image from docker.hub
+get image from docker hub to you docker instance
+```
+docker pull olmelabs/battleshipapi
+```
+However it has my mailtrap.io account tokens preconfigured. You can test api, but i may reset token at any moment.
+
 ### starting in docker on windows platform
 Rename file "appsettings.Production.json.template" to "appsettings.Production.json" and add mailtrap.io credentilas to get your development emails.
 Run
