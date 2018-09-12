@@ -61,6 +61,7 @@ npm run build
 ```
 Login credentials for demo user: **user@domain.com / password**
 ## Recent changes:
+ - Added user accounts flow. Login, Registration, Reset Paswsord
  - Added quick board generation.
  - Added simple user accounts to demo protected routes and further features
  - Added MongoDB as possible storage.
