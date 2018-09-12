@@ -320,5 +320,20 @@ namespace olmelabs.battleship.api.tests.Logic
             Assert.IsTrue(result.SequenceEqual(expected));
         }
         #endregion 
+
+        [TestMethod]
+        public void NextCellDecision_Vertical_Test()
+        {
+            IGameLogic gameLogic = new GameLogic();
+            BoardInfo boardInfo = new BoardInfo();
+            boardInfo.Board[10] = 3;
+            boardInfo.Board[20] = 3;
+            boardInfo.Board[30] = 3;
+            List<int> currentShip = new List<int>() { 20, 10, 30 };
+
+            int res = gameLogic.ChooseNextClientCell(boardInfo, currentShip, null);
+
+            Assert.AreEqual(40, res);
+        }
     }
 }

@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Link, Redirect } from 'react-router-dom';
 import PropTypes from 'prop-types';
-import { Redirect } from 'react-router-dom';
 import { bindActionCreators } from 'redux';
 import * as actions from '../actions';
 
@@ -47,15 +47,16 @@ class LoginPage extends React.Component {
           <h2 className="form-signin-heading">Please sign in</h2>
 
           <label htmlFor="email" className="sr-only">Email address</label>
-          <input type="email" autoComplete="email"  id="email" name="email" className="form-control" placeholder="Email address"
+          <input type="email" autoComplete="email"  id="email" name="email" className="form-control form-top-input" placeholder="Email address"
                 value={this.state.email} required autoFocus onChange={this.handleChange}/>
 
           <label htmlFor="password" className="sr-only">Password</label>
-          <input type="password" autoComplete="current-password" id="password" name="password" className="form-control" placeholder="Password"
+          <input type="password" autoComplete="current-password" id="password" name="password" className="form-control form-bottom-input" placeholder="Password"
                 value={this.state.password} required onChange={this.handleChange}/>
 
           {warning}
           <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+          <p><Link to="register">Register</Link> - <Link to="password_reset_link">Forgot Password?</Link></p>
         </form>
       </React.Fragment>
       );

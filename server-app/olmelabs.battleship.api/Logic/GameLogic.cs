@@ -214,11 +214,18 @@ namespace olmelabs.battleship.api.Logic
             return res;
         }
 
-        public virtual int ChooseNextClientCell(BoardInfo clientBoard, List<int> currentShip)
+        public virtual int ChooseNextClientCell(BoardInfo clientBoard, List<int> currentShip, ClientStatistics statistics)
         {
             //if no current ship just fire random cell
             if (currentShip.Count == 0)
             {
+                //TODO: This is a try to get most frequently used cells from statistics. Comment it for now.
+                //if (statistics != null)
+                //{
+                //    int? cellIndex = GetStatisticalCellIndex(clientBoard.Board, statistics);
+                //    if (cellIndex.HasValue)
+                //        return cellIndex.Value;
+                //}
                 return GetRandomCellIndex(clientBoard.Board);
             }
             //if only one cell of ship is marked - try to find if it is horizontal or vertical
@@ -251,6 +258,7 @@ namespace olmelabs.battleship.api.Logic
             else
             {
                 int j;
+                currentShip.Sort();
                 int i = currentShip.Last();
                 int k = currentShip.Skip(currentShip.Count - 2).Take(1).First();
                 if (Math.Abs(i - k) == 10) //vertical
@@ -339,6 +347,19 @@ namespace olmelabs.battleship.api.Logic
                 i = _random.Next(99);
             }
             return i;
+        }
+        private int? GetStatisticalCellIndex(int[] board, ClientStatistics statistics)
+        {
+            //TODO: Add Games Count
+            var sortedStat = statistics.CellHits.OrderByDescending(x => x.Value).ToDictionary(x => x.Key, x => x.Value);
+
+            for (int i = 0; i < 20; i++)
+            {
+                int cellIdx = sortedStat.Keys.ElementAt(i);
+                if (board[cellIdx] == (int)ClientCellState.CellNotFired)
+                    return cellIdx;
+            }
+            return null;
         }
 
         public void MarkCellsAroundShip(BoardInfo clientBoard, ShipInfo ship)

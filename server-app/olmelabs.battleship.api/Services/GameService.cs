@@ -1,4 +1,6 @@
-﻿using olmelabs.battleship.api.Logic;
+﻿using Microsoft.Extensions.Options;
+using olmelabs.battleship.api.Logic;
+using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
@@ -13,11 +15,17 @@ namespace olmelabs.battleship.api.Services
     {
         private readonly IStorage _storage;
         private readonly IGameLogic _gameLogic;
+        private readonly IGameStatisticsService _gameStatistics;
+        private readonly GameOptions _options;
 
-        public GameService(IStorage storage, IGameLogic gameLogic)
+        public GameService(IStorage storage, IGameLogic gameLogic, 
+            IGameStatisticsService gameStatistics,
+            IOptions<GameOptions> optionsAccessor)
         {
             _storage = storage;
             _gameLogic = gameLogic;
+            _gameStatistics = gameStatistics;
+            _options = optionsAccessor.Value;
         }
 
         public virtual async Task<GameState> StartNewGameAsync(string connectionId)
@@ -90,7 +98,13 @@ namespace olmelabs.battleship.api.Services
             if (g == null)
                 return -1;
 
-            int i = _gameLogic.ChooseNextClientCell(g.ClientBoard, g.CurrentShip);
+            ClientStatistics stat = null;
+            if (_options.UseStatistics)
+            {
+                stat = await _gameStatistics.GetStatisticsAsync();
+            }
+
+            int i = _gameLogic.ChooseNextClientCell(g.ClientBoard, g.CurrentShip, stat);
 
             g.ClientBoard.Board[i] = (int)ClientCellState.CellFiredResultNotYetKnown;
 

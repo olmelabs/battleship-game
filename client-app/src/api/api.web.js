@@ -30,6 +30,18 @@ class GameApi {
   static register(user) {
     return postDataReturnJson('Account/Register', user);
   }
+
+  static sendResetPasswordLink(email){
+    return postDataReturnJson('Account/SendResetPasswordLink', email);
+  }
+
+  static resetPassword(code, password, password2){
+    return postDataReturnJson('Account/ResetPassword', {code, password, password2});
+  }
+
+  static confirmEmail(code){
+    return postDataReturnJson('Account/ConfirmEmail', code);
+  }
 }
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch

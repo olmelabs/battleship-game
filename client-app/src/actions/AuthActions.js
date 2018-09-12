@@ -14,6 +14,12 @@ export function registrationResult(data){
 export function registrationReset(){
   return { type: consts.ACCOUNT_REGISTER_RESET};
 }
+export function resetPasswordResult(data){
+  return { type: consts.ACCOUNT_RESET_PASSWORD, data };
+}
+export function confirmEmaildResult(data){
+  return { type: consts.ACCOUNT_CONFIRM_EMAIL, data };
+}
 
 export function login(email, password) {
   return function(dispatch, getState){
@@ -55,5 +61,46 @@ export  function register(user) {
   };
 }
 
+export function sendResetPasswordLink(email){
+  return function(dispatch, getState){
 
+    dispatch(ajaxCallStart());
+
+    return gameApi.sendResetPasswordLink(email).then(() => {
+      dispatch(ajaxCallSuccess());
+    }).catch(error => {
+      dispatch(ajaxCallError(error));
+    });
+  };
+}
+
+export function resetPassword(code, password, password2){
+  return function(dispatch, getState){
+
+    dispatch(ajaxCallStart());
+
+    return gameApi.resetPassword(code, password, password2).then(data => {
+      dispatch(ajaxCallSuccess());
+      dispatch(resetPasswordResult(data));
+    }).catch(error => {
+      dispatch(ajaxCallError(error));
+      dispatch(resetPasswordResult({success:false, message:'Unknown Error'}));
+    });
+  };
+}
+
+export function confirmEmail(code){
+  return function(dispatch, getState){
+
+    dispatch(ajaxCallStart());
+
+    return gameApi.confirmEmail(code).then(data => {
+      dispatch(ajaxCallSuccess());
+      dispatch(confirmEmaildResult(data));
+    }).catch(error => {
+      dispatch(ajaxCallError(error));
+      dispatch(confirmEmaildResult({success:false, message:'Unknown Error'}));
+    });
+  };
+}
 

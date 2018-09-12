@@ -12,7 +12,7 @@ namespace olmelabs.battleship.api.Controllers
     [Route("api/[controller]/[action]")]
     public class AuthController : Controller
     {
-        private IConfiguration _config;
+        private readonly IConfiguration _config;
         private readonly IMapper _mapper;
         private readonly IAuthService _authSvc;
 

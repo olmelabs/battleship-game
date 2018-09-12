@@ -5,7 +5,12 @@ const initialState = {
   loginFailed: false,
   registrationDone: false,
   registrationSuccess: false,
-  registrationMessage: null
+  registrationMessage: null,
+  resetPasswordDone: false,
+  resetPasswordSuccess: false,
+  resetPasswordMessage: null,
+  emailConfirmSuccess: false,
+  emailConfirmMessage: null,
 };
 
 const authState = (state = initialState, action) => {
@@ -25,6 +30,12 @@ const authState = (state = initialState, action) => {
 
     case consts.ACCOUNT_REGISTER_RESET:
       return Object.assign({}, state, {registrationDone: false, registrationSuccess: false, registrationMessage: null});
+
+    case consts.ACCOUNT_RESET_PASSWORD:
+      return Object.assign({}, state, {resetPasswordDone: true, resetPasswordSuccess: action.data.success, resetPasswordMessage: action.data.message});
+
+    case consts.ACCOUNT_CONFIRM_EMAIL:
+      return  Object.assign({}, state, {emailConfirmSuccess: action.data.success, emailConfirmMessage: action.data.message});
   }
 
   return state;
