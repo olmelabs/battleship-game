@@ -226,6 +226,12 @@ namespace olmelabs.battleship.api.Logic
                 //    if (cellIndex.HasValue)
                 //        return cellIndex.Value;
                 //}
+
+                //try to guess next cell from most unexpplored space
+                int? cell = GetCellIndexFromLongestSpace(clientBoard.Board);
+                if (cell.HasValue)
+                    return cell.Value;
+
                 return GetRandomCellIndex(clientBoard.Board);
             }
             //if only one cell of ship is marked - try to find if it is horizontal or vertical
@@ -348,6 +354,7 @@ namespace olmelabs.battleship.api.Logic
             }
             return i;
         }
+
         private int? GetStatisticalCellIndex(int[] board, ClientStatistics statistics)
         {
             //TODO: Add Games Count
@@ -360,6 +367,51 @@ namespace olmelabs.battleship.api.Logic
                     return cellIdx;
             }
             return null;
+        }
+
+        public int? GetCellIndexFromLongestSpace(int[] board)
+        {
+            //we need some cells to be fired before going with intervals
+            int firedCellsCount = board.Count(c => c != (int)ClientCellState.CellNotFired);
+            double k = firedCellsCount / (double)board.Length;
+
+            if (k < 0.1) //at least 10% of board is known
+            {
+                return null;
+            }
+
+            int longestIntervalStart = -1;
+            int longestIntervalEnd = -1;
+            bool intervalReset = false;
+            int intervalStart = -1;
+            int intervalEnd = -1;
+
+            for (int i = 0; i < board.Length; i++)
+            {
+                if (board[i] == (int)ClientCellState.CellNotFired)
+                {
+                    if (intervalReset)
+                    {
+                        intervalStart = i;
+                        intervalReset = false;
+                    }
+                    intervalEnd = i;
+                }
+                else
+                {
+                    if (intervalEnd - intervalStart > longestIntervalEnd - longestIntervalStart)
+                    {
+                        longestIntervalStart = intervalStart;
+                        longestIntervalEnd = intervalEnd;
+                    }
+                    intervalReset = true;
+                }
+            }
+
+            if (longestIntervalStart < 0)
+                return null;
+
+            return _random.Next(longestIntervalStart, longestIntervalEnd);
         }
 
         public void MarkCellsAroundShip(BoardInfo clientBoard, ShipInfo ship)

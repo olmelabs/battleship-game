@@ -10,7 +10,7 @@ namespace olmelabs.battleship.api.tests.Logic
     [TestClass]
     public class GameLogicTests
     {
-   
+
         [TestMethod]
         public void GenerateBoadTest()
         {
@@ -116,12 +116,12 @@ namespace olmelabs.battleship.api.tests.Logic
             List<ClientShipDto> input = new List<ClientShipDto>()
             {
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 7, 8, 9, 10 } }, //this ship takes 2 lines
-                new ClientShipDto { IsVertical = false, Cells = new int?[] { 23, 24, 25 } }, 
+                new ClientShipDto { IsVertical = false, Cells = new int?[] { 23, 24, 25 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 43, 44, 45 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 63, 64 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 83, 84 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 88, 89} },
-                new ClientShipDto { IsVertical = false, Cells = new int?[] { 27 } }, 
+                new ClientShipDto { IsVertical = false, Cells = new int?[] { 27 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 47 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 67 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 96 } }
@@ -139,7 +139,7 @@ namespace olmelabs.battleship.api.tests.Logic
 
             List<ClientShipDto> input = new List<ClientShipDto>()
             {
-                new ClientShipDto { IsVertical = false, Cells = new int?[] { 6, 7, 8, 9 } }, 
+                new ClientShipDto { IsVertical = false, Cells = new int?[] { 6, 7, 8, 9 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 23, 24, 25 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 43, 44, 45 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 63, 64 } },
@@ -187,7 +187,7 @@ namespace olmelabs.battleship.api.tests.Logic
 
             List<ClientShipDto> input = new List<ClientShipDto>()
             {
-                new ClientShipDto { IsVertical = true, Cells = new int?[]  { 0, 10, 20, 30 } }, 
+                new ClientShipDto { IsVertical = true, Cells = new int?[]  { 0, 10, 20, 30 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 21, 22, 23 } }, //touches 4X ship 
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 43, 44, 45 } },
                 new ClientShipDto { IsVertical = false, Cells = new int?[] { 63, 64 } },
@@ -220,7 +220,7 @@ namespace olmelabs.battleship.api.tests.Logic
             Assert.AreEqual(14, board.Board.Count(x => x == 2));
 
             //select indexes of cells marked arounf ship
-            int[] result = board.Board.Select((val, idx) => new {V = val, I = idx }).Where(x => x.V == 2).Select(x => x.I).ToArray();
+            int[] result = board.Board.Select((val, idx) => new { V = val, I = idx }).Where(x => x.V == 2).Select(x => x.I).ToArray();
 
             Assert.IsTrue(result.SequenceEqual(expected));
         }
@@ -308,7 +308,7 @@ namespace olmelabs.battleship.api.tests.Logic
 
             BoardInfo board = new BoardInfo();
             ShipInfo ship = new ShipInfo(false, new[] { 91, 92, 93, 94 });
-            int[] expected = new[] {80, 81, 82, 83, 84, 85, 90, 95 };
+            int[] expected = new[] { 80, 81, 82, 83, 84, 85, 90, 95 };
 
             g.MarkCellsAroundShip(board, ship);
 
@@ -334,6 +334,27 @@ namespace olmelabs.battleship.api.tests.Logic
             int res = gameLogic.ChooseNextClientCell(boardInfo, currentShip, null);
 
             Assert.AreEqual(40, res);
+        }
+
+        [TestMethod]
+        public void GetCellFromUnFiredSpace_Test()
+        {
+            int[] board = new[] { 1, 0, 0, 0, 1, 2, 2, 2, 0, 0, 0, 0, 0, 0, 0, 1, 2, 2, 2, 2, 0, 0, 0, 1 };
+
+            GameLogic gameLogic = new GameLogic();
+            int? res1 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res2 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res3 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res4 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res5 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res6 = gameLogic.GetCellIndexFromLongestSpace(board);
+
+            Assert.IsTrue(res1 >= 8 && res1 <= 14);
+            Assert.IsTrue(res2 >= 8 && res2 <= 14);
+            Assert.IsTrue(res3 >= 8 && res3 <= 14);
+            Assert.IsTrue(res4 >= 8 && res4 <= 14);
+            Assert.IsTrue(res5 >= 8 && res5 <= 14);
+            Assert.IsTrue(res6 >= 8 && res6 <= 14);
         }
     }
 }
