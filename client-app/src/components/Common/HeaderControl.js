@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 
 class HeaderControl extends React.Component {
   constructor(props, context){
@@ -41,7 +41,7 @@ HeaderControl.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  authenticated: state.authState.authenticated
+  authenticated: state.authState.authenticated || localStorage.getItem('user')
 });
 
 

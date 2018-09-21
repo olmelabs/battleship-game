@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions';
+import * as actions from '../../actions';
 import { Link } from 'react-router-dom';
 
 class ResetPasswordStep2Page extends React.Component {

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import GameBoardMyCell from './GameBoardMyCell';
 import GameBoardEnemyCell from './GameBoardEnemyCell';
-import * as consts from '../helpers/const';
+import * as consts from '../../helpers/const';
 
 class GameBoard extends React.Component {
   constructor(props, context){
