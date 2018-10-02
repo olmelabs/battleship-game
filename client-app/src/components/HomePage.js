@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 
-class HomePage extends React.Component {
+export class HomePage extends React.Component {
   constructor(props, context){
     super(props, context);
   }
