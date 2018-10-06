@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import GameLink from './GameLink';
-import * as consts from '../helpers/const';
+import * as consts from '../../helpers/const';
 
 class GameMenu extends React.Component {
 

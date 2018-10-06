@@ -6,8 +6,8 @@ import GameBoard from './GameBoard';
 import BoardStatus from './BoardStatus';
 import GameMenu from './GameMenu';
 import ShipFactory from './ShipFactory';
-import * as actions from '../actions';
-import * as consts from '../helpers/const';
+import * as actions from '../../actions';
+import * as consts from '../../helpers/const';
 import toastr from 'toastr';
 
 class GamePage extends React.Component {

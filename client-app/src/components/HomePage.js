@@ -11,7 +11,7 @@ class HomePage extends React.Component {
   render() {
     const accountLink = this.props.authenticated ?
     (""):
-    (<p><Link to="login">Login</Link> or <Link to="register">Register</Link> to get the best experience</p>);
+    (<p className="dev-login-links"><Link to="login">Login</Link> or <Link to="register">Register</Link> to get the best experience</p>);
 
     return(
       <div className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { bindActionCreators } from 'redux';
-import * as actions from '../actions';
-import * as consts from '../helpers/const';
+import * as actions from '../../actions';
+import * as consts from '../../helpers/const';
 import {ClipLoader} from 'react-spinners';
 
 class GameBoardEnemyCell extends React.Component {
