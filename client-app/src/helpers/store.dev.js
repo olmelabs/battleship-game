@@ -4,14 +4,16 @@ import rootReducer from '../reducers';
 //dev dependencies
 import { createLogger } from 'redux-logger';
 import reduxImmutableStateInvariant from 'redux-immutable-state-invariant';
+import { composeWithDevTools } from 'redux-devtools-extension';
 
 const loggerMiddleware = createLogger();
 
 export const store = createStore(
     rootReducer,
-    applyMiddleware(
-        thunk,
-        reduxImmutableStateInvariant(),
-        loggerMiddleware
-    )
+    composeWithDevTools(
+      applyMiddleware(
+          thunk,
+          reduxImmutableStateInvariant(),
+          loggerMiddleware
+      ))
 );
