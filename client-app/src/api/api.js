@@ -1,1 +1,1 @@
-module.exports = require('./api.mock');
+module.exports = require('./api.web');
