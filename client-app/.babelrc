@@ -1,9 +1,14 @@
 {
   "presets": ["react","es2015","stage-3"],
-  "plugins": ["emotion","syntax-async-functions"],
+  "plugins": ["emotion",
+    "syntax-async-functions",
+    ["transform-runtime", {
+      "polyfill": false,
+      "regenerator": true
+    }]],
   "env": {
     "development": {
       "presets": ["react-hmre"]
     }
   }
-}                              
+}
