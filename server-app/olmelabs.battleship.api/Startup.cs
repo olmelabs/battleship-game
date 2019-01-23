@@ -36,18 +36,32 @@ namespace olmelabs.battleship.api
             services.AddOptions();
             services.Configure<GameOptions>(Configuration);
 
+            services.AddLogging(loggingBuilder =>
+            {
+                loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                loggingBuilder.AddConsole();
+                loggingBuilder.AddDebug();
+            });
+
             services.AddAutoMapper();
 
+            /*
+                After updating to signalr 1.1.0 withCredentials heade is hardocded to true in js. 
+                Had to send origin in response. 
+                AllowAnyOrigin sends * in response which is not acceptable when withCredentials = true
+            */
             services.AddCors(options =>
             {
-                options.AddPolicy("AllowAll",
+                options.AddPolicy("AllowedOrigins",
                     builder =>
                     {
                         builder
-                        .AllowAnyOrigin()
+                        .SetIsOriginAllowedToAllowWildcardSubdomains()
+                        //.AllowAnyOrigin()
+                        .WithOrigins(Configuration["Cors:AllowedOrigins"].Split(","))
                         .AllowAnyMethod()
                         .AllowAnyHeader()
-                        .AllowCredentials();    
+                        .AllowCredentials();
                     });
             });
 
@@ -106,10 +120,10 @@ namespace olmelabs.battleship.api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env, ILoggerFactory loggerFactory)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            loggerFactory.AddDebug();
+            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
+            //loggerFactory.AddDebug();
 
             if (env.IsDevelopment())
             {
@@ -119,7 +133,7 @@ namespace olmelabs.battleship.api
             IStorage storage = app.ApplicationServices.GetService<IStorage>();
             Task.Run(() => storage.Prepare());
 
-            app.UseCors("AllowAll");
+            app.UseCors("AllowedOrigins");
 
             app.UseAuthentication();
 
