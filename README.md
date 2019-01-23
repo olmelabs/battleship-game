@@ -75,19 +75,11 @@ npm install
 npm run build
 ```
 Login credentials for demo user: **user@domain.com / password**
-## Recent changes:
- - Added user accounts flow. Login, Registration, Reset Paswsord
- - Added quick board generation.
- - Added simple user accounts to demo protected routes and further features
- - Added MongoDB as possible storage.
- - Updated server-app from netcore2.1.0 to netcore 2.1.2
- - Added JWT authentification and Refresh tokens.
- - Updated server-app from netcore2.0 to netcore 2.1 
- - Updated client app to use signalr 1.0.0
- - Added more friendly ship placement flow.
 
-## Roadmap:
- - Add client side board validation 
- - Add client tests
- - ~~Add MongoDb as persistent stoage~~
- - ~~Add user accounts to proceed with collecting game statistics and other cool staff.~~
+## Release notes for 0.3.3:
+ - backend migrated to .netcore 2.2.1.
+ - docker image updated
+ - all other backend packages updated to latest versions.
+ - client migrated to reat 16.7, react-redux 6, signal r 1.1.0
+ - updated client unit tests to work with updated packages
+ - fixed CORS on backend to match signalr changes

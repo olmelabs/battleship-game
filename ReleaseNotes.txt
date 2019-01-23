@@ -1,7 +1,9 @@
 0.3.3
- - server migrated to .netcore 2.2.1.
- - all other server packages updated to latest versions
+ - backend migrated to .netcore 2.2.1.
+ - all other backend packages updated to latest versions.
  - client migrated to reat 16.7, react-redux 6, signal r 1.1.0
+ - updated client unit tests to work with updated packages
+ - fixed CORS on backend to match signalr changes
  
 0.3.1
  - Added quick board generation.
