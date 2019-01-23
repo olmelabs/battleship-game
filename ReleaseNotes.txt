@@ -1,3 +1,8 @@
+0.3.3
+ - server migrated to .netcore 2.2.1.
+ - all other server packages updated to latest versions
+ - client migrated to reat 16.7, react-redux 6, signal r 1.1.0
+ 
 0.3.1
  - Added quick board generation.
  - Added simple user accounts to demo protected routes and further features
