@@ -12,7 +12,7 @@ export class HomePage extends React.Component {
     const accountLink = this.props.authenticated ? (
       ""
     ) : (
-      <p className="dev-login-links">
+      <p test-id="login-links">
         <Link to="login">Login</Link> or <Link to="register">Register</Link> to
         get the best experience
       </p>

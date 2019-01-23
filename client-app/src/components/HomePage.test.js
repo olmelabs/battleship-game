@@ -14,12 +14,12 @@ describe("Home Page", () => {
   it("login links block is hidden for authenticated", () => {
     const wrapper = setup(true);
 
-    expect(wrapper.exists("p.dev-login-links")).toBe(false);
+    expect(wrapper.exists("[test-id='login-links']")).toBe(false);
   });
 
-  it("login links block is visible for not-authenticated", () => {
+  it("login links block is visible for non-authenticated", () => {
     const wrapper = setup(false);
 
-    expect(wrapper.exists("p.dev-login-links")).toBe(true);
+    expect(wrapper.exists("[test-id='login-links']")).toBe(true);
   });
 });
