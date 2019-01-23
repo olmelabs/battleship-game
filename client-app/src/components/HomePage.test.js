@@ -1,28 +1,25 @@
 import expect from "expect";
 import React from "react";
 import { shallow } from "enzyme";
-import HomePage from "./HomePage";
-import { store } from "../helpers/store.prod"; //change to store.dev to see dump of store.
-import * as actions from "../actions";
+import { HomePage } from "./HomePage";
 
-function setup() {
-  return shallow(<HomePage store={store} />).dive();
+function setup(authenticated) {
+  const props = {
+    authenticated
+  };
+  return shallow(<HomePage {...props} />);
 }
 
-//TODO: Fix tests after upgrading to react-redux 6
 describe("Home Page", () => {
-  xit("login links block is hidden for authenticated", () => {
-    //modify store state to test page props
-    store.dispatch(actions.loginSuccess());
+  it("login links block is hidden for authenticated", () => {
+    const wrapper = setup(true);
 
-    const wrapper = setup();
     expect(wrapper.exists("p.dev-login-links")).toBe(false);
   });
 
-  xit("login links block is visible for not-authenticated", () => {
-    store.dispatch(actions.loginFailed());
+  it("login links block is visible for not-authenticated", () => {
+    const wrapper = setup(false);
 
-    const wrapper = setup();
     expect(wrapper.exists("p.dev-login-links")).toBe(true);
   });
 });
