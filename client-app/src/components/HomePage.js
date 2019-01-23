@@ -20,7 +20,6 @@ export class HomePage extends React.Component {
 
     return (
       <div className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        {/* <h1 className="display-4">Welcome</h1> */}
         <p className="lead">
           This is battle-ship game to demo React, Redux, SignalR, .Net Core API,
           Docker and many other cool pieces of technology.

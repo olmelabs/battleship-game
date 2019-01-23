@@ -5,7 +5,8 @@ import { HeaderControl } from "./HeaderControl";
 
 function setup(authenticated) {
   const props = {
-    authenticated
+    authenticated,
+    actions: {}
   };
   return shallow(<HeaderControl {...props} />);
 }
