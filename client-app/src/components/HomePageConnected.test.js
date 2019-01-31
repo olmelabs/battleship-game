@@ -25,7 +25,9 @@ describe("Home Page Connected", () => {
 
     //console.log(wrapper.html());
     wrapper.update();
-    expect(wrapper.exists("p[test-id='login-links']")).toBe(false);
+
+    expect(wrapper.exists("[test-id='authorized-text']")).toBe(true);
+    expect(wrapper.exists("[test-id='unauthorized-text']")).toBe(false);
   });
 
   it("login links block is visible for not-authenticated", () => {
@@ -34,6 +36,8 @@ describe("Home Page Connected", () => {
 
     //console.log(wrapper.html());
     wrapper.update();
-    expect(wrapper.exists("p[test-id='login-links']")).toBe(true);
+
+    expect(wrapper.exists("[test-id='authorized-text']")).toBe(false);
+    expect(wrapper.exists("[test-id='unauthorized-text']")).toBe(true);
   });
 });

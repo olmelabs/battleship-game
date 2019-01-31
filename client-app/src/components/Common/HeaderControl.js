@@ -39,9 +39,9 @@ export class HeaderControl extends React.Component {
           <Link className="p-2 text-dark" to="/">
             Home
           </Link>
-          <Link className="p-2 text-dark" to="game">
+          {/* <Link className="p-2 text-dark" to="game">
             Game
-          </Link>
+          </Link> */}
           <Link className="p-2 text-dark" to="profile">
             Profile
           </Link>

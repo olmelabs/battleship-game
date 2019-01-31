@@ -10,20 +10,36 @@ export class HomePage extends React.Component {
 
   render() {
     const accountLink = this.props.authenticated ? (
-      ""
+      <p test-id="authorized-text">
+        <Link to="game">
+          <button className="round-button" title="Quick Game">
+            <i className="fa fa-laptop fa-2x" />
+          </button>
+        </Link>
+        <button className="round-button" title="Host Game">
+          <i className="fa fa-home fa-2x" />
+        </button>
+        <button className="round-button" title="Join Game">
+          <i className="fa fa-handshake fa-2x" />
+        </button>
+      </p>
     ) : (
-      <p test-id="login-links">
+      <p test-id="unauthorized-text">
         <Link to="login">Login</Link> or <Link to="register">Register</Link> to
-        get the best experience
+        play with friends.
+        <div>
+          <Link to="game">
+            <button className="round-button" title="Quick Game">
+              <i className="fa fa-laptop fa-2x" />
+            </button>
+          </Link>
+        </div>
       </p>
     );
 
     return (
       <div className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <p className="lead">
-          This is battle-ship game to demo React, Redux, SignalR, .Net Core API,
-          Docker and many other cool pieces of technology.
-        </p>
+        <p className="lead">Welcome to battle-ship game.</p>
         {accountLink}
       </div>
     );
