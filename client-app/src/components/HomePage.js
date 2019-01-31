@@ -12,14 +12,14 @@ export class HomePage extends React.Component {
     const accountLink = this.props.authenticated ? (
       <p test-id="authorized-text">
         <Link to="game">
-          <button className="round-button" title="Quick Game">
+          <button className="round-button round-button-80" title="Quick Game">
             <i className="fa fa-laptop fa-2x" />
           </button>
         </Link>
-        <button className="round-button" title="Host Game">
+        <button className="round-button round-button-80" title="Host Game">
           <i className="fa fa-home fa-2x" />
         </button>
-        <button className="round-button" title="Join Game">
+        <button className="round-button round-button-80" title="Join Game">
           <i className="fa fa-handshake fa-2x" />
         </button>
       </p>
@@ -29,7 +29,7 @@ export class HomePage extends React.Component {
         play with friends.
         <div>
           <Link to="game">
-            <button className="round-button" title="Quick Game">
+            <button className="round-button round-button-80" title="Quick Game">
               <i className="fa fa-laptop fa-2x" />
             </button>
           </Link>

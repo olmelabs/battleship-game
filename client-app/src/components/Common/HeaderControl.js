@@ -58,8 +58,7 @@ HeaderControl.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  authenticated:
-    state.authState.authenticated || localStorage.getItem("user") != null
+  authenticated: state.authState.authenticated
 });
 
 function mapDispatchToProps(dispatch) {
