@@ -157,5 +157,26 @@ namespace olmelabs.battleship.api.Repositories
         {
             await ConfirmEmailCodes.DeleteOneAsync(t => t.Key == code);
         }
+
+        public async Task<PeerToPeerGameState> FindP2PGameAsync(string code)
+        {
+            //TODO: Implement
+            await Task.FromResult(0);
+            throw new NotImplementedException();
+        }
+
+        public async Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState p2pgame)
+        {
+            //TODO: Implement
+            await Task.FromResult(0);
+            throw new NotImplementedException();
+        }
+
+        public async Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState p2pgame)
+        {
+            //TODO: Implement
+            await Task.FromResult(0);
+            throw new NotImplementedException();
+        }
     }
 }

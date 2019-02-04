@@ -10,6 +10,7 @@ using olmelabs.battleship.api.Services;
 namespace olmelabs.battleship.api.Controllers
 {
     [Route("api/[controller]/[action]")]
+    [ApiController]
     public class GameController : Controller
     {
         private readonly IGameService _gameSvc;
@@ -51,9 +52,9 @@ namespace olmelabs.battleship.api.Controllers
         public async Task<IActionResult> StartNewGame([FromBody]string connectionId)
         {
             GameState game = await _gameSvc.StartNewGameAsync(connectionId);
-            NewGameDto dto = _mapper.Map<NewGameDto>(game);
+            NewGameDto respDto = _mapper.Map<NewGameDto>(game);
 
-            return Ok(dto);
+            return Ok(respDto);
         }
 
         [HttpPost]

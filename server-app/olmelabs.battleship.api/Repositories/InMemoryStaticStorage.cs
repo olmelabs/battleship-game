@@ -20,6 +20,9 @@ namespace olmelabs.battleship.api.Repositories
         private static ConcurrentDictionary<string, string> _confirmEmailCodes;
         //dummy - ClientStatistics - only one record for now
         private static ConcurrentDictionary<string, ClientStatistics> _clientStatistics;
+        //p2p code - p2p game
+        private static ConcurrentDictionary<string, PeerToPeerGameState> _p2pgames;
+
 
 
         static InMemoryStaticStorage()
@@ -30,6 +33,7 @@ namespace olmelabs.battleship.api.Repositories
             _clientStatistics = new ConcurrentDictionary<string, ClientStatistics>();
             _resetPasswordCodes = new ConcurrentDictionary<string, string>();
             _confirmEmailCodes = new ConcurrentDictionary<string, string>();
+            _p2pgames = new ConcurrentDictionary<string, PeerToPeerGameState>();
         }
 
         public Task Prepare()
@@ -172,6 +176,24 @@ namespace olmelabs.battleship.api.Repositories
         {
             _confirmEmailCodes.TryRemove(code, out _);
             return Task.FromResult(0);
+        }
+
+        public Task<PeerToPeerGameState> FindP2PGameAsync(string code)
+        {
+            PeerToPeerGameState p2pgame = _p2pgames.FirstOrDefault(u => u.Key == code).Value;
+            return Task.FromResult(p2pgame);
+        }
+
+        public Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState p2pgame)
+        {
+            p2pgame = _p2pgames.GetOrAdd(p2pgame.Code, p2pgame);
+            return Task.FromResult(p2pgame);
+        }
+
+        public Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState p2pgame)
+        {
+            p2pgame = _p2pgames.AddOrUpdate(p2pgame.Code, p2pgame, (key, val) => p2pgame);
+            return Task.FromResult(p2pgame);
         }
     }
 }

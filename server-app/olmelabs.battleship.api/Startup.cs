@@ -15,6 +15,8 @@ using olmelabs.battleship.api.Services;
 using olmelabs.battleship.api.SignalRHubs;
 using Swashbuckle.AspNetCore.Swagger;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -83,6 +85,7 @@ namespace olmelabs.battleship.api
             services.AddTransient<IGameStatisticsService, GameStatisticsService>();
             services.AddTransient<INotificationService, NotificationService>();
             services.AddTransient<IGameService, GameService>();
+            services.AddTransient<IPeerToPeerGameService, PeerToPeerGameService>();
             services.AddTransient<IAuthService, AuthService>();
             services.AddTransient<IAccountService, AccountService>();
             services.AddTransient<IGameLogic, GameLogic>();
@@ -112,9 +115,21 @@ namespace olmelabs.battleship.api
 
             services.AddSignalR();
 
-            services.AddSwaggerGen(c =>
+            services.AddSwaggerGen(options =>
             {
-                c.SwaggerDoc("v1", new Info { Title = "Omelabs Battle Ship Game API V1", Version = "v1" });
+                options.SwaggerDoc("v1", new Info { Title = "Omelabs Battle Ship Game API V1", Version = "v1" });
+
+                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
+                {
+                    Description = "JWT Authorization header. Example: \"Authorization: Bearer {token}\"",
+                    Name = "Authorization",
+                    In = "header",
+                    Type = "apiKey"
+                });
+
+                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
+                    { "Bearer", Enumerable.Empty<string>() },
+                });
             });
 
         }

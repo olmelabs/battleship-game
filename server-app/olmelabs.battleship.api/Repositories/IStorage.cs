@@ -44,5 +44,11 @@ namespace olmelabs.battleship.api.Repositories
         Task AddEmailConfirmationCodeCodeAsync(string code, string email);
 
         Task DeleteEmailConfirmationCodeAsync(string code);
+
+        Task<PeerToPeerGameState> FindP2PGameAsync(string code);
+
+        Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState p2pgame);
+
+        Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState p2pgame);
     }
 }
