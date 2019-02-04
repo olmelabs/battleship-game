@@ -26,7 +26,7 @@ namespace olmelabs.battleship.api.Controllers
             _gameHubContext = gameHubContext;
         }
 
-        [HttpGet]
+        [HttpPost]
         [ActionName("StartSession")]
         public async Task<IActionResult> StartSession(string connectionId)
         {
@@ -39,7 +39,7 @@ namespace olmelabs.battleship.api.Controllers
         }
 
 
-        [HttpGet]
+        [HttpPost]
         [ActionName("JoinSession")]
         public async Task<IActionResult> JoinSession(string code, string connectionId)
         {

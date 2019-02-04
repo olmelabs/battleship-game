@@ -1,46 +1,56 @@
-import {API_URL} from './api.config';
+import { API_URL } from "./api.config";
 
 class GameApi {
   static validateBoard(ships) {
-    return postDataReturnJsonWithRefreshAsync('Game/ValidateBoard/', ships);
+    return postDataReturnJsonWithRefreshAsync("Game/ValidateBoard/", ships);
   }
   static generateBoard() {
-    return postDataReturnJsonWithRefreshAsync('Game/GenerateBoard/');
+    return postDataReturnJsonWithRefreshAsync("Game/GenerateBoard/");
   }
   static startNewGame(connectionId) {
-    return postDataReturnJsonWithRefreshAsync('Game/StartNewGame/', connectionId);
+    return postDataReturnJsonWithRefreshAsync(
+      "Game/StartNewGame/",
+      connectionId
+    );
   }
 
   static stopGame(gameId) {
-    return postDataReturnJsonWithRefreshAsync('Game/StopGame/', gameId);
+    return postDataReturnJsonWithRefreshAsync("Game/StopGame/", gameId);
   }
 
   static fireCannon(shotData) {
-    return postDataReturnJsonWithRefreshAsync('Game/FireCannon/', shotData);
+    return postDataReturnJsonWithRefreshAsync("Game/FireCannon/", shotData);
   }
 
-  static fireCannonResponse(shotResult){
-    return postDataReturnJsonWithRefreshAsync('Game/FireCannonProcessResult', shotResult);
+  static fireCannonResponse(shotResult) {
+    return postDataReturnJsonWithRefreshAsync(
+      "Game/FireCannonProcessResult",
+      shotResult
+    );
   }
 
   static login(email, password) {
-    return postDataReturnJson('Auth/Token', {email, password});
+    return postDataReturnJson("Auth/Token", { email, password });
   }
 
   static register(user) {
-    return postDataReturnJson('Account/Register', user);
+    return postDataReturnJson("Account/Register", user);
   }
 
-  static sendResetPasswordLink(email){
-    return postDataReturnJson('Account/SendResetPasswordLink', email);
+  static sendResetPasswordLink(email) {
+    return postDataReturnJson("Account/SendResetPasswordLink", email);
   }
 
-  static resetPassword(code, password, password2){
-    return postDataReturnJson('Account/ResetPassword', {code, password, password2});
+  static resetPassword(code, password, password2) {
+    return postDataReturnJson("Account/ResetPassword", {
+      code,
+      password,
+      password2
+    });
   }
 
-  static confirmEmail(code){
-    return postDataReturnJson('Account/ConfirmEmail', code);
+  static confirmEmail(code) {
+    return postDataReturnJson("Account/ConfirmEmail", code);
   }
 }
 
@@ -49,45 +59,44 @@ function postData(url, data) {
   // Default options are marked with *
   return fetch(API_URL + url, {
     body: JSON.stringify(data), // must match 'Content-Type' header
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, same-origin, *omit
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, same-origin, *omit
     headers: addHeaders(),
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, cors, *same-origin
-    redirect: 'follow', // manual, *follow, error
-    referrer: 'no-referrer', // *client, no-referrer
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, cors, *same-origin
+    redirect: "follow", // manual, *follow, error
+    referrer: "no-referrer" // *client, no-referrer
   });
 }
 
 function postDataReturnJson(url, data) {
-  return postData(url, data)
-    .then(response => response.json());
+  return postData(url, data).then(response => response.json());
 }
 
 async function postDataAsync(url, data) {
   // Default options are marked with *
   return await fetch(API_URL + url, {
     body: JSON.stringify(data), // must match 'Content-Type' header
-    cache: 'no-cache', // *default, no-cache, reload, force-cache, only-if-cached
-    credentials: 'same-origin', // include, same-origin, *omit
+    cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
+    credentials: "same-origin", // include, same-origin, *omit
     headers: addHeaders(),
-    method: 'POST', // *GET, POST, PUT, DELETE, etc.
-    mode: 'cors', // no-cors, cors, *same-origin
-    redirect: 'follow', // manual, *follow, error
-    referrer: 'no-referrer', // *client, no-referrer
+    method: "POST", // *GET, POST, PUT, DELETE, etc.
+    mode: "cors", // no-cors, cors, *same-origin
+    redirect: "follow", // manual, *follow, error
+    referrer: "no-referrer" // *client, no-referrer
   });
 }
 
-async function postDataReturnJsonWithRefreshAsync(url, data){
+async function postDataReturnJsonWithRefreshAsync(url, data) {
   let response = await postDataAsync(url, data);
-  if(response.ok) {
+  if (response.ok) {
     return response.json();
   }
-  if (response.status === 401){
+  if (response.status === 401) {
     let res = await refreshToken();
-    if (res){
+    if (res) {
       response = await postDataAsync(url, data);
-      if(response.ok) {
+      if (response.ok) {
         return response.json();
       } else {
         return response.blob;
@@ -97,40 +106,42 @@ async function postDataReturnJsonWithRefreshAsync(url, data){
   return response.blob;
 }
 
-async function refreshToken(){
-  const user = JSON.parse(localStorage.getItem('user'));
-  let response = await postDataAsync('Auth/Refresh', {token: user.token, refreshToken: user.refreshToken});
-  if(response.ok) {
+async function refreshToken() {
+  const user = JSON.parse(localStorage.getItem("user"));
+  let response = await postDataAsync("Auth/Refresh", {
+    token: user.token,
+    refreshToken: user.refreshToken
+  });
+  if (response.ok) {
     let newUser = await response.json();
-    localStorage.setItem('user', JSON.stringify(newUser));
+    localStorage.setItem("user", JSON.stringify(newUser));
     return true;
   }
-  if (response.status === 401){
+  if (response.status === 401) {
     return false;
   }
 }
 
-function addHeaders()
-{
+function addHeaders() {
   let headers = {
-    'Accept': 'application/json',
-    'Content-Type': 'application/json'
+    Accept: "application/json",
+    "Content-Type": "application/json"
   };
 
   let auth = addAuthHeader();
-  if (auth !== null){
+  if (auth !== null) {
     headers = Object.assign({}, headers, auth);
   }
 
   return headers;
 }
 
-function addAuthHeader(){
-  const user = JSON.parse(localStorage.getItem('user'));
+function addAuthHeader() {
+  const user = JSON.parse(localStorage.getItem("user"));
   if (user && user.token) {
-      return { 'Authorization': 'Bearer ' + user.token };
+    return { Authorization: "Bearer " + user.token };
   } else {
-      return null;
+    return null;
   }
 }
 
