@@ -28,7 +28,7 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("StartSession")]
-        public async Task<IActionResult> StartSession(string connectionId)
+        public async Task<IActionResult> StartSession([FromBody] string connectionId)
         {
             if (string.IsNullOrWhiteSpace(connectionId))
                 return BadRequest();
@@ -41,19 +41,19 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("JoinSession")]
-        public async Task<IActionResult> JoinSession(string code, string connectionId)
+        public async Task<IActionResult> JoinSession([FromBody] JoinSessionDto dto)
         {
-            if (string.IsNullOrWhiteSpace(connectionId))
+            if (string.IsNullOrWhiteSpace(dto.ConnectionId))
                 return BadRequest();
 
-            PeerToPeerGameState g = await _p2pSvc.JoinSessionAsync(code, connectionId);
+            PeerToPeerGameState g = await _p2pSvc.JoinSessionAsync(dto.Code, dto.ConnectionId);
             if (g == null)
               return NotFound();
 
-            if (connectionId == g.HostConnectionId)
+            if (dto.ConnectionId == g.HostConnectionId)
                 return BadRequest();
 
-            await _gameHubContext.Clients.Client(g.HostConnectionId).SendAsync("FriendConnected", connectionId);
+            await _gameHubContext.Clients.Client(g.HostConnectionId).SendAsync("FriendConnected", dto.ConnectionId);
 
             return Ok(new { });
         }

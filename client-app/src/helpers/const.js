@@ -19,6 +19,16 @@ export const BOARD_VALID = "BOARD_VALID";
 export const BOARD_INVALID = "BOARD_INVALID";
 export const BOARD_GENERATED = "BOARD_GENERATED";
 
+export const SET_GAME_TYPE = "SET_GAME_TYPE";
+
+export const GameType = {
+  SINGLEPLAYER: "SINGLEPLAYER",
+  HOST: "HOST",
+  JOIN: "JOIN"
+};
+
+export const SET_GAME_CODE = "SET_GAME_CODE";
+
 export const GameState = {
   NOT_STARTED: "NOT_STARTED",
   STARTED: "STARTED",

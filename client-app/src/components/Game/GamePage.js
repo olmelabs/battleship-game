@@ -9,10 +9,23 @@ import ShipFactory from "./ShipFactory";
 import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import toastr from "toastr";
+import { withRouter } from "react-router";
 
 class GamePage extends React.Component {
   constructor(props, context) {
     super(props, context);
+  }
+
+  componentDidMount() {
+    const { location } = this.props;
+
+    if (location.pathname === "/host") {
+      this.props.actions.initGameType(consts.GameType.HOST);
+    } else if (location.pathname === "/join") {
+      this.props.actions.initGameType(consts.GameType.JOIN);
+    } else {
+      this.props.actions.initGameType(consts.GameType.SINGLEPLAYER);
+    }
   }
 
   componentWillReceiveProps(nextProps) {
@@ -32,6 +45,9 @@ class GamePage extends React.Component {
 
     return (
       <React.Fragment>
+        <div>
+          {this.props.gameType} {this.props.gameAccessCode}
+        </div>
         <div className="row justify-content-center">
           <div className="col">
             <GameBoard boardType={consts.BoardType.MY_BOARD} />
@@ -51,11 +67,16 @@ class GamePage extends React.Component {
 
 GamePage.propTypes = {
   currentState: PropTypes.string.isRequired,
-  actions: PropTypes.object.isRequired
+  gameType: PropTypes.string.isRequired,
+  gameAccessCode: PropTypes.string,
+  actions: PropTypes.object.isRequired,
+  location: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  currentState: state.gameState.currentState
+  currentState: state.gameState.currentState,
+  gameType: state.gameState.gameType,
+  gameAccessCode: state.gameState.gameAccessCode
 });
 
 function mapDispatchToProps(dispatch) {
@@ -64,7 +85,9 @@ function mapDispatchToProps(dispatch) {
   };
 }
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(GamePage);
+export default withRouter(
+  connect(
+    mapStateToProps,
+    mapDispatchToProps
+  )(GamePage)
+);

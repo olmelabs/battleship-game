@@ -16,17 +16,23 @@ export class HomePage extends React.Component {
             <i className="fa fa-laptop fa-2x" />
           </button>
         </Link>
-        <button className="round-button round-button-80" title="Host Game">
-          <i className="fa fa-home fa-2x" />
-        </button>
-        <button className="round-button round-button-80" title="Join Game">
-          <i className="fa fa-handshake fa-2x" />
-        </button>
+        <Link to="host">
+          <button className="round-button round-button-80" title="Host Game">
+            <i className="fa fa-home fa-2x" />
+          </button>
+        </Link>
+        <Link to="join">
+          <button className="round-button round-button-80" title="Join Game">
+            <i className="fa fa-handshake fa-2x" />
+          </button>
+        </Link>
       </p>
     ) : (
-      <p test-id="unauthorized-text">
-        <Link to="login">Login</Link> or <Link to="register">Register</Link> to
-        play with friends.
+      <React.Fragment>
+        <p test-id="unauthorized-text">
+          <Link to="login">Login</Link> or <Link to="register">Register</Link>{" "}
+          to play with friends.
+        </p>
         <div>
           <Link to="game">
             <button className="round-button round-button-80" title="Quick Game">
@@ -34,7 +40,7 @@ export class HomePage extends React.Component {
             </button>
           </Link>
         </div>
-      </p>
+      </React.Fragment>
     );
 
     return (

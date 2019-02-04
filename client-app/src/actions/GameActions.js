@@ -1,6 +1,10 @@
-import * as consts from '../helpers/const';
-import gameApi from '../api/api';
-import {ajaxCallStart, ajaxCallError, ajaxCallSuccess} from './AjaxStatusActions';
+import * as consts from "../helpers/const";
+import gameApi from "../api/api";
+import {
+  ajaxCallStart,
+  ajaxCallError,
+  ajaxCallSuccess
+} from "./AjaxStatusActions";
 
 export const dummy = () => ({
   type: consts.AJAX_CALL_START
@@ -48,11 +52,11 @@ export const shipRotated = data => ({
 });
 
 export const boardValid = () => ({
-  type: consts.BOARD_VALID,
+  type: consts.BOARD_VALID
 });
 
 export const boardInvalid = () => ({
-  type: consts.BOARD_INVALID,
+  type: consts.BOARD_INVALID
 });
 
 export const boardGenerated = board => ({
@@ -60,69 +64,96 @@ export const boardGenerated = board => ({
   board
 });
 
+export const setGameType = gameType => ({
+  type: consts.SET_GAME_TYPE,
+  gameType
+});
 
-export function startNewGame(){
-  return function(dispatch, getState){
+export const setGameAccessCode = gameAccessCode => ({
+  type: consts.SET_GAME_CODE,
+  gameAccessCode
+});
 
+export function initGameType(gameType) {
+  return function(dispatch, getState) {
+    dispatch(setGameType(gameType));
+
+    if (gameType === consts.GameType.HOST) {
+      dispatch(ajaxCallStart());
+
+      const connectionId = getState().signalrState.connectionId;
+
+      return gameApi
+        .startSession(connectionId)
+        .then(res => {
+          dispatch(ajaxCallSuccess());
+
+          dispatch(setGameAccessCode(res.code));
+        })
+        .catch(error => {
+          dispatch(ajaxCallError(error));
+          throw error;
+        });
+    }
+  };
+}
+
+export function startNewGame() {
+  return function(dispatch, getState) {
     dispatch(ajaxCallStart());
     const ships = getState().gameState.myShips;
 
-    return gameApi.validateBoard(ships).then(ret => {
-
-      if (ret.result === true){
-
+    return gameApi
+      .validateBoard(ships)
+      .then(ret => {
+        if (ret.result === true) {
           dispatch(boardValid());
 
           const connectionId = getState().signalrState.connectionId;
           gameApi.startNewGame(connectionId).then(gameInfo => {
-
             dispatch(ajaxCallSuccess());
 
             dispatch(setGameState(consts.GameState.STARTED, gameInfo.gameId));
+          });
+        } else {
+          dispatch(ajaxCallSuccess());
 
-           });
-      }
-      else{
-
-        dispatch(ajaxCallSuccess());
-
-        dispatch(boardInvalid());
-      }
-
-    }).catch(error => {
-      dispatch(ajaxCallError());
-      throw(error);
-    });
+          dispatch(boardInvalid());
+        }
+      })
+      .catch(error => {
+        dispatch(ajaxCallError());
+        throw error;
+      });
   };
 }
 
-export function stopGame(){
-  return function(dispatch, getState){
-
+export function stopGame() {
+  return function(dispatch, getState) {
     dispatch(ajaxCallStart());
 
     const gameId = getState().gameState.gameId;
-    const ships =  getState().gameState.myShips;
+    const ships = getState().gameState.myShips;
 
-    return gameApi.stopGame({gameId, ships}).then(gameInfo => {
+    return gameApi
+      .stopGame({ gameId, ships })
+      .then(gameInfo => {
+        dispatch(ajaxCallSuccess());
 
-      dispatch(ajaxCallSuccess());
+        dispatch(setGameState(consts.GameState.COMPLETED, null));
 
-      dispatch(setGameState(consts.GameState.COMPLETED, null));
-
-      dispatch(showEnemyShips(gameInfo.ships));
-
-    }).catch(error => {
-      dispatch(ajaxCallError(error));
-      throw(error);
-    });
+        dispatch(showEnemyShips(gameInfo.ships));
+      })
+      .catch(error => {
+        dispatch(ajaxCallError(error));
+        throw error;
+      });
   };
 }
 
-export function fireCannon(cellId){
-  return function(dispatch, getState){
-
-    if(getState().ajaxState.ajaxCallIsnProgress > 0){
+export function fireCannon(cellId) {
+  return function(dispatch, getState) {
+    if (getState().ajaxState.ajaxCallIsnProgress > 0) {
       return Promise.resolve();
     }
 
@@ -130,88 +161,90 @@ export function fireCannon(cellId){
 
     const gameId = getState().gameState.gameId;
 
-    return gameApi.fireCannon({gameId, cellId})
+    return gameApi
+      .fireCannon({ gameId, cellId })
       .then(fireResult => {
-
         dispatch(ajaxCallSuccess());
 
         dispatch(makeFire(fireResult));
 
-        if (fireResult.ship.constructor === Array && fireResult.ship.length > 0){
+        if (
+          fireResult.ship.constructor === Array &&
+          fireResult.ship.length > 0
+        ) {
           dispatch(shipDestroyed(fireResult));
         }
 
-        if (fireResult.gameover === true){
+        if (fireResult.gameover === true) {
           dispatch(stopGame());
         }
-
       })
       .catch(error => {
         dispatch(ajaxCallError(error));
-        throw(error);
+        throw error;
       });
   };
 }
 
-export function fireCannonFromServer(fireRequest){
-  return function(dispatch, getState){
-
+export function fireCannonFromServer(fireRequest) {
+  return function(dispatch, getState) {
     dispatch(fireRequestFromServer(fireRequest));
 
     const cellId = fireRequest.cellId;
     const gameState = getState().gameState;
     const myBoard = getState().gameState.myBoard;
-    const ship = gameState.lastMyDestroyedShip === null ? null : gameState.lastMyDestroyedShip.cells;
+    const ship =
+      gameState.lastMyDestroyedShip === null
+        ? null
+        : gameState.lastMyDestroyedShip.cells;
 
     const res = {
       gameId: gameState.gameId,
       cellId: cellId,
-      result: (myBoard[cellId] == 1 || myBoard[cellId] == 3),
+      result: myBoard[cellId] == 1 || myBoard[cellId] == 3,
       ship: ship
     };
 
     //check game over
     let numberOfDestroyedShips = 0;
     gameState.myShips.map((ship, index) => {
-      if (ship.hits == ship.cells.length){
-          numberOfDestroyedShips++;
-        }
-      });
+      if (ship.hits == ship.cells.length) {
+        numberOfDestroyedShips++;
+      }
+    });
 
     dispatch(ajaxCallStart());
 
-    return gameApi.fireCannonResponse(res)
+    return gameApi
+      .fireCannonResponse(res)
       .then(res => {
-
         dispatch(ajaxCallSuccess());
 
-        if (numberOfDestroyedShips === 10){
+        if (numberOfDestroyedShips === 10) {
           dispatch(stopGame());
         }
-
       })
       .catch(error => {
         dispatch(ajaxCallError(error));
-        throw(error);
+        throw error;
       });
   };
 }
 
-export function generateBoard(){
-  return function(dispatch, getState){
-
+export function generateBoard() {
+  return function(dispatch, getState) {
     dispatch(ajaxCallStart());
 
-    return gameApi.generateBoard()
-    .then(board => {
+    return gameApi
+      .generateBoard()
+      .then(board => {
+        dispatch(ajaxCallSuccess());
 
-      dispatch(ajaxCallSuccess());
-
-      dispatch(boardGenerated(board));
-    })
-    .catch(error => {
-      dispatch(ajaxCallError(error));
-      throw(error);
-    });
+        dispatch(boardGenerated(board));
+      })
+      .catch(error => {
+        dispatch(ajaxCallError(error));
+        throw error;
+      });
   };
 }

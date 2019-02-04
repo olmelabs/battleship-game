@@ -3,6 +3,8 @@ import { updateShip, placeShipOnBoard } from "../services/GameService";
 
 const initialState = {
   currentState: consts.GameState.NOT_STARTED,
+  gameType: consts.GameType.SINGLEPLAYER,
+  gameAccessCode: null,
   gameId: null,
   isServerTurn: false,
   myShips: [
@@ -177,6 +179,22 @@ const gameState = (state = initialState, action) => {
         return Object.assign({}, state, {
           myShips: newShips,
           myBoard: newBoard
+        });
+      }
+      return state;
+
+    case consts.SET_GAME_TYPE:
+      if (state.currentState === consts.GameState.NOT_STARTED) {
+        return Object.assign({}, state, {
+          gameType: action.gameType
+        });
+      }
+      return state;
+
+    case consts.SET_GAME_CODE:
+      if (state.currentState === consts.GameState.NOT_STARTED) {
+        return Object.assign({}, state, {
+          gameAccessCode: action.gameAccessCode
         });
       }
       return state;

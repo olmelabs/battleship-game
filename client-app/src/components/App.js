@@ -64,6 +64,8 @@ class App extends React.Component {
                   component={ConfirmEmailPage}
                 />
                 <Route exact path="/game" component={GamePage} />
+                <PrivateRoute exact path="/host" component={GamePage} />
+                <PrivateRoute exact path="/join" component={GamePage} />
                 <PrivateRoute exact path="/profile" component={ProfilePage} />
                 <Route component={_NotFound} />
               </Switch>

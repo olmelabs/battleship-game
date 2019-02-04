@@ -52,6 +52,20 @@ class GameApi {
   static confirmEmail(code) {
     return postDataReturnJson("Account/ConfirmEmail", code);
   }
+
+  static startSession(connectionId) {
+    return postDataReturnJsonWithRefreshAsync(
+      "PeerToPeerGame/StartSession",
+      connectionId
+    );
+  }
+
+  static joinSession(code, connectionId) {
+    return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/JoinSession", {
+      code,
+      connectionId
+    });
+  }
 }
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
