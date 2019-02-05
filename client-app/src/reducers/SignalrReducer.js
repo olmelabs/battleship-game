@@ -1,12 +1,12 @@
-import * as consts from '../helpers/const';
+import * as consts from "../helpers/const";
 
 const initialState = {
   connectionId: null
 };
 
 const signalrState = (state = initialState, action) => {
-  if (action.type == consts.SIGNALR_ON_CONNECTED){
-    return {connectionId: action.connectionId};
+  if (action.type == consts.SIGNALR_ON_CONNECTED) {
+    return { connectionId: action.connectionId };
   }
   return state;
 };

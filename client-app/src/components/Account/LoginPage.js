@@ -1,17 +1,17 @@
-import React from 'react';
-import { connect } from 'react-redux';
-import { Link, Redirect } from 'react-router-dom';
-import PropTypes from 'prop-types';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions';
+import React from "react";
+import { connect } from "react-redux";
+import { Link, Redirect } from "react-router-dom";
+import PropTypes from "prop-types";
+import { bindActionCreators } from "redux";
+import * as actions from "../../actions";
 
 class LoginPage extends React.Component {
-  constructor(props, context){
+  constructor(props, context) {
     super(props, context);
 
     this.state = {
-      email: '',
-      password: '',
+      email: "",
+      password: "",
       submitted: false
     };
 
@@ -35,31 +35,65 @@ class LoginPage extends React.Component {
   }
 
   render() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
     if (this.props.authenticated) {
-      return <Redirect to={from}/>;
+      return <Redirect to={from} />;
     }
 
-    const warning = this.props.loginFailed ? (<div className="alert alert-warning" role="alert">Login failed</div>): ("");
-    return(
+    const warning = this.props.loginFailed ? (
+      <div className="alert alert-warning" role="alert">
+        Login failed
+      </div>
+    ) : (
+      ""
+    );
+    return (
       <React.Fragment>
         <form className="form-signin" onSubmit={this.handleSubmit}>
           <h2 className="form-signin-heading">Please sign in</h2>
 
-          <label htmlFor="email" className="sr-only">Email address</label>
-          <input type="email" autoComplete="email"  id="email" name="email" className="form-control form-top-input" placeholder="Email address"
-                value={this.state.email} required autoFocus onChange={this.handleChange}/>
+          <label htmlFor="email" className="sr-only">
+            Email address
+          </label>
+          <input
+            type="email"
+            autoComplete="email"
+            id="email"
+            name="email"
+            className="form-control form-top-input"
+            placeholder="Email address"
+            value={this.state.email}
+            required
+            autoFocus
+            onChange={this.handleChange}
+          />
 
-          <label htmlFor="password" className="sr-only">Password</label>
-          <input type="password" autoComplete="current-password" id="password" name="password" className="form-control form-bottom-input" placeholder="Password"
-                value={this.state.password} required onChange={this.handleChange}/>
+          <label htmlFor="password" className="sr-only">
+            Password
+          </label>
+          <input
+            type="password"
+            autoComplete="current-password"
+            id="password"
+            name="password"
+            className="form-control form-bottom-input"
+            placeholder="Password"
+            value={this.state.password}
+            required
+            onChange={this.handleChange}
+          />
 
           {warning}
-          <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-          <p><Link to="register">Register</Link> - <Link to="password_reset_link">Forgot Password?</Link></p>
+          <button className="btn btn-lg btn-primary btn-block" type="submit">
+            Sign in
+          </button>
+          <p>
+            <Link to="register">Register</Link> -{" "}
+            <Link to="password_reset_link">Forgot Password?</Link>
+          </p>
         </form>
       </React.Fragment>
-      );
+    );
   }
 }
 
@@ -75,7 +109,7 @@ const mapStateToProps = (state, ownProps) => ({
   loginFailed: state.authState.loginFailed
 });
 
-function mapDispatchToProps(dispatch){
+function mapDispatchToProps(dispatch) {
   return {
     actions: bindActionCreators(actions, dispatch)
   };

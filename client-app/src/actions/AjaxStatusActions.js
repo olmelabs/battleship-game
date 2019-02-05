@@ -1,4 +1,4 @@
-import * as consts from '../helpers/const';
+import * as consts from "../helpers/const";
 
 export function ajaxCallStart() {
   return { type: consts.AJAX_CALL_START };

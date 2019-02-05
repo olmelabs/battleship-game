@@ -1,38 +1,42 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { bindActionCreators } from 'redux';
-import * as actions from '../../actions';
-import * as consts from '../../helpers/const';
-import {ClipLoader} from 'react-spinners';
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import { bindActionCreators } from "redux";
+import * as actions from "../../actions";
+import * as consts from "../../helpers/const";
+import { ClipLoader } from "react-spinners";
 
 class GameBoardEnemyCell extends React.Component {
   constructor(props, context) {
     super(props, context);
     this.onCellClick = this.onCellClick.bind(this);
     this.state = {
-      loading:false
+      loading: false
     };
   }
 
-  onCellClick(){
-    if (this.props.currentState === consts.GameState.NOT_STARTED || this.props.currentState === consts.GameState.COMPLETED){
+  onCellClick() {
+    if (
+      this.props.currentState === consts.GameState.NOT_STARTED ||
+      this.props.currentState === consts.GameState.COMPLETED
+    ) {
       return;
     }
 
-    if (this.props.isServerTurn){
+    if (this.props.isServerTurn) {
       return;
     }
 
-    if (this.props.isShotFired || this.state.loading == true){
+    if (this.props.isShotFired || this.state.loading == true) {
       return;
     }
 
-    this.setState({loading:true});
-    this.props.actions.fireCannon(this.props.cellId)
-      .then(() => this.setState({loading: false}))
+    this.setState({ loading: true });
+    this.props.actions
+      .fireCannon(this.props.cellId)
+      .then(() => this.setState({ loading: false }))
       .catch(error => {
-        this.setState({loading: false});
+        this.setState({ loading: false });
       });
   }
 
@@ -40,9 +44,10 @@ class GameBoardEnemyCell extends React.Component {
     return (
       <button
         className={this.props.drawBorder ? "cell-selected" : "cell"}
-        onClick={this.onCellClick}>
-          {this.props.isShotFired ? (this.props.isShipOnIt ? "X" : "-") : ""}
-           <ClipLoader color={'#868e96'} loading={this.state.loading}  />
+        onClick={this.onCellClick}
+      >
+        {this.props.isShotFired ? (this.props.isShipOnIt ? "X" : "-") : ""}
+        <ClipLoader color={"#868e96"} loading={this.state.loading} />
       </button>
     );
   }
@@ -70,17 +75,16 @@ const mapStateToProps = (state, ownProps) => ({
   isShipOnIt: state.gameState.enemyBoard[ownProps.cellId] % 10 === 2,
   drawBorder: state.gameState.enemyBoard[ownProps.cellId] >= 10,
   currentState: state.gameState.currentState,
-  isServerTurn: state.gameState.isServerTurn,
+  isServerTurn: state.gameState.isServerTurn
 });
 
-function mapDispatchToProps(dispatch){
-    return {
-      actions: bindActionCreators(actions, dispatch)
-    };
+function mapDispatchToProps(dispatch) {
+  return {
+    actions: bindActionCreators(actions, dispatch)
+  };
 }
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+  mapStateToProps,
+  mapDispatchToProps
 )(GameBoardEnemyCell);
-

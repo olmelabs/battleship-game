@@ -1,5 +1,5 @@
-if (process.env.NODE_ENV === 'production'){
-  module.exports = require('./api.config.prod');
+if (process.env.NODE_ENV === "production") {
+  module.exports = require("./api.config.prod");
 } else {
-  module.exports = require('../api/api.config.dev');
+  module.exports = require("../api/api.config.dev");
 }

@@ -1,15 +1,14 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import GameLink from './GameLink';
-import * as consts from '../../helpers/const';
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import GameLink from "./GameLink";
+import * as consts from "../../helpers/const";
 
 class GameMenu extends React.Component {
-
-  render(){
-
-    const isStartActive = this.props.currentState === consts.GameState.NOT_STARTED;
-    const isStopActive =  this.props.currentState === consts.GameState.STARTED;
+  render() {
+    const isStartActive =
+      this.props.currentState === consts.GameState.NOT_STARTED;
+    const isStopActive = this.props.currentState === consts.GameState.STARTED;
     const isNewActive = this.props.currentState === consts.GameState.COMPLETED;
 
     return (
@@ -17,13 +16,16 @@ class GameMenu extends React.Component {
         {/* <div>Current State: {this.props.currentState}</div> */}
         {/* <span>Actions: </span> */}
         <GameLink newState={consts.GameState.STARTED} isActive={isStartActive}>
-            Start
+          Start
         </GameLink>
         <GameLink newState={consts.GameState.COMPLETED} isActive={isStopActive}>
-            Finish
+          Finish
         </GameLink>
-        <GameLink newState={consts.GameState.NOT_STARTED} isActive={isNewActive}>
-            New Game
+        <GameLink
+          newState={consts.GameState.NOT_STARTED}
+          isActive={isNewActive}
+        >
+          New Game
         </GameLink>
       </div>
     );
@@ -35,10 +37,7 @@ GameMenu.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  currentState: state.gameState.currentState,
+  currentState: state.gameState.currentState
 });
 
-export default connect(
-  mapStateToProps
-)(GameMenu);
-
+export default connect(mapStateToProps)(GameMenu);
