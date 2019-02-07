@@ -2,7 +2,7 @@ import * as consts from "../helpers/const";
 import gameApi from "../api/api";
 import {
   ajaxCallStart,
-  ajaxCallError,
+  ajaxCallErrorCheckAuth,
   ajaxCallSuccess
 } from "./AjaxStatusActions";
 
@@ -91,7 +91,7 @@ export function initGameType(gameType) {
           dispatch(setGameAccessCode(res.code));
         })
         .catch(error => {
-          dispatch(ajaxCallError(error));
+          dispatch(ajaxCallErrorCheckAuth(error));
           throw error;
         });
     }
@@ -122,7 +122,7 @@ export function startNewGame() {
         }
       })
       .catch(error => {
-        dispatch(ajaxCallError());
+        dispatch(ajaxCallErrorCheckAuth(error));
         throw error;
       });
   };
@@ -145,7 +145,7 @@ export function stopGame() {
         dispatch(showEnemyShips(gameInfo.ships));
       })
       .catch(error => {
-        dispatch(ajaxCallError(error));
+        dispatch(ajaxCallErrorCheckAuth(error));
         throw error;
       });
   };
@@ -180,7 +180,7 @@ export function fireCannon(cellId) {
         }
       })
       .catch(error => {
-        dispatch(ajaxCallError(error));
+        dispatch(ajaxCallErrorCheckAuth(error));
         throw error;
       });
   };
@@ -225,7 +225,7 @@ export function fireCannonFromServer(fireRequest) {
         }
       })
       .catch(error => {
-        dispatch(ajaxCallError(error));
+        dispatch(ajaxCallErrorCheckAuth(error));
         throw error;
       });
   };
@@ -243,7 +243,7 @@ export function generateBoard() {
         dispatch(boardGenerated(board));
       })
       .catch(error => {
-        dispatch(ajaxCallError(error));
+        dispatch(ajaxCallErrorCheckAuth(error));
         throw error;
       });
   };

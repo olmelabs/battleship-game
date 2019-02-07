@@ -16,6 +16,8 @@ import ProfilePage from "./Account/ProfilePage";
 import HeaderControl from "./Common/HeaderControl";
 import FooterControl from "./Common/FooterControl";
 import _NotFound from "./Common/_NotFound";
+import { API_MODE } from "./../api/api";
+import * as consts from "./../helpers/const";
 
 import toastr from "toastr";
 import * as actions from "../actions";
@@ -25,16 +27,25 @@ import SignalRService from "../services/SignalrService";
 class App extends React.Component {
   constructor(props) {
     super(props);
+  }
 
-    SignalRService.registerConnection(connectionId => {
-      toastr.info("Connected to Server");
-      this.props.actions.signalrConnected(connectionId);
-    });
+  componentDidMount() {
+    if (API_MODE === consts.ApiMode.WEB) {
+      SignalRService.registerConnection(connectionId => {
+        toastr.info("Connected to Server");
+        this.props.actions.signalrConnected(connectionId);
+      });
 
-    SignalRService.registerFireFromServer(message => {
-      toastr.info("" + message.cellId); //"0" digit is ot displayed, so cast to string ;)
-      this.props.actions.fireCannonFromServer(message);
-    });
+      SignalRService.registerFireFromServer(message => {
+        toastr.info("" + message.cellId); //"0" digit is ot displayed, so cast to string ;)
+        this.props.actions.fireCannonFromServer(message);
+      });
+    }
+
+    if (API_MODE === consts.ApiMode.MOCK) {
+      toastr.info("Signal R connection is mocked");
+      this.props.actions.signalrConnected("MOCK_SIGNALR_CONNECTION_ID");
+    }
   }
 
   render() {

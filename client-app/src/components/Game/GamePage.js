@@ -9,7 +9,7 @@ import ShipFactory from "./ShipFactory";
 import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import toastr from "toastr";
-import { withRouter } from "react-router";
+import { withRouter, Redirect } from "react-router";
 
 class GamePage extends React.Component {
   constructor(props, context) {
@@ -48,6 +48,14 @@ class GamePage extends React.Component {
   }
 
   render() {
+    if (
+      (this.props.gameType === consts.GameType.HOST ||
+        this.props.gameType === consts.GameType.JOIN) &&
+      !this.props.authenticated
+    ) {
+      return <Redirect to="/login" />;
+    }
+
     const enemyBoard =
       this.props.currentState === consts.GameState.STARTED ||
       this.props.currentState === consts.GameState.COMPLETED ? (
@@ -96,6 +104,7 @@ GamePage.propTypes = {
   gameType: PropTypes.string.isRequired,
   gameAccessCode: PropTypes.string,
   connectionId: PropTypes.string,
+  authenticated: PropTypes.bool.isRequired,
   actions: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 };
@@ -104,7 +113,8 @@ const mapStateToProps = (state, ownProps) => ({
   currentState: state.gameState.currentState,
   gameType: state.gameState.gameType,
   gameAccessCode: state.gameState.gameAccessCode,
-  connectionId: state.signalrState.connectionId
+  connectionId: state.signalrState.connectionId,
+  authenticated: state.authState.authenticated
 });
 
 function mapDispatchToProps(dispatch) {

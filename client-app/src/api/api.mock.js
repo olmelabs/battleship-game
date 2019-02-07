@@ -1,4 +1,7 @@
 import delay from "./delay";
+import * as consts from "../helpers/const";
+
+export const API_MODE = consts.ApiMode.MOCK;
 
 const gameIdOnServer = "0000000000000000000";
 class GameApi {

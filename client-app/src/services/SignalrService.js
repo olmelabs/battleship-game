@@ -1,5 +1,8 @@
 import { SIGNALR_URL } from "../api/api.config";
 
+import { API_MODE } from "../api/api";
+import * as consts from "../helpers/const";
+
 import {
   HubConnection,
   HubConnectionBuilder,
@@ -15,9 +18,11 @@ class WebSocketService {
       .build();
 
     // start connection
-    this.connection.start().catch(err => {
-      throw err;
-    });
+    if (API_MODE == consts.ApiMode.WEB) {
+      this.connection.start().catch(err => {
+        throw err;
+      });
+    }
   }
 
   registerConnection(callBack) {

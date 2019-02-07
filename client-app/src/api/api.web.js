@@ -1,4 +1,7 @@
 import { API_URL } from "./api.config";
+import * as consts from "../helpers/const";
+
+export const API_MODE = consts.ApiMode.WEB;
 
 class GameApi {
   static validateBoard(ships) {
@@ -115,6 +118,8 @@ async function postDataReturnJsonWithRefreshAsync(url, data) {
       } else {
         return response.blob;
       }
+    } else {
+      throw new Error(response.status);
     }
   }
   return response.blob;
