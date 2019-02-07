@@ -28,6 +28,8 @@ export const GameType = {
 };
 
 export const SET_GAME_CODE = "SET_GAME_CODE";
+export const JOIN_GAME = "JOIN_GAME";
+export const JOIN_GAME_ERROR = "JOIN_GAME_ERROR";
 
 export const GameState = {
   NOT_STARTED: "NOT_STARTED",

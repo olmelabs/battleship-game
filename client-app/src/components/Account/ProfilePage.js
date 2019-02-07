@@ -18,8 +18,6 @@ class ProfilePage extends React.Component {
     return (
       <div className="row justify-content-center">
         <div className="col-md-8 col-lg-4 col-xs-12">
-          {/* <h2>Profile</h2> */}
-          <p> this is private route demo</p>
           <form>
             <div className="form-group">
               <label htmlFor="txtEmail">Email address</label>

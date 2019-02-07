@@ -74,6 +74,10 @@ export const setGameAccessCode = gameAccessCode => ({
   gameAccessCode
 });
 
+export const joinGameError = () => ({
+  type: consts.JOIN_GAME_ERROR
+});
+
 export function initGameType(gameType) {
   return function(dispatch, getState) {
     dispatch(setGameType(gameType));
@@ -95,6 +99,27 @@ export function initGameType(gameType) {
           throw error;
         });
     }
+  };
+}
+
+export function joinGame(code) {
+  return function(dispatch, getState) {
+    const gameType = getState().gameState.gameType;
+    dispatch(ajaxCallStart());
+
+    const connectionId = getState().signalrState.connectionId;
+
+    return gameApi
+      .joinSession(code, connectionId)
+      .then(res => {
+        dispatch(ajaxCallSuccess());
+        dispatch(setGameAccessCode(code));
+      })
+      .catch(error => {
+        dispatch(ajaxCallErrorCheckAuth(error));
+        dispatch(joinGameError());
+        throw error;
+      });
   };
 }
 

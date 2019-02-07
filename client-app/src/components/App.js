@@ -11,6 +11,7 @@ import ResetPasswordStep2Page from "./Account/ResetPasswordStep2Page";
 import ConfirmEmailPage from "./Account/ConfirmEmailPage";
 import RegisterPage from "./Account/RegisterPage";
 import GamePage from "./Game/GamePage";
+import JoinGamePage from "./Game/JoinGamePage";
 import HomePage from "./HomePage";
 import ProfilePage from "./Account/ProfilePage";
 import HeaderControl from "./Common/HeaderControl";
@@ -77,6 +78,7 @@ class App extends React.Component {
                 <Route exact path="/game" component={GamePage} />
                 <PrivateRoute exact path="/host" component={GamePage} />
                 <PrivateRoute exact path="/join" component={GamePage} />
+                <PrivateRoute exact path="/code" component={JoinGamePage} />
                 <PrivateRoute exact path="/profile" component={ProfilePage} />
                 <Route component={_NotFound} />
               </Switch>

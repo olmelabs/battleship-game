@@ -109,6 +109,12 @@ async function postDataReturnJsonWithRefreshAsync(url, data) {
   if (response.ok) {
     return response.json();
   }
+  if (response.status === 400) {
+    throw new Error(response.status);
+  }
+  if (response.status === 404) {
+    throw new Error(response.status);
+  }
   if (response.status === 401) {
     let res = await refreshToken();
     if (res) {

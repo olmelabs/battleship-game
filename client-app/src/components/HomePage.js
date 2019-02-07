@@ -21,7 +21,7 @@ export class HomePage extends React.Component {
             <i className="fa fa-home fa-2x" />
           </button>
         </Link>
-        <Link to="join">
+        <Link to="code">
           <button className="round-button round-button-80" title="Join Game">
             <i className="fa fa-handshake fa-2x" />
           </button>

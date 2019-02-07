@@ -5,6 +5,7 @@ const initialState = {
   currentState: consts.GameState.NOT_STARTED,
   gameType: consts.GameType.SINGLEPLAYER,
   gameAccessCode: null,
+  joinGameError: false,
   gameId: null,
   isServerTurn: false,
   myShips: [
@@ -195,6 +196,14 @@ const gameState = (state = initialState, action) => {
       if (state.currentState === consts.GameState.NOT_STARTED) {
         return Object.assign({}, state, {
           gameAccessCode: action.gameAccessCode
+        });
+      }
+      return state;
+
+    case consts.JOIN_GAME_ERROR:
+      if (state.currentState === consts.GameState.NOT_STARTED) {
+        return Object.assign({}, state, {
+          joinGameError: true
         });
       }
       return state;
