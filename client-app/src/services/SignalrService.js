@@ -36,6 +36,12 @@ class WebSocketService {
       callBack(message);
     });
   }
+
+  registerFriendConnected(callBack) {
+    this.connection.on("FriendConnected", message => {
+      callBack(message);
+    });
+  }
 }
 
 const SignalRService = new WebSocketService();

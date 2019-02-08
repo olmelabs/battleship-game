@@ -38,8 +38,12 @@ class App extends React.Component {
       });
 
       SignalRService.registerFireFromServer(message => {
-        toastr.info("" + message.cellId); //"0" digit is ot displayed, so cast to string ;)
+        toastr.info("" + message.cellId); //"0" digit is not displayed, so cast to string ;)
         this.props.actions.fireCannonFromServer(message);
+      });
+
+      SignalRService.registerFriendConnected(message => {
+        toastr.info("Your friend joined the game");
       });
     }
 
