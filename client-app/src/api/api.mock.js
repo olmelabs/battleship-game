@@ -39,7 +39,15 @@ class GameApi {
     });
   }
 
-  static startNewGame(connectionId) {
+  static startMultiPlayerNewGame(gameCode, connectionId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({});
+      }, delay);
+    });
+  }
+
+  static startSinglePlayerNewGame(connectionId) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(Object.assign({}, { gameId: gameIdOnServer }));
@@ -47,7 +55,7 @@ class GameApi {
     });
   }
 
-  static stopGame(gameId) {
+  static stopSinglePlayerGame(gameId) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve(

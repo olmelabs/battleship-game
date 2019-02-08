@@ -18,10 +18,14 @@ class GameLink extends React.Component {
         this.props.actions.setGameState(consts.GameState.NOT_STARTED, null);
         break;
       case consts.GameState.STARTED:
-        this.props.actions.startNewGame();
+        if (this.props.gameType === consts.GameType.SINGLEPLAYER) {
+          this.props.actions.startSinglePlayerNewGame();
+        } else {
+          this.props.actions.startMultiPlayerNewGame();
+        }
         break;
       case consts.GameState.COMPLETED:
-        this.props.actions.stopGame();
+        this.props.actions.stopSinglePlayerGame();
         break;
       default:
         break;
@@ -45,13 +49,16 @@ class GameLink extends React.Component {
 }
 
 GameLink.propTypes = {
+  gameType: PropTypes.string.isRequired,
   isActive: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
   newState: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+  gameType: state.gameState.gameType
+});
 
 function mapDispatchToProps(dispatch) {
   return {

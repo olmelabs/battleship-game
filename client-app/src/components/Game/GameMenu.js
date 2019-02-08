@@ -7,7 +7,12 @@ import * as consts from "../../helpers/const";
 class GameMenu extends React.Component {
   render() {
     const isStartActive =
-      this.props.currentState === consts.GameState.NOT_STARTED;
+      this.props.currentState === consts.GameState.NOT_STARTED &&
+      (this.props.gameType === consts.GameType.SINGLEPLAYER ||
+        (this.props.gameType === consts.GameType.HOST &&
+          this.props.isFriendConnected) ||
+        (this.props.gameType === consts.GameType.JOIN &&
+          this.props.isFriendConnected));
     const isStopActive = this.props.currentState === consts.GameState.STARTED;
     const isNewActive = this.props.currentState === consts.GameState.COMPLETED;
 
@@ -33,10 +38,14 @@ class GameMenu extends React.Component {
 }
 
 GameMenu.propTypes = {
+  gameType: PropTypes.string.isRequired,
+  isFriendConnected: PropTypes.bool.isRequired,
   currentState: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
+  gameType: state.gameState.gameType,
+  isFriendConnected: state.gameState.multiplayer.isFriendConnected,
   currentState: state.gameState.currentState
 });
 

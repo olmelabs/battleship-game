@@ -44,6 +44,7 @@ class App extends React.Component {
 
       SignalRService.registerFriendConnected(message => {
         toastr.info("Your friend joined the game");
+        this.props.actions.joinGameSuccess();
       });
     }
 

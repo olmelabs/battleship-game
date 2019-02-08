@@ -7,17 +7,19 @@ class GameApi {
   static validateBoard(ships) {
     return postDataReturnJsonWithRefreshAsync("Game/ValidateBoard/", ships);
   }
+
   static generateBoard() {
     return postDataReturnJsonWithRefreshAsync("Game/GenerateBoard/");
   }
-  static startNewGame(connectionId) {
+
+  static startSinglePlayerNewGame(connectionId) {
     return postDataReturnJsonWithRefreshAsync(
       "Game/StartNewGame/",
       connectionId
     );
   }
 
-  static stopGame(gameId) {
+  static stopSinglePlayerGame(gameId) {
     return postDataReturnJsonWithRefreshAsync("Game/StopGame/", gameId);
   }
 
@@ -65,6 +67,13 @@ class GameApi {
 
   static joinSession(code, connectionId) {
     return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/JoinSession", {
+      code,
+      connectionId
+    });
+  }
+
+  static startMultiPlayerNewGame(code, connectionId) {
+    return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/StartNewGame/", {
       code,
       connectionId
     });

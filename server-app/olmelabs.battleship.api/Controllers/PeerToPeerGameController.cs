@@ -41,7 +41,7 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("JoinSession")]
-        public async Task<IActionResult> JoinSession([FromBody] JoinSessionDto dto)
+        public async Task<IActionResult> JoinSession([FromBody] P2PGameKeyDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.ConnectionId))
                 return BadRequest();
@@ -54,6 +54,15 @@ namespace olmelabs.battleship.api.Controllers
                 return BadRequest();
 
             await _gameHubContext.Clients.Client(g.HostConnectionId).SendAsync("FriendConnected", dto.ConnectionId);
+
+            return Ok(new { });
+        }
+
+        [HttpPost]
+        [ActionName("StartNewGame")]
+        public async Task<IActionResult> StartNewGame([FromBody]P2PGameKeyDto dto)
+        {
+            await Task.FromResult(0);
 
             return Ok(new { });
         }

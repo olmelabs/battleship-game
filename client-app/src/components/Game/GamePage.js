@@ -48,6 +48,7 @@ class GamePage extends React.Component {
   }
 
   render() {
+    //TODO: Redevelop this to show overlay/popup asking to relogin.
     if (
       (this.props.gameType === consts.GameType.HOST ||
         this.props.gameType === consts.GameType.JOIN) &&
@@ -74,7 +75,10 @@ class GamePage extends React.Component {
           <div className="col alert alert-primary game-top-message">
             You are hosting the game. Send this access code to your friend:{" "}
             <b>{this.props.gameAccessCode}</b>
-            <p>Setup your fleet while waitning friend to join.</p>
+            <p>
+              Setup your fleet while waitning your friend to join. You can start
+              game when you both connected.{" "}
+            </p>
           </div>
         </div>
       );
@@ -112,7 +116,7 @@ GamePage.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   currentState: state.gameState.currentState,
   gameType: state.gameState.gameType,
-  gameAccessCode: state.gameState.gameAccessCode,
+  gameAccessCode: state.gameState.multiplayer.gameAccessCode,
   connectionId: state.signalrState.connectionId,
   authenticated: state.authState.authenticated
 });

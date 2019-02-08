@@ -4,8 +4,11 @@ import { updateShip, placeShipOnBoard } from "../services/GameService";
 const initialState = {
   currentState: consts.GameState.NOT_STARTED,
   gameType: consts.GameType.SINGLEPLAYER,
-  gameAccessCode: null,
-  joinGameError: false,
+  multiplayer: {
+    gameAccessCode: null,
+    joinGameError: false,
+    isFriendConnected: false
+  },
   gameId: null,
   isServerTurn: false,
   myShips: [
@@ -195,7 +198,10 @@ const gameState = (state = initialState, action) => {
     case consts.SET_GAME_CODE:
       if (state.currentState === consts.GameState.NOT_STARTED) {
         return Object.assign({}, state, {
-          gameAccessCode: action.gameAccessCode
+          multiplayer: {
+            ...state.multiplayer,
+            gameAccessCode: action.gameAccessCode
+          }
         });
       }
       return state;
@@ -203,7 +209,21 @@ const gameState = (state = initialState, action) => {
     case consts.JOIN_GAME_ERROR:
       if (state.currentState === consts.GameState.NOT_STARTED) {
         return Object.assign({}, state, {
-          joinGameError: true
+          multiplayer: {
+            ...state.multiplayer,
+            joinGameError: true
+          }
+        });
+      }
+      return state;
+
+    case consts.JOIN_GAME_SUCCESS:
+      if (state.currentState === consts.GameState.NOT_STARTED) {
+        return Object.assign({}, state, {
+          multiplayer: {
+            ...state.multiplayer,
+            isFriendConnected: true
+          }
         });
       }
       return state;

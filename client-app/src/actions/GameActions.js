@@ -74,6 +74,10 @@ export const setGameAccessCode = gameAccessCode => ({
   gameAccessCode
 });
 
+export const joinGameSuccess = () => ({
+  type: consts.JOIN_GAME_SUCCESS
+});
+
 export const joinGameError = () => ({
   type: consts.JOIN_GAME_ERROR
 });
@@ -114,6 +118,7 @@ export function joinGame(code) {
       .then(res => {
         dispatch(ajaxCallSuccess());
         dispatch(setGameAccessCode(code));
+        dispatch(joinGameSuccess());
       })
       .catch(error => {
         dispatch(ajaxCallErrorCheckAuth(error));
@@ -123,7 +128,38 @@ export function joinGame(code) {
   };
 }
 
-export function startNewGame() {
+export function startMultiPlayerNewGame() {
+  return function(dispatch, getState) {
+    dispatch(ajaxCallStart());
+    const ships = getState().gameState.myShips;
+
+    return gameApi
+      .validateBoard(ships)
+      .then(ret => {
+        if (ret.result === true) {
+          dispatch(boardValid());
+
+          const code = getState().gameState.multiplayer.gameAccessCode;
+          const connectionId = getState().signalrState.connectionId;
+          gameApi.startMultiPlayerNewGame(code, connectionId).then(gameInfo => {
+            dispatch(ajaxCallSuccess());
+
+            //dispatch(setGameState(consts.GameState.STARTED, gameInfo.gameId));
+          });
+        } else {
+          dispatch(ajaxCallSuccess());
+
+          dispatch(boardInvalid());
+        }
+      })
+      .catch(error => {
+        dispatch(ajaxCallErrorCheckAuth(error));
+        throw error;
+      });
+  };
+}
+
+export function startSinglePlayerNewGame() {
   return function(dispatch, getState) {
     dispatch(ajaxCallStart());
     const ships = getState().gameState.myShips;
@@ -135,7 +171,7 @@ export function startNewGame() {
           dispatch(boardValid());
 
           const connectionId = getState().signalrState.connectionId;
-          gameApi.startNewGame(connectionId).then(gameInfo => {
+          gameApi.startSinglePlayerNewGame(connectionId).then(gameInfo => {
             dispatch(ajaxCallSuccess());
 
             dispatch(setGameState(consts.GameState.STARTED, gameInfo.gameId));
@@ -153,7 +189,7 @@ export function startNewGame() {
   };
 }
 
-export function stopGame() {
+export function stopSinglePlayerGame() {
   return function(dispatch, getState) {
     dispatch(ajaxCallStart());
 
@@ -161,7 +197,7 @@ export function stopGame() {
     const ships = getState().gameState.myShips;
 
     return gameApi
-      .stopGame({ gameId, ships })
+      .stopSinglePlayerGame({ gameId, ships })
       .then(gameInfo => {
         dispatch(ajaxCallSuccess());
 
@@ -201,7 +237,7 @@ export function fireCannon(cellId) {
         }
 
         if (fireResult.gameover === true) {
-          dispatch(stopGame());
+          dispatch(stopSinglePlayerGame());
         }
       })
       .catch(error => {
@@ -246,7 +282,7 @@ export function fireCannonFromServer(fireRequest) {
         dispatch(ajaxCallSuccess());
 
         if (numberOfDestroyedShips === 10) {
-          dispatch(stopGame());
+          dispatch(stopSinglePlayerGame());
         }
       })
       .catch(error => {

@@ -65,8 +65,8 @@ JoinGamePage.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  joinGameError: state.gameState.joinGameError,
-  gameAccessCode: state.gameState.gameAccessCode
+  joinGameError: state.gameState.multiplayer.joinGameError,
+  gameAccessCode: state.gameState.multiplayer.gameAccessCode
 });
 
 function mapDispatchToProps(dispatch) {
