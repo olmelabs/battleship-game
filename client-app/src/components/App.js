@@ -42,8 +42,18 @@ class App extends React.Component {
         this.props.actions.fireCannonFromServer(message);
       });
 
-      SignalRService.registerFriendConnected(message => {
+      SignalRService.registerFriendConnected(_ => {
         toastr.info("Your friend joined the game");
+        this.props.actions.joinGameSuccess();
+      });
+
+      SignalRService.registerFriendStartedGame(_ => {
+        toastr.info("Your friend started the game");
+        this.props.actions.joinGameSuccess();
+      });
+
+      SignalRService.registerGameStarted(_ => {
+        toastr.info("Your game is now started. Fire!");
         this.props.actions.joinGameSuccess();
       });
     }

@@ -4,7 +4,7 @@ using Moq;
 using olmelabs.battleship.api.Controllers;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 

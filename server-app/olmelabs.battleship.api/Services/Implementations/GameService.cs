@@ -4,12 +4,13 @@ using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
+using olmelabs.battleship.api.Services.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Implementations
 {
     public class GameService : IGameService
     {

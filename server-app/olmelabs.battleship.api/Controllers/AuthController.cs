@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using olmelabs.battleship.api.Models.Dto;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Interfaces;
 
 namespace olmelabs.battleship.api.Controllers
 {

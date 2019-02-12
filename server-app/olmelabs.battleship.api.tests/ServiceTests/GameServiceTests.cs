@@ -5,7 +5,7 @@ using olmelabs.battleship.api.Logic;
 using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Implementations;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;

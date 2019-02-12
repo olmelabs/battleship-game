@@ -2,7 +2,7 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Moq;
 using olmelabs.battleship.api.Repositories;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Implementations;
 
 namespace olmelabs.battleship.api.tests.ServiceTests
 {

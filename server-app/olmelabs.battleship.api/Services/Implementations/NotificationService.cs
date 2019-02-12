@@ -4,8 +4,9 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Models.ViewModels;
+using olmelabs.battleship.api.Services.Interfaces;
 
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Implementations
 {
     public class NotificationService : INotificationService
     {

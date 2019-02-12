@@ -9,9 +9,10 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
+using olmelabs.battleship.api.Services.Interfaces;
 
 // all credits - https://ppolyzos.com/2016/09/09/asp-net-core-render-view-to-string/
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Implementations
 {
     public class RazorViewRendererService : IRazorViewRendererService
     {

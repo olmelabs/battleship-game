@@ -57,6 +57,13 @@ class GamePage extends React.Component {
       return <Redirect to="/login" />;
     }
 
+    if (
+      this.props.gameType === consts.GameType.JOIN &&
+      this.props.gameAccessCode == null
+    ) {
+      return <Redirect to="/code" />;
+    }
+
     const enemyBoard =
       this.props.currentState === consts.GameState.STARTED ||
       this.props.currentState === consts.GameState.COMPLETED ? (

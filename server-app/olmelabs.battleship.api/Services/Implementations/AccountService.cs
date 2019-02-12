@@ -3,8 +3,9 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
+using olmelabs.battleship.api.Services.Interfaces;
 
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Implementations
 {
     public class AccountService : IAccountService
     {

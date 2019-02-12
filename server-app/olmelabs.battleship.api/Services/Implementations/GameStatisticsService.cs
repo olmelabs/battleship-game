@@ -5,8 +5,9 @@ using System.Collections.Concurrent;
 using olmelabs.battleship.api.Repositories;
 using System.Threading.Tasks;
 using olmelabs.battleship.api.Helpers;
+using olmelabs.battleship.api.Services.Interfaces;
 
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Implementations
 {
     public class GameStatisticsService : IGameStatisticsService
     {

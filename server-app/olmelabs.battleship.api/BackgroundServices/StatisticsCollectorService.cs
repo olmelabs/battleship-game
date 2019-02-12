@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using olmelabs.battleship.api.Models;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Interfaces;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;

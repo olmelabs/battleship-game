@@ -2,7 +2,7 @@
 using System.Security.Claims;
 using System.Threading.Tasks;
 
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Interfaces
 {
     public interface IAuthService
     {

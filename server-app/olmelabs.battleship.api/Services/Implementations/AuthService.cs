@@ -9,12 +9,13 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
+using olmelabs.battleship.api.Services.Interfaces;
 
 /*
  * Some credits on refresh token
  * https://www.blinkingcaret.com/2018/05/30/refresh-tokens-in-asp-net-core-web-api/
  */
-namespace olmelabs.battleship.api.Services
+namespace olmelabs.battleship.api.Services.Implementations
 {
     public class AuthService : IAuthService
     {
@@ -59,8 +60,7 @@ namespace olmelabs.battleship.api.Services
                     new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
                 };
 
-            int timeToLive = 24;
-            int.TryParse(_config["Jwt:TokenLifeHours"], out timeToLive);
+            int timeToLive = int.TryParse(_config["Jwt:TokenLifeHours"], out timeToLive) ? timeToLive : 24;
 
             var token = new JwtSecurityToken(_config["Jwt:Issuer"],
               _config["Jwt:Issuer"],
@@ -83,10 +83,8 @@ namespace olmelabs.battleship.api.Services
             };
 
             var tokenHandler = new JwtSecurityTokenHandler();
-            SecurityToken securityToken;
-            var principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out securityToken);
-            var jwtSecurityToken = securityToken as JwtSecurityToken;
-            if (jwtSecurityToken == null || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
+            ClaimsPrincipal principal = tokenHandler.ValidateToken(token, tokenValidationParameters, out SecurityToken securityToken);
+            if (!(securityToken is JwtSecurityToken jwtSecurityToken) || !jwtSecurityToken.Header.Alg.Equals(SecurityAlgorithms.HmacSha256, StringComparison.InvariantCultureIgnoreCase))
                 throw new SecurityTokenException("Invalid token");
 
             return principal;

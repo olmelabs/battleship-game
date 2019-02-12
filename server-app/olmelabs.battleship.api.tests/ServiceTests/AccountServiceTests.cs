@@ -2,7 +2,7 @@
 using Moq;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Repositories;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Implementations;
 using System;
 using System.Threading.Tasks;
 

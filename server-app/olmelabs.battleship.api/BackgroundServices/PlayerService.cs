@@ -10,7 +10,7 @@ using olmelabs.battleship.api.Helpers;
 using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Interfaces;
 using olmelabs.battleship.api.SignalRHubs;
 
 namespace olmelabs.battleship.api.BackgroundServices

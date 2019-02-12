@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
-using olmelabs.battleship.api.Services;
+using olmelabs.battleship.api.Services.Interfaces;
 using olmelabs.battleship.api.SignalRHubs;
 using System.Threading.Tasks;
 
@@ -48,12 +48,12 @@ namespace olmelabs.battleship.api.Controllers
 
             PeerToPeerGameState g = await _p2pSvc.JoinSessionAsync(dto.Code, dto.ConnectionId);
             if (g == null)
-              return NotFound();
+              return BadRequest();
 
             if (dto.ConnectionId == g.HostConnectionId)
                 return BadRequest();
 
-            await _gameHubContext.Clients.Client(g.HostConnectionId).SendAsync("FriendConnected", dto.ConnectionId);
+            await _gameHubContext.Clients.Client(g.HostConnectionId).SendAsync("FriendConnected");
 
             return Ok(new { });
         }
@@ -62,7 +62,28 @@ namespace olmelabs.battleship.api.Controllers
         [ActionName("StartNewGame")]
         public async Task<IActionResult> StartNewGame([FromBody]P2PGameKeyDto dto)
         {
-            await Task.FromResult(0);
+            if (string.IsNullOrWhiteSpace(dto.ConnectionId))
+                return BadRequest();
+
+            if (string.IsNullOrWhiteSpace(dto.Code))
+                return BadRequest();
+
+            PeerToPeerGameState g = await _p2pSvc.AddPeerToGame(dto.Code, dto.ConnectionId);
+
+            if (g == null)
+                return BadRequest();
+
+            if (g.GameStartedCount == 2)
+            {
+                //Start game here. Implement first move to signalr peer
+                var connectionId = dto.ConnectionId == g.HostConnectionId ? g.FriendConnectionId : g.HostConnectionId;
+                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStarted");
+            }
+            else {
+
+                var connectionId = dto.ConnectionId == g.HostConnectionId ? g.FriendConnectionId : g.HostConnectionId;
+                await _gameHubContext.Clients.Client(connectionId).SendAsync("FriendStartedGame");
+            }
 
             return Ok(new { });
         }

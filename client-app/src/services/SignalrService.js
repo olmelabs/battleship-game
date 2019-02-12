@@ -42,6 +42,18 @@ class WebSocketService {
       callBack(message);
     });
   }
+
+  registerFriendStartedGame(callBack) {
+    this.connection.on("FriendStartedGame", message => {
+      callBack(message);
+    });
+  }
+
+  registerGameStarted(callBack) {
+    this.connection.on("GameStarted", message => {
+      callBack(message);
+    });
+  }
 }
 
 const SignalRService = new WebSocketService();
