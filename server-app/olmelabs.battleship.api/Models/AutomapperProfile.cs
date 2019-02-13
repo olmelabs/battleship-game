@@ -12,6 +12,9 @@ namespace olmelabs.battleship.api.Models
             CreateMap<GameState, NewGameDto>()
                 .ForMember(dest => dest.GameId, opt => opt.MapFrom(src => src.GameId));
 
+            CreateMap<PeerToPeerGameState, NewGameDto>()
+                .ForMember(dest => dest.GameId, opt => opt.MapFrom(src => src.GameId));
+            
             CreateMap<GameState, GameOverDto>()
                 .ForMember(dest => dest.Ships, opt => opt.MapFrom(src => src.ServerBoard.Ships.Select(s => s.Cells).ToList()));
 
