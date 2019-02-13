@@ -20,10 +20,11 @@ namespace olmelabs.battleship.api.Repositories
         private static ConcurrentDictionary<string, string> _confirmEmailCodes;
         //dummy - ClientStatistics - only one record for now
         private static ConcurrentDictionary<string, ClientStatistics> _clientStatistics;
-        //p2p code - p2p game
-        private static ConcurrentDictionary<string, PeerToPeerGameState> _p2pgames;
-
-
+        //p2p code - p2p session
+        private static ConcurrentDictionary<string, PeerToPeerSessionState> _p2pSessions;
+        //game-id - game
+        private static ConcurrentDictionary<string, PeerToPeerGameState> _p2pGames;
+        
 
         static InMemoryStaticStorage()
         {
@@ -33,7 +34,8 @@ namespace olmelabs.battleship.api.Repositories
             _clientStatistics = new ConcurrentDictionary<string, ClientStatistics>();
             _resetPasswordCodes = new ConcurrentDictionary<string, string>();
             _confirmEmailCodes = new ConcurrentDictionary<string, string>();
-            _p2pgames = new ConcurrentDictionary<string, PeerToPeerGameState>();
+            _p2pSessions = new ConcurrentDictionary<string, PeerToPeerSessionState>();
+            _p2pGames = new ConcurrentDictionary<string, PeerToPeerGameState>();
         }
 
         public Task Prepare()
@@ -47,6 +49,7 @@ namespace olmelabs.battleship.api.Repositories
             return Task.FromResult(0);
         }
 
+        #region Singleplayer
         public Task<GameState> FindActiveGameAsync(string gameId)
         {
             var game = _games.Values.FirstOrDefault(g => g.GameId == gameId && g.DateEnd == null);
@@ -76,13 +79,53 @@ namespace olmelabs.battleship.api.Repositories
             game = _games.AddOrUpdate(game.GameId, game, (key, val) => game);
             return Task.FromResult(game);
         }
+        #endregion
 
+        #region P2P (multiplayer)
+        public Task<PeerToPeerSessionState> FindP2PSessionAsync(string code)
+        {
+            PeerToPeerSessionState p2pSession = _p2pSessions.FirstOrDefault(u => u.Key == code).Value;
+            return Task.FromResult(p2pSession);
+        }
+
+        public Task<PeerToPeerSessionState> AddP2PSessionAsync(PeerToPeerSessionState p2pSession)
+        {
+            p2pSession = _p2pSessions.GetOrAdd(p2pSession.Code, p2pSession);
+            return Task.FromResult(p2pSession);
+        }
+
+        public Task<PeerToPeerSessionState> UpdateP2PSessionAsync(PeerToPeerSessionState p2pSession)
+        {
+            p2pSession = _p2pSessions.AddOrUpdate(p2pSession.Code, p2pSession, (key, val) => p2pSession);
+            return Task.FromResult(p2pSession);
+        }
+
+        public Task<PeerToPeerGameState> FindActiveP2PGameAsync(string gameId)
+        {
+            var game = _p2pGames.Values.FirstOrDefault(g => g.GameId == gameId && g.DateEnd == null);
+            return Task.FromResult(game);
+        }
+
+        public Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState game)
+        {
+            game = _p2pGames.GetOrAdd(game.GameId, game);
+            return Task.FromResult(game);
+        }
+
+        public Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState game)
+        {
+            game = _p2pGames.AddOrUpdate(game.GameId, game, (key, val) => game);
+            return Task.FromResult(game);
+        }
+        #endregion
+
+        #region Account
         public Task<User> FindUserAsync(string email)
         {
             User user = _users.FirstOrDefault(u => u.Key == email).Value;
             return Task.FromResult(user);
         }
-        
+
         public Task<User> UpdateUserAsync(User user)
         {
             User oldUser = _users.FirstOrDefault(u => u.Key == user.Email).Value;
@@ -177,23 +220,6 @@ namespace olmelabs.battleship.api.Repositories
             _confirmEmailCodes.TryRemove(code, out _);
             return Task.FromResult(0);
         }
-
-        public Task<PeerToPeerGameState> FindP2PGameAsync(string code)
-        {
-            PeerToPeerGameState p2pgame = _p2pgames.FirstOrDefault(u => u.Key == code).Value;
-            return Task.FromResult(p2pgame);
-        }
-
-        public Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState p2pgame)
-        {
-            p2pgame = _p2pgames.GetOrAdd(p2pgame.Code, p2pgame);
-            return Task.FromResult(p2pgame);
-        }
-
-        public Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState p2pgame)
-        {
-            p2pgame = _p2pgames.AddOrUpdate(p2pgame.Code, p2pgame, (key, val) => p2pgame);
-            return Task.FromResult(p2pgame);
-        }
+        #endregion
     }
 }

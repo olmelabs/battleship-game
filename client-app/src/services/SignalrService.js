@@ -49,8 +49,20 @@ class WebSocketService {
     });
   }
 
-  registerGameStarted(callBack) {
-    this.connection.on("GameStarted", message => {
+  registerYouStartedGame(callBack) {
+    this.connection.on("YouStartedGame", message => {
+      callBack(message);
+    });
+  }
+
+  registerGameStartedYourMove(callBack) {
+    this.connection.on("GameStartedYourMove", message => {
+      callBack(message);
+    });
+  }
+
+  registerGameStartedFriendsMove(callBack) {
+    this.connection.on("GameStartedFriendsMove", message => {
       callBack(message);
     });
   }

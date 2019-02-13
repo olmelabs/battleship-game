@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using olmelabs.battleship.api.Models.Dto;
@@ -15,14 +16,17 @@ namespace olmelabs.battleship.api.Controllers
     public class PeerToPeerGameController: Controller
     {
         private readonly IPeerToPeerGameService _p2pSvc;
+        private readonly IMapper _mapper;
         private readonly IHubContext<GameHub> _gameHubContext;
 
         public PeerToPeerGameController(
             IPeerToPeerGameService p2pSvc,
+            IMapper mapper,
             IHubContext<GameHub> gameHubContext
             )
         {
             _p2pSvc = p2pSvc;
+            _mapper = mapper;
             _gameHubContext = gameHubContext;
         }
 
@@ -33,7 +37,7 @@ namespace olmelabs.battleship.api.Controllers
             if (string.IsNullOrWhiteSpace(connectionId))
                 return BadRequest();
 
-            PeerToPeerGameState g = await _p2pSvc.StartNewSessionAsync(connectionId);
+            PeerToPeerSessionState g = await _p2pSvc.StartNewSessionAsync(connectionId);
 
             return Ok(new { code = g.Code });
         }
@@ -46,7 +50,7 @@ namespace olmelabs.battleship.api.Controllers
             if (string.IsNullOrWhiteSpace(dto.ConnectionId))
                 return BadRequest();
 
-            PeerToPeerGameState g = await _p2pSvc.JoinSessionAsync(dto.Code, dto.ConnectionId);
+            PeerToPeerSessionState g = await _p2pSvc.JoinSessionAsync(dto.Code, dto.ConnectionId);
             if (g == null)
               return BadRequest();
 
@@ -68,21 +72,28 @@ namespace olmelabs.battleship.api.Controllers
             if (string.IsNullOrWhiteSpace(dto.Code))
                 return BadRequest();
 
-            PeerToPeerGameState g = await _p2pSvc.AddPeerToGame(dto.Code, dto.ConnectionId);
+            PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId);
 
-            if (g == null)
+            if (session == null)
                 return BadRequest();
 
-            if (g.GameStartedCount == 2)
+            if (session.GameStartedCount == 2)
             {
-                //Start game here. Implement first move to signalr peer
-                var connectionId = dto.ConnectionId == g.HostConnectionId ? g.FriendConnectionId : g.HostConnectionId;
-                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStarted");
+
+                PeerToPeerGameState game = await _p2pSvc.StartNewGameAsync(session);
+                NewGameDto respDto = _mapper.Map<NewGameDto>(game);
+
+                var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
+                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", respDto);
+                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", respDto);
+
+                return Ok(respDto);
             }
             else {
 
-                var connectionId = dto.ConnectionId == g.HostConnectionId ? g.FriendConnectionId : g.HostConnectionId;
+                var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
                 await _gameHubContext.Clients.Client(connectionId).SendAsync("FriendStartedGame");
+                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("YouStartedGame");
             }
 
             return Ok(new { });

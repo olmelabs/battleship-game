@@ -33,7 +33,7 @@ class App extends React.Component {
   componentDidMount() {
     if (API_MODE === consts.ApiMode.WEB) {
       SignalRService.registerConnection(connectionId => {
-        toastr.info("Connected to Server");
+        toastr.info("Connected to Server.");
         this.props.actions.signalrConnected(connectionId);
       });
 
@@ -43,23 +43,45 @@ class App extends React.Component {
       });
 
       SignalRService.registerFriendConnected(_ => {
-        toastr.info("Your friend joined the game");
+        toastr.info("Your friend joined the game.");
         this.props.actions.joinGameSuccess();
       });
 
       SignalRService.registerFriendStartedGame(_ => {
-        toastr.info("Your friend started the game");
+        toastr.info(
+          "Your friend started the game. The game will begin when both of you press start."
+        );
         this.props.actions.joinGameSuccess();
       });
 
-      SignalRService.registerGameStarted(_ => {
-        toastr.info("Your game is now started. Fire!");
+      SignalRService.registerYouStartedGame(_ => {
+        toastr.info(
+          "You started the game. The game will begin when both of you press start. Let's wait for your friend."
+        );
         this.props.actions.joinGameSuccess();
+      });
+
+      SignalRService.registerGameStartedYourMove(newGameDto => {
+        toastr.info(
+          "Your game is now started. You make the first move. Fire!" +
+            JSON.stringify(newGameDto)
+        );
+        //start game action(newGameDto)
+        //this.props.actions.joinGameSuccess();
+      });
+
+      SignalRService.registerGameStartedFriendsMove(newGameDto => {
+        toastr.info(
+          "Your game is now started. Your are now waiting for first move from your friend." +
+            JSON.stringify(newGameDto)
+        );
+        //start game action(newGameDto)
+        //this.props.actions.joinGameSuccess();
       });
     }
 
     if (API_MODE === consts.ApiMode.MOCK) {
-      toastr.info("Signal R connection is mocked");
+      toastr.info("Signal R connection is mocked.");
       this.props.actions.signalrConnected("MOCK_SIGNALR_CONNECTION_ID");
     }
   }

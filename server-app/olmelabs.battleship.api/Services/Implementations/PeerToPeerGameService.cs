@@ -14,55 +14,70 @@ namespace olmelabs.battleship.api.Services.Implementations
             _storage = storage;
         }
 
-        public async Task<PeerToPeerGameState> StartNewSessionAsync(string hostConnectionId)
+        public async Task<PeerToPeerSessionState> StartNewSessionAsync(string hostConnectionId)
         {
             //TODO: create some short code here 
-            string code = hostConnectionId; 
-            PeerToPeerGameState g = new PeerToPeerGameState()
+            string code = hostConnectionId;
+            PeerToPeerSessionState s = new PeerToPeerSessionState()
             {
                 HostConnectionId = hostConnectionId,
                 Code = code
             };
 
-            await _storage.AddP2PGameAsync(g);
+            await _storage.AddP2PSessionAsync(s);
 
-            return g;
+            return s;
         }
 
-        public async Task<PeerToPeerGameState> JoinSessionAsync(string code, string connectionId)
+        public async Task<PeerToPeerSessionState> JoinSessionAsync(string code, string connectionId)
         {
-            PeerToPeerGameState g = await _storage.FindP2PGameAsync(code);
-            if (g == null)
+            PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
+            if (s == null)
                 return null;
 
             //if friend already joined.
-            if (!string.IsNullOrWhiteSpace(g.FriendConnectionId))
+            if (!string.IsNullOrWhiteSpace(s.FriendConnectionId))
                 return null;
 
-            g.FriendConnectionId = connectionId;
+            s.FriendConnectionId = connectionId;
 
-            return g;
+            s = await _storage.UpdateP2PSessionAsync(s);
+
+            return s;
         }
 
-        public async Task<PeerToPeerGameState> AddPeerToGame(string code, string connectionId)
+        public async Task<PeerToPeerSessionState> AddPeerToSession(string code, string connectionId)
         {
-            PeerToPeerGameState g = await _storage.FindP2PGameAsync(code);
+            PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
 
-            if (g == null)
+            if (s == null)
                 return null;
 
             //game already started by both peers
-            if (g.GameStartedCount == 2)
+            if (s.GameStartedCount == 2)
                 return null;
 
-            if (g.HostConnectionId == connectionId || g.FriendConnectionId == connectionId)
+            if (s.HostConnectionId == connectionId || s.FriendConnectionId == connectionId)
             {
-                g.GameStartedCount++;
+                s.GameStartedCount++;
 
-                return g;
+                s = await _storage.UpdateP2PSessionAsync(s);
+
+                return s;
             }
 
             return null;
+        }
+
+        public virtual async Task<PeerToPeerGameState> StartNewGameAsync(PeerToPeerSessionState session)
+        {
+            PeerToPeerGameState game = PeerToPeerGameState.CreateNew();
+            session.GameId = game.GameId;
+
+            game = await _storage.AddP2PGameAsync(game);
+            await _storage.UpdateP2PSessionAsync(session);
+
+            return game;
         }
     }
 }

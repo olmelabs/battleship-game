@@ -56,6 +56,7 @@ namespace olmelabs.battleship.api.Repositories
 
         public virtual IMongoCollection<KeyValuePair> ConfirmEmailCodes => _database.GetCollection<KeyValuePair>("confirm_email_code");
 
+        #region Singleplayer
         public async Task<GameState> AddGameAsync(GameState game)
         {
             await Games.InsertOneAsync(game);
@@ -80,7 +81,50 @@ namespace olmelabs.battleship.api.Repositories
             await Games.ReplaceOneAsync(filter, game);
             return game; 
         }
+        #endregion
 
+        #region P2P (multiplayer)
+        public async Task<PeerToPeerSessionState> FindP2PSessionAsync(string code)
+        {
+            //TODO: Implement
+            await Task.FromResult(0);
+            throw new NotImplementedException();
+        }
+
+        public async Task<PeerToPeerSessionState> AddP2PSessionAsync(PeerToPeerSessionState p2pSession)
+        {
+            //TODO: Implement
+            await Task.FromResult(0);
+            throw new NotImplementedException();
+        }
+
+        public async Task<PeerToPeerSessionState> UpdateP2PSessionAsync(PeerToPeerSessionState p2pSession)
+        {
+            //TODO: Implement
+            await Task.FromResult(0);
+            throw new NotImplementedException();
+        }
+
+        public Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState game)
+        {
+            //TODO: Implement
+            throw new NotImplementedException();
+        }
+
+        public Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState game)
+        {
+            //TODO: Implement
+            throw new NotImplementedException();
+        }
+
+        public Task<PeerToPeerGameState> FindActiveP2PGameAsync(string gameId)
+        {
+            //TODO: Implement
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        #region Account
         public async Task<User> FindUserAsync(string email)
         {
             var user = await Users.Find(u => u.Email.ToLower() == email.ToLower()).FirstOrDefaultAsync();
@@ -157,26 +201,7 @@ namespace olmelabs.battleship.api.Repositories
         {
             await ConfirmEmailCodes.DeleteOneAsync(t => t.Key == code);
         }
-
-        public async Task<PeerToPeerGameState> FindP2PGameAsync(string code)
-        {
-            //TODO: Implement
-            await Task.FromResult(0);
-            throw new NotImplementedException();
-        }
-
-        public async Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState p2pgame)
-        {
-            //TODO: Implement
-            await Task.FromResult(0);
-            throw new NotImplementedException();
-        }
-
-        public async Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState p2pgame)
-        {
-            //TODO: Implement
-            await Task.FromResult(0);
-            throw new NotImplementedException();
-        }
+        #endregion
+ 
     }
 }
