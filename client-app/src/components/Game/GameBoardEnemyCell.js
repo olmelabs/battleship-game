@@ -32,12 +32,24 @@ class GameBoardEnemyCell extends React.Component {
     }
 
     this.setState({ loading: true });
-    this.props.actions
-      .fireCannon(this.props.cellId)
-      .then(() => this.setState({ loading: false }))
-      .catch(error => {
-        this.setState({ loading: false });
-      });
+    if (
+      this.props.gameType === consts.GameType.HOST ||
+      this.props.gameType === consts.GameType.JOIN
+    ) {
+      this.props.actions
+        .fireCannonMultiPlayer(this.props.cellId)
+        .catch(error => {
+          this.setState({ loading: false });
+        });
+    } else {
+      //singleplayer
+      this.props.actions
+        .fireCannon(this.props.cellId)
+        .then(() => this.setState({ loading: false }))
+        .catch(error => {
+          this.setState({ loading: false });
+        });
+    }
   }
 
   render() {
@@ -60,6 +72,7 @@ GameBoardEnemyCell.propTypes = {
   drawBorder: PropTypes.bool.isRequired,
   currentState: PropTypes.string.isRequired,
   isServerTurn: PropTypes.bool.isRequired,
+  gameType: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
@@ -75,7 +88,8 @@ const mapStateToProps = (state, ownProps) => ({
   isShipOnIt: state.gameState.enemyBoard[ownProps.cellId] % 10 === 2,
   drawBorder: state.gameState.enemyBoard[ownProps.cellId] >= 10,
   currentState: state.gameState.currentState,
-  isServerTurn: state.gameState.isServerTurn
+  isServerTurn: state.gameState.isServerTurn,
+  gameType: state.gameState.gameType
 });
 
 function mapDispatchToProps(dispatch) {

@@ -13,7 +13,7 @@ namespace olmelabs.battleship.api.Controllers
     [Route("api/[controller]/[action]")]
     [ApiController]
     [Authorize]
-    public class PeerToPeerGameController: Controller
+    public class PeerToPeerGameController : Controller
     {
         private readonly IPeerToPeerGameService _p2pSvc;
         private readonly IMapper _mapper;
@@ -52,7 +52,7 @@ namespace olmelabs.battleship.api.Controllers
 
             PeerToPeerSessionState g = await _p2pSvc.JoinSessionAsync(dto.Code, dto.ConnectionId);
             if (g == null)
-              return BadRequest();
+                return BadRequest();
 
             if (dto.ConnectionId == g.HostConnectionId)
                 return BadRequest();
@@ -81,20 +81,43 @@ namespace olmelabs.battleship.api.Controllers
             {
 
                 PeerToPeerGameState game = await _p2pSvc.StartNewGameAsync(session);
-                NewGameDto respDto = _mapper.Map<NewGameDto>(game);
 
                 var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
-                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", respDto);
-                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", respDto);
-
-                return Ok(respDto);
+                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", new P2PNewGameDto { GameId = game.GameId, YourMove = true });
+                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", new P2PNewGameDto { GameId = game.GameId, YourMove = false });
             }
-            else {
+            else
+            {
 
                 var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
                 await _gameHubContext.Clients.Client(connectionId).SendAsync("FriendStartedGame");
                 await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("YouStartedGame");
             }
+
+            return Ok(new { });
+        }
+
+        [HttpPost]
+        [ActionName("FireCannon")]
+        public async Task<IActionResult> FireCannon([FromBody]P2PFireCannonDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.ConnectionId))
+                return BadRequest();
+
+            if (string.IsNullOrWhiteSpace(dto.Code))
+                return BadRequest();
+
+            PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId);
+
+            var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
+
+            FireCannonDto srDto = new FireCannonDto
+            {
+                GameId = session.GameId,
+                CellId = dto.CellId
+            };
+
+            await _gameHubContext.Clients.Client(connectionId).SendAsync("MakeFireFromServer", srDto);
 
             return Ok(new { });
         }

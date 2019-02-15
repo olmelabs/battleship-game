@@ -21,7 +21,7 @@ class GameLink extends React.Component {
         if (this.props.gameType === consts.GameType.SINGLEPLAYER) {
           this.props.actions.startSinglePlayerNewGame();
         } else {
-          this.props.actions.startMultiPlayerNewGame();
+          this.props.actions.startNewGameMultiPlayer();
         }
         break;
       case consts.GameState.COMPLETED:

@@ -67,7 +67,7 @@ class App extends React.Component {
             JSON.stringify(newGameDto)
         );
         //start game action(newGameDto)
-        //this.props.actions.joinGameSuccess();
+        this.props.actions.startMultiPlayerSrCallback(newGameDto);
       });
 
       SignalRService.registerGameStartedFriendsMove(newGameDto => {
@@ -75,8 +75,7 @@ class App extends React.Component {
           "Your game is now started. Your are now waiting for first move from your friend." +
             JSON.stringify(newGameDto)
         );
-        //start game action(newGameDto)
-        //this.props.actions.joinGameSuccess();
+        this.props.actions.startMultiPlayerSrCallback(newGameDto);
       });
     }
 

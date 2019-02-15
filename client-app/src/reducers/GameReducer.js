@@ -10,6 +10,7 @@ const initialState = {
     isFriendConnected: false
   },
   gameId: null,
+  //server turn in singleplayer game, friends turn in mulitplayer game
   isServerTurn: false,
   myShips: [
     { title: "4X", vertical: false, cells: Array(4).fill(null), hits: 0 },
@@ -38,7 +39,11 @@ const gameState = (state = initialState, action) => {
       } else {
         return Object.assign({}, state, {
           currentState: action.currentState,
-          gameId: action.gameId
+          gameId: action.gameInfo === null ? null : action.gameInfo.gameId,
+          isServerTurn:
+            action.gameInfo === null
+              ? state.isServerTurn
+              : !action.gameInfo.yourMove
         });
       }
 

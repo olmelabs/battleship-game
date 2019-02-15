@@ -10,10 +10,10 @@ export const dummy = () => ({
   type: consts.AJAX_CALL_START
 });
 
-export const setGameState = (currentState, gameId) => ({
+export const setGameState = (currentState, gameInfo) => ({
   type: consts.SET_GAME_MODE,
   currentState,
-  gameId
+  gameInfo
 });
 
 export const makeFire = fireResult => ({
@@ -128,7 +128,7 @@ export function joinGame(code) {
   };
 }
 
-export function startMultiPlayerNewGame() {
+export function startNewGameMultiPlayer() {
   return function(dispatch, getState) {
     dispatch(ajaxCallStart());
     const ships = getState().gameState.myShips;
@@ -141,10 +141,9 @@ export function startMultiPlayerNewGame() {
 
           const code = getState().gameState.multiplayer.gameAccessCode;
           const connectionId = getState().signalrState.connectionId;
-          gameApi.startMultiPlayerNewGame(code, connectionId).then(gameInfo => {
+          gameApi.startNewGameMultiPlayer(code, connectionId).then(gameInfo => {
             dispatch(ajaxCallSuccess());
-
-            //dispatch(setGameState(consts.GameState.STARTED, gameInfo.gameId));
+            //game started received via SignalR message
           });
         } else {
           dispatch(ajaxCallSuccess());
@@ -156,6 +155,36 @@ export function startMultiPlayerNewGame() {
         dispatch(ajaxCallErrorCheckAuth(error));
         throw error;
       });
+  };
+}
+
+export function fireCannonMultiPlayer(cellId) {
+  return function(dispatch, getState) {
+    if (getState().ajaxState.ajaxCallIsnProgress > 0) {
+      return Promise.resolve();
+    }
+
+    dispatch(ajaxCallStart());
+
+    const connectionId = getState().signalrState.connectionId;
+    const gameAccessCode = getState().signalrState.multiplayer.gameAccessCode;
+
+    return gameApi
+      .fireCannonMultiPlayer({ connectionId, code: gameAccessCode, cellId })
+      .then(fireResult => {
+        dispatch(ajaxCallSuccess());
+      })
+      .catch(error => {
+        dispatch(ajaxCallErrorCheckAuth(error));
+        throw error;
+      });
+  };
+}
+
+//From SignlaR
+export function startMultiPlayerSrCallback(gameInfo) {
+  return function(dispatch, getState) {
+    dispatch(setGameState(consts.GameState.STARTED, gameInfo));
   };
 }
 
@@ -174,7 +203,7 @@ export function startSinglePlayerNewGame() {
           gameApi.startSinglePlayerNewGame(connectionId).then(gameInfo => {
             dispatch(ajaxCallSuccess());
 
-            dispatch(setGameState(consts.GameState.STARTED, gameInfo.gameId));
+            dispatch(setGameState(consts.GameState.STARTED, gameInfo));
           });
         } else {
           dispatch(ajaxCallSuccess());
