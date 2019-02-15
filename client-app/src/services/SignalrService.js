@@ -25,45 +25,51 @@ class WebSocketService {
     }
   }
 
-  registerConnection(callBack) {
+  registerConnection(callback) {
     this.connection.on("AcquireConnectionId", connectionId => {
-      callBack(connectionId);
+      callback(connectionId);
     });
   }
 
-  registerFireFromServer(callBack) {
+  registerFireFromServer(callback) {
     this.connection.on("MakeFireFromServer", message => {
-      callBack(message);
+      callback(message);
     });
   }
 
-  registerFriendConnected(callBack) {
+  registerFriendConnected(callback) {
     this.connection.on("FriendConnected", message => {
-      callBack(message);
+      callback(message);
     });
   }
 
-  registerFriendStartedGame(callBack) {
+  registerFriendStartedGame(callback) {
     this.connection.on("FriendStartedGame", message => {
-      callBack(message);
+      callback(message);
     });
   }
 
-  registerYouStartedGame(callBack) {
+  registerYouStartedGame(callback) {
     this.connection.on("YouStartedGame", message => {
-      callBack(message);
+      callback(message);
     });
   }
 
-  registerGameStartedYourMove(callBack) {
+  registerGameStartedYourMove(callback) {
     this.connection.on("GameStartedYourMove", message => {
-      callBack(message);
+      callback(message);
     });
   }
 
-  registerGameStartedFriendsMove(callBack) {
+  registerGameStartedFriendsMove(callback) {
     this.connection.on("GameStartedFriendsMove", message => {
-      callBack(message);
+      callback(message);
+    });
+  }
+
+  registerMakeFireProcessResult(callback){
+    this.connection.on("MakeFireProcessResult", message => {
+      callback(message);
     });
   }
 }

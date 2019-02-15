@@ -127,21 +127,28 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("FireCannonProcessResult")]
-        public async Task<IActionResult> FireCannonProcessResult([FromBody]FireCannonResponseDto dto)
+        public async Task<IActionResult> FireCannonProcessResult([FromBody]P2PFireCannonCallbackDto dto)
         {
-            //TODO: formard result to client
-            await Task.FromResult(0);
+            if (string.IsNullOrWhiteSpace(dto.ConnectionId))
+                return BadRequest();
 
-            //FireCannonResultDto respDto = _mapper.Map<FireCannonResultDto>(res);
+            if (string.IsNullOrWhiteSpace(dto.Code))
+                return BadRequest();
 
-            //if (res == null)
-            //    return BadRequest();
+            PeerToPeerSessionState session = await _p2pSvc.FindActiveSessionAsync(dto.Code, dto.ConnectionId);
 
-            //FireCannonResultDto respDto = _mapper.Map<FireCannonResultDto>(res);
-            //respDto.CellId = dto.CellId;
-            //respDto.GameId = dto.GameId;
+            FireCannonResultDto respDto = new FireCannonResultDto
+            {
+                CellId = dto.CellId,
+                ShipDestroyed = dto.ShipDestroyed,
+                IsAwaitingServerTurn = !dto.Result,
+                IsGameOver = dto.IsGameOver,
+                Result = dto.Result
+            };
 
-            //await _gameHubContext.Clients.Client(connectionId).SendAsync("MakeFireFromServer", respDto);
+            var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
+
+            await _gameHubContext.Clients.Client(connectionId).SendAsync("MakeFireProcessResult", respDto);
 
             return Ok(new { });
         }

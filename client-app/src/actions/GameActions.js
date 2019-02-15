@@ -128,7 +128,7 @@ export function joinGame(code) {
   };
 }
 
-export function startNewGameMultiPlayer() {
+export function startNewGameMultiplayer() {
   return function(dispatch, getState) {
     dispatch(ajaxCallStart());
     const ships = getState().gameState.myShips;
@@ -141,7 +141,7 @@ export function startNewGameMultiPlayer() {
 
           const code = getState().gameState.multiplayer.gameAccessCode;
           const connectionId = getState().signalrState.connectionId;
-          gameApi.startNewGameMultiPlayer(code, connectionId).then(gameInfo => {
+          gameApi.startNewGameMultiplayer(code, connectionId).then(gameInfo => {
             dispatch(ajaxCallSuccess());
             //game started received via SignalR message
           });
@@ -158,7 +158,7 @@ export function startNewGameMultiPlayer() {
   };
 }
 
-export function fireCannonMultiPlayer(cellId) {
+export function fireCannonMultiplayer(cellId) {
   return function(dispatch, getState) {
     if (getState().ajaxState.ajaxCallIsnProgress > 0) {
       return Promise.resolve();
@@ -170,7 +170,7 @@ export function fireCannonMultiPlayer(cellId) {
     const gameAccessCode = getState().gameState.multiplayer.gameAccessCode;
 
     return gameApi
-      .fireCannonMultiPlayer({ connectionId, code: gameAccessCode, cellId })
+      .fireCannonMultiplayer({ connectionId, code: gameAccessCode, cellId })
       .then(fireResult => {
         dispatch(ajaxCallSuccess());
       })
@@ -181,7 +181,7 @@ export function fireCannonMultiPlayer(cellId) {
   };
 }
 
-export function fireCannonFromServerMultiPlayer(fireRequest) {
+export function fireCannonFromServerMultiplayer(fireRequest) {
   return function(dispatch, getState) {
     dispatch(fireRequestFromServer(fireRequest));
 
@@ -194,15 +194,6 @@ export function fireCannonFromServerMultiPlayer(fireRequest) {
         ? null
         : gameState.lastMyDestroyedShip.cells;
 
-    const state = getState();
-    const res = {
-      connectionId: state.signalrState.connectionId,
-      gameAccessCode: state.gameState.multiplayer.gameAccessCode,
-      cellId: cellId,
-      result: myBoard[cellId] == 1 || myBoard[cellId] == 3,
-      ship: ship
-    };
-
     //check game over
     let numberOfDestroyedShips = 0;
     gameState.myShips.map((ship, index) => {
@@ -211,9 +202,20 @@ export function fireCannonFromServerMultiPlayer(fireRequest) {
       }
     });
 
+    const state = getState();
+    const res = {
+      connectionId: state.signalrState.connectionId,
+      code: state.gameState.multiplayer.gameAccessCode,
+      cellId: cellId,
+      result: myBoard[cellId] == 1 || myBoard[cellId] == 3,
+      ship: ship,
+      gameover: numberOfDestroyedShips == 10,
+    };
+
+
     dispatch(ajaxCallStart());
     return gameApi
-      .fireCannonResponseMultiPlayer(res)
+      .fireCannonResponseMultiplayer(res)
       .then(res => {
         dispatch(ajaxCallSuccess());
 
@@ -230,7 +232,7 @@ export function fireCannonFromServerMultiPlayer(fireRequest) {
 }
 
 //From SignlaR
-export function startMultiPlayerSrCallback(gameInfo) {
+export function startMultiplayerSrCallback(gameInfo) {
   return function(dispatch, getState) {
     dispatch(setGameState(consts.GameState.STARTED, gameInfo));
   };

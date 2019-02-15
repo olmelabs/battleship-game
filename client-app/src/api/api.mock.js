@@ -39,7 +39,7 @@ class GameApi {
     });
   }
 
-  static startNewGameMultiPlayer(gameCode, connectionId) {
+  static startNewGameMultiplayer(gameCode, connectionId) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve({});
@@ -225,7 +225,7 @@ class GameApi {
     });
   }
 
-  static fireCannonMultiPlayer(shotData) {
+  static fireCannonMultiplayer(shotData) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve({});
@@ -233,7 +233,7 @@ class GameApi {
     });
   }
 
-  static fireCannonResponseMultiPlayer(shotData) {
+  static fireCannonResponseMultiplayer(shotData) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve({});

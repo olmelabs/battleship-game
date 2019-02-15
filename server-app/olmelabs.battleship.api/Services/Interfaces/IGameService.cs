@@ -15,7 +15,7 @@ namespace olmelabs.battleship.api.Services.Interfaces
 
         Task<FireResult> FireCannon(string gameId, int cellId);
 
-        Task<GameState> FireCannonProcessResult(FireCannonResponseDto fireResult);
+        Task<GameState> FireCannonProcessResult(FireCannonCallbackDto fireResult);
 
         Task<int> FiredCannonFromServer(string gameId);
 

@@ -72,21 +72,21 @@ class GameApi {
     });
   }
 
-  static startNewGameMultiPlayer(code, connectionId) {
+  static startNewGameMultiplayer(code, connectionId) {
     return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/StartNewGame/", {
       code,
       connectionId
     });
   }
 
-  static fireCannonMultiPlayer(shotData) {
+  static fireCannonMultiplayer(shotData) {
     return postDataReturnJsonWithRefreshAsync(
       "PeerToPeerGame/FireCannon/",
       shotData
     );
   }
 
-  static fireCannonResponseMultiPlayer(shotResult) {
+  static fireCannonResponseMultiplayer(shotResult) {
     return postDataReturnJsonWithRefreshAsync(
       "PeerToPeerGame/FireCannonProcessResult",
       shotResult

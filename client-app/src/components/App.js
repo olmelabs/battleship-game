@@ -37,15 +37,15 @@ class App extends React.Component {
         this.props.actions.signalrConnected(connectionId);
       });
 
-      SignalRService.registerFireFromServer(message => {
-        toastr.info("" + message.cellId); //"0" digit is not displayed, so cast to string ;)
+      SignalRService.registerFireFromServer(data => {
+        toastr.info("" + data.cellId); //"0" digit is not displayed, so cast to string ;)
         if (
           this.props.gameType === consts.GameType.HOST ||
           this.props.gameType === consts.GameType.JOIN
         ) {
-          this.props.actions.fireCannonFromServerMultiplayer(message);
+          this.props.actions.fireCannonFromServerMultiplayer(data);
         } else {
-          this.props.actions.fireCannonFromServer(message);
+          this.props.actions.fireCannonFromServer(data);
         }
       });
 
@@ -68,17 +68,21 @@ class App extends React.Component {
         this.props.actions.joinGameSuccess();
       });
 
-      SignalRService.registerGameStartedYourMove(newGameDto => {
+      SignalRService.registerGameStartedYourMove(data => {
         toastr.info("Your game is now started. You make the first move. Fire!");
-        //start game action(newGameDto)
-        this.props.actions.startMultiPlayerSrCallback(newGameDto);
+        this.props.actions.startMultiplayerSrCallback(data);
       });
 
-      SignalRService.registerGameStartedFriendsMove(newGameDto => {
+      SignalRService.registerGameStartedFriendsMove(data => {
         toastr.info(
           "Your game is now started. Your are now waiting for first move from your friend."
         );
-        this.props.actions.startMultiPlayerSrCallback(newGameDto);
+        this.props.actions.startMultiplayerSrCallback(data);
+      });
+
+      SignalRService.registerMakeFireProcessResult(data => {
+        //TODO: revise. fire the same action as when reesponse from api got in singleplayer mode for now
+        this.props.actions.makeFire(data); 
       });
     }
 

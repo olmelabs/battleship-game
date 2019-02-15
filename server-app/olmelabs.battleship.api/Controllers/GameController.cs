@@ -94,7 +94,7 @@ namespace olmelabs.battleship.api.Controllers
         [HttpPost]
         [ActionName("FireCannonProcessResult")]
         //Called by client in response to server move (signal R)
-        public async Task<IActionResult> FireCannonProcessResult([FromBody]FireCannonResponseDto dto)
+        public async Task<IActionResult> FireCannonProcessResult([FromBody]FireCannonCallbackDto dto)
         {
             var game = await _gameSvc.FireCannonProcessResult(dto);
 

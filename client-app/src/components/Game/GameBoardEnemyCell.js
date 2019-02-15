@@ -37,7 +37,7 @@ class GameBoardEnemyCell extends React.Component {
       this.props.gameType === consts.GameType.JOIN
     ) {
       this.props.actions
-        .fireCannonMultiPlayer(this.props.cellId)
+        .fireCannonMultiplayer(this.props.cellId)
         .catch(error => {
           this.setState({ loading: false });
         });

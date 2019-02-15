@@ -116,7 +116,7 @@ namespace olmelabs.battleship.api.Services.Implementations
             return i;
         }
 
-        public virtual async Task<GameState> FireCannonProcessResult(FireCannonResponseDto fireResult)
+        public virtual async Task<GameState> FireCannonProcessResult(FireCannonCallbackDto fireResult)
         {
             GameState g = await FindActiveGameAsync(fireResult.GameId);
 

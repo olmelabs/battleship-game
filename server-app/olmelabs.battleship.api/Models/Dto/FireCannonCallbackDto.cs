@@ -2,7 +2,7 @@
 
 namespace olmelabs.battleship.api.Models.Dto
 {
-    public class FireCannonResponseDto
+    public class FireCannonCallbackDto
     {
         [JsonProperty("gameId")]
         public string GameId { get; set; }
