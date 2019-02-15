@@ -76,6 +76,7 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("FireCannon")]
+        //Called by client when its move
         public async Task<IActionResult> FireCannon([FromBody]FireCannonDto dto)
         {
             FireResult res = await _gameSvc.FireCannon(dto.GameId, dto.CellId);
@@ -92,6 +93,7 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("FireCannonProcessResult")]
+        //Called by client in response to server move (signal R)
         public async Task<IActionResult> FireCannonProcessResult([FromBody]FireCannonResponseDto dto)
         {
             var game = await _gameSvc.FireCannonProcessResult(dto);

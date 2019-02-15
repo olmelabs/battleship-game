@@ -80,11 +80,11 @@ namespace olmelabs.battleship.api.Controllers
             if (session.GameStartedCount == 2)
             {
 
-                PeerToPeerGameState game = await _p2pSvc.StartNewGameAsync(session);
+                session = await _p2pSvc.StartNewGameAsync(session);
 
                 var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
-                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", new P2PNewGameDto { GameId = game.GameId, YourMove = true });
-                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", new P2PNewGameDto { GameId = game.GameId, YourMove = false });
+                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", new P2PNewGameDto { GameId = session.GameId, YourMove = true });
+                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", new P2PNewGameDto { GameId = session.GameId, YourMove = false });
             }
             else
             {
@@ -107,7 +107,10 @@ namespace olmelabs.battleship.api.Controllers
             if (string.IsNullOrWhiteSpace(dto.Code))
                 return BadRequest();
 
-            PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId);
+            PeerToPeerSessionState session = await _p2pSvc.FindActiveSessionAsync(dto.Code, dto.ConnectionId);
+
+            if (session == null)
+                return BadRequest();
 
             var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
 
@@ -118,6 +121,27 @@ namespace olmelabs.battleship.api.Controllers
             };
 
             await _gameHubContext.Clients.Client(connectionId).SendAsync("MakeFireFromServer", srDto);
+
+            return Ok(new { });
+        }
+
+        [HttpPost]
+        [ActionName("FireCannonProcessResult")]
+        public async Task<IActionResult> FireCannonProcessResult([FromBody]FireCannonResponseDto dto)
+        {
+            //TODO: formard result to client
+            await Task.FromResult(0);
+
+            //FireCannonResultDto respDto = _mapper.Map<FireCannonResultDto>(res);
+
+            //if (res == null)
+            //    return BadRequest();
+
+            //FireCannonResultDto respDto = _mapper.Map<FireCannonResultDto>(res);
+            //respDto.CellId = dto.CellId;
+            //respDto.GameId = dto.GameId;
+
+            //await _gameHubContext.Clients.Client(connectionId).SendAsync("MakeFireFromServer", respDto);
 
             return Ok(new { });
         }

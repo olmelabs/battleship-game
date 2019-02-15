@@ -39,7 +39,14 @@ class App extends React.Component {
 
       SignalRService.registerFireFromServer(message => {
         toastr.info("" + message.cellId); //"0" digit is not displayed, so cast to string ;)
-        this.props.actions.fireCannonFromServer(message);
+        if (
+          this.props.gameType === consts.GameType.HOST ||
+          this.props.gameType === consts.GameType.JOIN
+        ) {
+          this.props.actions.fireCannonFromServerMultiplayer(message);
+        } else {
+          this.props.actions.fireCannonFromServer(message);
+        }
       });
 
       SignalRService.registerFriendConnected(_ => {
@@ -62,18 +69,14 @@ class App extends React.Component {
       });
 
       SignalRService.registerGameStartedYourMove(newGameDto => {
-        toastr.info(
-          "Your game is now started. You make the first move. Fire!" +
-            JSON.stringify(newGameDto)
-        );
+        toastr.info("Your game is now started. You make the first move. Fire!");
         //start game action(newGameDto)
         this.props.actions.startMultiPlayerSrCallback(newGameDto);
       });
 
       SignalRService.registerGameStartedFriendsMove(newGameDto => {
         toastr.info(
-          "Your game is now started. Your are now waiting for first move from your friend." +
-            JSON.stringify(newGameDto)
+          "Your game is now started. Your are now waiting for first move from your friend."
         );
         this.props.actions.startMultiPlayerSrCallback(newGameDto);
       });
@@ -128,10 +131,13 @@ class App extends React.Component {
 }
 
 App.propTypes = {
+  gameType: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+  gameType: state.gameState.gameType
+});
 
 function mapDispatchToProps(dispatch) {
   return {

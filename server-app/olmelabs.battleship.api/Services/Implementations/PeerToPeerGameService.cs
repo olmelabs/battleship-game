@@ -69,7 +69,7 @@ namespace olmelabs.battleship.api.Services.Implementations
             return null;
         }
 
-        public virtual async Task<PeerToPeerGameState> StartNewGameAsync(PeerToPeerSessionState session)
+        public virtual async Task<PeerToPeerSessionState> StartNewGameAsync(PeerToPeerSessionState session)
         {
             PeerToPeerGameState game = PeerToPeerGameState.CreateNew();
             session.GameId = game.GameId;
@@ -77,7 +77,22 @@ namespace olmelabs.battleship.api.Services.Implementations
             game = await _storage.AddP2PGameAsync(game);
             await _storage.UpdateP2PSessionAsync(session);
 
-            return game;
+            return session;
+        }
+
+        public async Task<PeerToPeerSessionState> FindActiveSessionAsync(string code, string connectionId)
+        {
+            PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
+
+            if (s == null)
+                return null;
+
+            if (s.HostConnectionId == connectionId || s.FriendConnectionId == connectionId)
+            {
+                return s;
+            }
+
+            return null;
         }
     }
 }

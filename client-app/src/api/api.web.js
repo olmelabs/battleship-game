@@ -85,6 +85,13 @@ class GameApi {
       shotData
     );
   }
+
+  static fireCannonResponseMultiPlayer(shotResult) {
+    return postDataReturnJsonWithRefreshAsync(
+      "PeerToPeerGame/FireCannonProcessResult",
+      shotResult
+    );
+  }
 }
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch

@@ -167,12 +167,60 @@ export function fireCannonMultiPlayer(cellId) {
     dispatch(ajaxCallStart());
 
     const connectionId = getState().signalrState.connectionId;
-    const gameAccessCode = getState().signalrState.multiplayer.gameAccessCode;
+    const gameAccessCode = getState().gameState.multiplayer.gameAccessCode;
 
     return gameApi
       .fireCannonMultiPlayer({ connectionId, code: gameAccessCode, cellId })
       .then(fireResult => {
         dispatch(ajaxCallSuccess());
+      })
+      .catch(error => {
+        dispatch(ajaxCallErrorCheckAuth(error));
+        throw error;
+      });
+  };
+}
+
+export function fireCannonFromServerMultiPlayer(fireRequest) {
+  return function(dispatch, getState) {
+    dispatch(fireRequestFromServer(fireRequest));
+
+    //TODO: merge common code with singleplayer fireCannonFromServer somewhere
+    const cellId = fireRequest.cellId;
+    const gameState = getState().gameState;
+    const myBoard = getState().gameState.myBoard;
+    const ship =
+      gameState.lastMyDestroyedShip === null
+        ? null
+        : gameState.lastMyDestroyedShip.cells;
+
+    const state = getState();
+    const res = {
+      connectionId: state.signalrState.connectionId,
+      gameAccessCode: state.gameState.multiplayer.gameAccessCode,
+      cellId: cellId,
+      result: myBoard[cellId] == 1 || myBoard[cellId] == 3,
+      ship: ship
+    };
+
+    //check game over
+    let numberOfDestroyedShips = 0;
+    gameState.myShips.map((ship, index) => {
+      if (ship.hits == ship.cells.length) {
+        numberOfDestroyedShips++;
+      }
+    });
+
+    dispatch(ajaxCallStart());
+    return gameApi
+      .fireCannonResponseMultiPlayer(res)
+      .then(res => {
+        dispatch(ajaxCallSuccess());
+
+        //TODO: implement multiplayer
+        if (numberOfDestroyedShips === 10) {
+          dispatch(stopSinglePlayerGame());
+        }
       })
       .catch(error => {
         dispatch(ajaxCallErrorCheckAuth(error));
