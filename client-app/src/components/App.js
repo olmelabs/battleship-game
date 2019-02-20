@@ -70,19 +70,18 @@ class App extends React.Component {
 
       SignalRService.registerGameStartedYourMove(data => {
         toastr.info("Your game is now started. You make the first move. Fire!");
-        this.props.actions.startMultiplayerSrCallback(data);
+        this.props.actions.startGameMultiplayerSrCallback(data);
       });
 
       SignalRService.registerGameStartedFriendsMove(data => {
         toastr.info(
           "Your game is now started. Your are now waiting for first move from your friend."
         );
-        this.props.actions.startMultiplayerSrCallback(data);
+        this.props.actions.startGameMultiplayerSrCallback(data);
       });
 
       SignalRService.registerMakeFireProcessResult(data => {
-        //TODO: revise. fire the same action as when reesponse from api got in singleplayer mode for now
-        this.props.actions.makeFire(data); 
+        this.props.actions.makeFireMultiplayerSrCallback(data);
       });
     }
 

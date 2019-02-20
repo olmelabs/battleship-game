@@ -15,6 +15,13 @@ class GameBoardEnemyCell extends React.Component {
     };
   }
 
+  componentDidUpdate(prevProps) {
+    if (prevProps.cancelLoading !== this.props.cancelLoading) {
+      // eslint-disable-next-line react/no-did-update-set-state
+      this.setState({ loading: false }); //always false as property change indicates stop loading
+    }
+  }
+
   onCellClick() {
     if (
       this.props.currentState === consts.GameState.NOT_STARTED ||
@@ -66,6 +73,7 @@ class GameBoardEnemyCell extends React.Component {
 }
 
 GameBoardEnemyCell.propTypes = {
+  cancelLoading: PropTypes.bool.isRequired,
   cellId: PropTypes.number.isRequired,
   isShotFired: PropTypes.bool.isRequired,
   isShipOnIt: PropTypes.bool.isRequired,
@@ -81,9 +89,10 @@ GameBoardEnemyCell.propTypes = {
 // 2 - shot fired - hit ship
 // 10 - shot not fired, but when game ended there was ship on it. so draw border
 // 11 - should not happen so far.
-// 12 - shot fired and ship destroyed. draw borders around cells in destroyed shi[]
+// 12 - shot fired and ship destroyed. draw borders around cells in destroyed ship[]
 
 const mapStateToProps = (state, ownProps) => ({
+  cancelLoading: state.gameState.multiplayer.cancelLoading,
   isShotFired: state.gameState.enemyBoard[ownProps.cellId] % 10 !== 0,
   isShipOnIt: state.gameState.enemyBoard[ownProps.cellId] % 10 === 2,
   drawBorder: state.gameState.enemyBoard[ownProps.cellId] >= 10,

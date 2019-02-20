@@ -21,6 +21,15 @@ export const makeFire = fireResult => ({
   fireResult
 });
 
+export const makeFireMultiplayer = fireResult => ({
+  type: consts.MAKE_FIRE_MULTIPLAYER,
+  fireResult
+});
+
+export const cancelLoadingMultiplayer = () => ({
+  type: consts.CANCEL_LOADING
+});
+
 export const shipDestroyed = fireResult => ({
   type: consts.SHIP_DESTROYED,
   fireResult
@@ -163,7 +172,7 @@ export function fireCannonMultiplayer(cellId) {
     if (getState().ajaxState.ajaxCallIsnProgress > 0) {
       return Promise.resolve();
     }
-
+    dispatch(cancelLoadingMultiplayer());
     dispatch(ajaxCallStart());
 
     const connectionId = getState().signalrState.connectionId;
@@ -209,9 +218,8 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
       cellId: cellId,
       result: myBoard[cellId] == 1 || myBoard[cellId] == 3,
       ship: ship,
-      gameover: numberOfDestroyedShips == 10,
+      gameover: numberOfDestroyedShips == 10
     };
-
 
     dispatch(ajaxCallStart());
     return gameApi
@@ -232,9 +240,19 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
 }
 
 //From SignlaR
-export function startMultiplayerSrCallback(gameInfo) {
+export function startGameMultiplayerSrCallback(gameInfo) {
   return function(dispatch, getState) {
     dispatch(setGameState(consts.GameState.STARTED, gameInfo));
+  };
+}
+
+export function makeFireMultiplayerSrCallback(fireResult) {
+  return function(dispatch, getState) {
+    dispatch(makeFireMultiplayer(fireResult));
+
+    if (fireResult.ship.constructor === Array && fireResult.ship.length > 0) {
+      dispatch(shipDestroyed(fireResult));
+    }
   };
 }
 

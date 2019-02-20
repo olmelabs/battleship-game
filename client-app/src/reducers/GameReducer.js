@@ -7,7 +7,8 @@ const initialState = {
   multiplayer: {
     gameAccessCode: null,
     joinGameError: false,
-    isFriendConnected: false
+    isFriendConnected: false,
+    cancelLoading: false
   },
   gameId: null,
   //server turn in singleplayer game, friends turn in mulitplayer game
@@ -57,6 +58,37 @@ const gameState = (state = initialState, action) => {
           enemyBoard,
           isServerTurn: action.fireResult.serverturn
         });
+      }
+      return state;
+
+    case consts.MAKE_FIRE_MULTIPLAYER:
+      if (state.currentState === consts.GameState.STARTED) {
+        const enemyBoard = state.enemyBoard.slice();
+        action.fireResult.result
+          ? (enemyBoard[action.fireResult.cellId] = 2)
+          : (enemyBoard[action.fireResult.cellId] = 1);
+
+        return {
+          ...state,
+          enemyBoard,
+          isServerTurn: action.fireResult.serverturn,
+          multiplayer: {
+            ...state.multiplayer,
+            cancelLoading: true
+          }
+        };
+      }
+      return state;
+
+    case consts.CANCEL_LOADING:
+      if (state.currentState === consts.GameState.STARTED) {
+        return {
+          ...state,
+          multiplayer: {
+            ...state.multiplayer,
+            cancelLoading: false
+          }
+        };
       }
       return state;
 
