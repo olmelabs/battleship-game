@@ -39,7 +39,7 @@ namespace olmelabs.battleship.api.Controllers
 
             PeerToPeerSessionState g = await _p2pSvc.StartNewSessionAsync(connectionId);
 
-            return Ok(new { code = g.Code });
+            return Ok(new P2PStartSessionDto { Code = g.Code });
         }
 
 
