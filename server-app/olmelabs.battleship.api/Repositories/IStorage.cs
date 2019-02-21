@@ -21,6 +21,7 @@ namespace olmelabs.battleship.api.Repositories
         #endregion
 
         #region P2P (multiplayer)
+        //TODO: Implement Active Session - so not to load all previouse sessions
         Task<PeerToPeerSessionState> FindP2PSessionAsync(string code);
 
         Task<PeerToPeerSessionState> AddP2PSessionAsync(PeerToPeerSessionState p2pSession);

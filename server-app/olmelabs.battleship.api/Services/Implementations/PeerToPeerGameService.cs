@@ -16,8 +16,8 @@ namespace olmelabs.battleship.api.Services.Implementations
 
         public async Task<PeerToPeerSessionState> StartNewSessionAsync(string hostConnectionId)
         {
-            //TODO: create some short code here 
-            string code = hostConnectionId;
+            //fallback afer 1000 tries if game is super popular :) 
+            string code = await GenerateCode() ?? hostConnectionId;
             PeerToPeerSessionState s = new PeerToPeerSessionState()
             {
                 HostConnectionId = hostConnectionId,
@@ -92,6 +92,24 @@ namespace olmelabs.battleship.api.Services.Implementations
                 return s;
             }
 
+            return null;
+        }
+
+        private async Task<string> GenerateCode()
+        {
+            Random rnd = new Random();
+            int i = 0;
+            while (i < 1000)
+            {
+                int num = rnd.Next(0, 9999);
+                string code = num.ToString().PadLeft(4, '0');
+
+                //if session not found - code OK. Otherwise generate new code
+                PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
+                if (s == null)
+                    return code;
+                ++i;
+            }
             return null;
         }
     }
