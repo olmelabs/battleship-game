@@ -137,6 +137,9 @@ namespace olmelabs.battleship.api.Controllers
 
             PeerToPeerSessionState session = await _p2pSvc.FindActiveSessionAsync(dto.Code, dto.ConnectionId);
 
+            if (session == null)
+                return BadRequest();
+
             FireCannonResultDto respDto = new FireCannonResultDto
             {
                 CellId = dto.CellId,

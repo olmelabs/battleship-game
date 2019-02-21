@@ -27,6 +27,12 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             _notificationServiceMock = new Mock<INotificationService>();
 
             _signalRHub = new Mock<IHubContext<GameHub>>();
+
+            var clients = new Mock<IHubClients>();
+            var client = new Mock<IClientProxy>();
+            clients.Setup(x => x.Client(It.IsAny<string>())).Returns(client.Object);
+
+            _signalRHub.Setup(x => x.Clients).Returns(clients.Object);
         }
 
     }

@@ -140,5 +140,37 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
         }
+
+        [TestMethod]
+        public async Task FireCannonProcessResult_Ok()
+        {
+            var gameLogic = new Mock<IGameLogic>();
+            GameState game = GameState.CreateNew(gameLogic.Object);
+
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(x => x.FireCannonProcessResult(It.IsAny<FireCannonCallbackDto>()))
+                .ReturnsAsync(game);
+
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
+            var output = await controller.FireCannonProcessResult(new FireCannonCallbackDto());
+
+            Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public async Task FireCannonProcessResult_BadRequest()
+        {
+            var gameLogic = new Mock<IGameLogic>();
+            GameState game = GameState.CreateNew(gameLogic.Object);
+
+            var gameService = new Mock<IGameService>();
+            gameService.Setup(x => x.FireCannonProcessResult(It.IsAny<FireCannonCallbackDto>()))
+                .ReturnsAsync((GameState)null);
+
+            var controller = new GameController(gameService.Object, _mapper, _statisticsSvcMock.Object);
+            var output = await controller.FireCannonProcessResult(new FireCannonCallbackDto());
+
+            Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
+        }
     }
 }
