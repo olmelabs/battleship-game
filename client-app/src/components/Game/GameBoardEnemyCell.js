@@ -16,8 +16,9 @@ class GameBoardEnemyCell extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
+    //TODO: refactor this state setting
     if (prevProps.cancelLoading !== this.props.cancelLoading) {
-      // eslint-disable-next-line react/no-did-update-set-state
+      //eslint-disable-next-line react/no-did-update-set-state
       this.setState({ loading: false }); //always false as property change indicates stop loading
     }
   }
