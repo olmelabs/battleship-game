@@ -1,4 +1,6 @@
 ﻿
+using System.Collections.Generic;
+
 namespace olmelabs.battleship.api.Models.Entities
 {
     public class PeerToPeerSessionState
@@ -12,11 +14,13 @@ namespace olmelabs.battleship.api.Models.Entities
 
         public string HostConnectionId { get; set; }
 
-        public int GameStartedCount = 0;
+        public List<ShipInfo> HostShips { get; set; }
 
         public string FriendConnectionId { get; set; }
 
-        public bool IsFriendReady { get; set; }
+        public List<ShipInfo> FriendShips { get; set; }
+
+        public int GameStartedCount = 0;
 
         public string GameId { get; set; }
 

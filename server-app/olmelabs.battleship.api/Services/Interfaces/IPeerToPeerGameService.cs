@@ -1,5 +1,6 @@
 ﻿
 using olmelabs.battleship.api.Models.Entities;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace olmelabs.battleship.api.Services.Interfaces
@@ -10,7 +11,7 @@ namespace olmelabs.battleship.api.Services.Interfaces
 
         Task<PeerToPeerSessionState> JoinSessionAsync(string code, string connectionId);
 
-        Task<PeerToPeerSessionState> AddPeerToSession(string code, string connectionId);
+        Task<PeerToPeerSessionState> AddPeerToSession(string code, string connectionId, IEnumerable<ShipInfo> ships);
 
         Task<PeerToPeerSessionState> StartNewGameAsync(PeerToPeerSessionState session);
 

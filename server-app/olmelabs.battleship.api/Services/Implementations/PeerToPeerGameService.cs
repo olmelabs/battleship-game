@@ -2,6 +2,7 @@
 using olmelabs.battleship.api.Repositories;
 using olmelabs.battleship.api.Services.Interfaces;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace olmelabs.battleship.api.Services.Implementations
@@ -46,7 +47,7 @@ namespace olmelabs.battleship.api.Services.Implementations
             return s;
         }
 
-        public async Task<PeerToPeerSessionState> AddPeerToSession(string code, string connectionId)
+        public async Task<PeerToPeerSessionState> AddPeerToSession(string code, string connectionId, IEnumerable<ShipInfo> ships)
         {
             PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
 
@@ -59,6 +60,15 @@ namespace olmelabs.battleship.api.Services.Implementations
 
             if (s.HostConnectionId == connectionId || s.FriendConnectionId == connectionId)
             {
+                if (s.HostConnectionId == connectionId)
+                {
+                    s.HostShips = new List<ShipInfo>(ships);
+                }
+                else if (s.FriendConnectionId == connectionId)
+                {
+                    s.FriendShips = new List<ShipInfo>(ships);
+                }
+                
                 s.GameStartedCount++;
 
                 s = await _storage.UpdateP2PSessionAsync(s);
@@ -74,6 +84,7 @@ namespace olmelabs.battleship.api.Services.Implementations
             PeerToPeerGameState game = PeerToPeerGameState.CreateNew();
             session.GameId = game.GameId;
 
+            //TODO: Do we need separate game or session here? Merge objects(?)
             game = await _storage.AddP2PGameAsync(game);
             await _storage.UpdateP2PSessionAsync(session);
 

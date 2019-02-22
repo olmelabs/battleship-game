@@ -6,6 +6,8 @@ using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Services.Interfaces;
 using olmelabs.battleship.api.SignalRHubs;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace olmelabs.battleship.api.Controllers
@@ -75,7 +77,7 @@ namespace olmelabs.battleship.api.Controllers
             if (dto.Ships == null || dto.Ships.Length != 10)
                 return BadRequest();
 
-            PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId);
+            PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId, _mapper.Map<IEnumerable<ShipInfo>>(dto.Ships));
 
             if (session == null)
                 return BadRequest();
@@ -139,9 +141,12 @@ namespace olmelabs.battleship.api.Controllers
                 return BadRequest();
 
             PeerToPeerSessionState session = await _p2pSvc.FindActiveSessionAsync(dto.Code, dto.ConnectionId);
-
+            
             if (session == null)
                 return BadRequest();
+
+            //TODO: check if this is correct
+            List<ShipInfo> ships = dto.ConnectionId == session.HostConnectionId ? session.HostShips : session.FriendShips;
 
             FireCannonResultDto respDto = new FireCannonResultDto
             {
@@ -149,12 +154,18 @@ namespace olmelabs.battleship.api.Controllers
                 ShipDestroyed = dto.ShipDestroyed,
                 IsAwaitingServerTurn = !dto.Result,
                 IsGameOver = dto.IsGameOver,
-                Result = dto.Result
+                Result = dto.Result,
             };
 
             var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
 
             await _gameHubContext.Clients.Client(connectionId).SendAsync("MakeFireProcessResult", respDto);
+
+            if (dto.IsGameOver)
+            {
+                GameOverDto shipsDto = new GameOverDto { Ships = ships.Select(s => s.Cells).ToList() };
+                return Ok(shipsDto);
+            }
 
             return Ok(new { });
         }

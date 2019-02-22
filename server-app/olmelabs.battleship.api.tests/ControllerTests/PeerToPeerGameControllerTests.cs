@@ -5,6 +5,7 @@ using olmelabs.battleship.api.Controllers;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Services.Interfaces;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace olmelabs.battleship.api.tests.ControllerTests
@@ -126,7 +127,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
-            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>()))
+            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<ShipInfo>>()))
                 .ReturnsAsync(new PeerToPeerSessionState() { Code = "12345", HostConnectionId = "c1", GameStartedCount = 1 });
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
@@ -147,7 +148,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
-            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>()))
+            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<ShipInfo>>()))
                 .ReturnsAsync(new PeerToPeerSessionState() { Code = "12345", HostConnectionId = "c1", FriendConnectionId = "c2", GameStartedCount = 2 });
 
             p2pSvc.Setup(x => x.StartNewGameAsync(It.IsAny<PeerToPeerSessionState>()))
@@ -213,7 +214,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
-            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>()))
+            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<ShipInfo>>()))
                 .ReturnsAsync((PeerToPeerSessionState)null);
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
@@ -347,7 +348,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
-            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>()))
+            p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<IEnumerable<ShipInfo>>()))
                 .ReturnsAsync((PeerToPeerSessionState)null);
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);

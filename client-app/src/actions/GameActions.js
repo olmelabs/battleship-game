@@ -213,7 +213,6 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
       }
     });
 
-    //TODO: if game over send ships on my board, to display on his
     const state = getState();
     const res = {
       connectionId: state.signalrState.connectionId,
@@ -230,15 +229,16 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
       .then(res => {
         dispatch(ajaxCallSuccess());
 
-        //TODO: implement multiplayer
         if (numberOfDestroyedShips === 10) {
-          //TODO: Implement gqame over received from signalr call.
-          //this means other party won. all your ships
+          //TODO: Implement game over received from api call.
+          //this means other party won.
+
           // eslint-disable-next-line no-console
           console.log("GAME OVER YOU LOST");
           dispatch(setGameState(consts.GameState.COMPLETED, null));
-          //Add to Signal R Action
-          //dispatch(showEnemyShips(gameInfo.ships));
+
+          //show enemy ship data
+          dispatch(showEnemyShips(res.ships));
         }
       })
       .catch(error => {
@@ -268,12 +268,13 @@ export function makeFireMultiplayerSrCallback(fireResult) {
     }
 
     if (fireResult.gameover) {
-      //TODO: Implement gqame over received from signalr call.
+      //TODO: Implement game over received from signalr call.
       //this means you won as all ships on enemy board are destroyed
+
       // eslint-disable-next-line no-console
       console.log("GAME OVER YOU WON");
+
       dispatch(setGameState(consts.GameState.COMPLETED, null));
-      //dispatch(showMyShipd(gameInfo.ships));
     }
   };
 }
