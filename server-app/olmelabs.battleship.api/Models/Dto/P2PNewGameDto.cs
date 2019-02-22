@@ -2,12 +2,12 @@
 
 namespace olmelabs.battleship.api.Models.Dto
 {
-    public class P2PNewGameDto
+    public class P2PNewGametDto
     {
-        [JsonProperty("gameId")]
-        public string GameId { get; set; }
+        public string Code { get; set; }
 
-        [JsonProperty("yourMove")]
-        public bool YourMove { get; set; }
+        public string ConnectionId { get; set; }
+
+        public ClientShipDto[] Ships { get; set; }
     }
 }

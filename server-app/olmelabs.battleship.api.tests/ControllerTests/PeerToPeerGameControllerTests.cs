@@ -63,7 +63,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
             var output = await controller.JoinSession(dto);
 
             p2pSvc.Verify(p => p.JoinSessionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
-            
+
             _signalRHub.VerifyGet(p => p.Clients, Times.Once);
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
@@ -122,7 +122,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
         [TestMethod]
         public async Task StartNewGame_FirstConnected_Ok()
         {
-            P2PGameKeyDto dto = new P2PGameKeyDto() { Code = "12345", ConnectionId = "c2" };
+            P2PNewGametDto dto = new P2PNewGametDto() { Code = "12345", ConnectionId = "c2", Ships = new ClientShipDto[10] };
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
@@ -143,7 +143,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
         [TestMethod]
         public async Task StartNewGame_BothConnected_Ok()
         {
-            P2PGameKeyDto dto = new P2PGameKeyDto() { Code = "12345", ConnectionId = "c2" };
+            P2PNewGametDto dto = new P2PNewGametDto() { Code = "12345", ConnectionId = "c2", Ships = new ClientShipDto[10] };
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
@@ -168,12 +168,12 @@ namespace olmelabs.battleship.api.tests.ControllerTests
         public async Task StartNewGame_BadRequest_1()
         {
             P2PGameKeyDto dto = new P2PGameKeyDto();
-           
+
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
 
-            var output = await controller.StartNewGame(new P2PGameKeyDto { Code = "12345", ConnectionId= null});
+            var output = await controller.StartNewGame(new P2PNewGametDto { Code = "12345", ConnectionId = null, Ships = null });
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
         }
@@ -187,7 +187,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
 
-            var output = await controller.StartNewGame(new P2PGameKeyDto { Code = null, ConnectionId = "c1" });
+            var output = await controller.StartNewGame(new P2PNewGametDto { Code = null, ConnectionId = "c1", Ships = null });
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
         }
@@ -199,12 +199,26 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
+
+            var output = await controller.StartNewGame(new P2PNewGametDto { Code = "12345", ConnectionId = "c1", Ships = null });
+
+            Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        public async Task StartNewGame_BadRequest_4()
+        {
+            P2PGameKeyDto dto = new P2PGameKeyDto();
+
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+
             p2pSvc.Setup(x => x.AddPeerToSession(It.IsAny<string>(), It.IsAny<string>()))
                 .ReturnsAsync((PeerToPeerSessionState)null);
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
 
-            var output = await controller.StartNewGame(new P2PGameKeyDto { Code = "12345", ConnectionId = "c1" });
+            var output = await controller.StartNewGame(new P2PNewGametDto { Code = "12345", ConnectionId = "c1", Ships = new ClientShipDto[10] });
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
         }
@@ -255,7 +269,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
         }
-        
+
         public async Task FireCannon_BadRequest_3()
         {
             var p2pSvc = new Mock<IPeerToPeerGameService>();
@@ -319,7 +333,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
 
-            var output = await controller.FireCannonProcessResult(new P2PFireCannonCallbackDto { Code = "12345", ConnectionId = null});
+            var output = await controller.FireCannonProcessResult(new P2PFireCannonCallbackDto { Code = "12345", ConnectionId = null });
 
             _signalRHub.VerifyGet(p => p.Clients, Times.Never);
 

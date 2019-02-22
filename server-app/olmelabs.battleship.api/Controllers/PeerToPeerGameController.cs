@@ -64,12 +64,15 @@ namespace olmelabs.battleship.api.Controllers
 
         [HttpPost]
         [ActionName("StartNewGame")]
-        public async Task<IActionResult> StartNewGame([FromBody]P2PGameKeyDto dto)
+        public async Task<IActionResult> StartNewGame([FromBody]P2PNewGametDto dto)
         {
             if (string.IsNullOrWhiteSpace(dto.ConnectionId))
                 return BadRequest();
 
             if (string.IsNullOrWhiteSpace(dto.Code))
+                return BadRequest();
+
+            if (dto.Ships == null || dto.Ships.Length != 10)
                 return BadRequest();
 
             PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId);
@@ -79,12 +82,12 @@ namespace olmelabs.battleship.api.Controllers
 
             if (session.GameStartedCount == 2)
             {
-
+                //TODO: Implement add board to Game
                 session = await _p2pSvc.StartNewGameAsync(session);
 
                 var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
-                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", new P2PNewGameDto { GameId = session.GameId, YourMove = true });
-                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", new P2PNewGameDto { GameId = session.GameId, YourMove = false });
+                await _gameHubContext.Clients.Client(connectionId).SendAsync("GameStartedYourMove", new P2PNewGameResultDto { GameId = session.GameId, YourMove = true });
+                await _gameHubContext.Clients.Client(dto.ConnectionId).SendAsync("GameStartedFriendsMove", new P2PNewGameResultDto { GameId = session.GameId, YourMove = false });
             }
             else
             {

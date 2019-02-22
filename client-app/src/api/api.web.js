@@ -72,10 +72,9 @@ class GameApi {
     });
   }
 
-  static startNewGameMultiplayer(code, connectionId) {
+  static startNewGameMultiplayer(gameInfo) {
     return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/StartNewGame/", {
-      code,
-      connectionId
+      gameInfo
     });
   }
 

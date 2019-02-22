@@ -69,12 +69,12 @@ class App extends React.Component {
       });
 
       SignalRService.registerGameStartedYourMove(data => {
-        toastr.info("Your game is now started. You make the first move. Fire!");
+        toastr.success("Your game is now started. You make the first move. Fire!");
         this.props.actions.startGameMultiplayerSrCallback(data);
       });
 
       SignalRService.registerGameStartedFriendsMove(data => {
-        toastr.info(
+        toastr.success(
           "Your game is now started. Your are now waiting for first move from your friend."
         );
         this.props.actions.startGameMultiplayerSrCallback(data);

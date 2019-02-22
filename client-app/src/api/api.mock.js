@@ -39,7 +39,7 @@ class GameApi {
     });
   }
 
-  static startNewGameMultiplayer(gameCode, connectionId) {
+  static startNewGameMultiplayer(gameInfo) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {
         resolve({});
