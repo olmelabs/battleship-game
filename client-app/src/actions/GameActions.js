@@ -230,14 +230,11 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
         dispatch(ajaxCallSuccess());
 
         if (numberOfDestroyedShips === 10) {
-          //TODO: Implement game over received from api call.
-          //this means other party won.
+          //Means your friend won. You will be shown his ships
 
-          // eslint-disable-next-line no-console
-          console.log("GAME OVER YOU LOST");
+          // console.log("GAME OVER YOU LOST");
           dispatch(setGameState(consts.GameState.COMPLETED, null));
 
-          //show enemy ship data
           dispatch(showEnemyShips(res.ships));
         }
       })
@@ -268,12 +265,10 @@ export function makeFireMultiplayerSrCallback(fireResult) {
     }
 
     if (fireResult.gameover) {
-      //TODO: Implement game over received from signalr call.
-      //this means you won as all ships on enemy board are destroyed
+      //Means you won as all ships on enemy board are destroyed
 
       // eslint-disable-next-line no-console
-      console.log("GAME OVER YOU WON");
-
+      //console.log("GAME OVER YOU WON");
       dispatch(setGameState(consts.GameState.COMPLETED, null));
     }
   };

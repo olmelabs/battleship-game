@@ -39,6 +39,14 @@ class ShipFactory extends React.Component {
   }
 
   render() {
+    const isGenerateActive =
+      this.props.currentState === consts.GameState.NOT_STARTED &&
+      (this.props.gameType === consts.GameType.SINGLEPLAYER ||
+        (this.props.gameType === consts.GameType.HOST &&
+          this.props.isFriendConnected) ||
+        (this.props.gameType === consts.GameType.JOIN &&
+          this.props.isFriendConnected));
+
     return (
       <React.Fragment>
         <div className="centered text-center">
@@ -69,6 +77,7 @@ class ShipFactory extends React.Component {
         <div className="centered text-center">
           <p>Or click the button below to quickly generate board.</p>
           <button
+            disabled={!isGenerateActive}
             className="control-button btn btn-primary"
             title="Generate"
             onClick={this.onGenerateBoardClick}
@@ -82,6 +91,8 @@ class ShipFactory extends React.Component {
 }
 
 ShipFactory.propTypes = {
+  gameType: PropTypes.string.isRequired,
+  isFriendConnected: PropTypes.bool.isRequired,
   myShips: PropTypes.array.isRequired,
   myShipsCurrent: PropTypes.number.isRequired,
   currentState: PropTypes.string.isRequired,
@@ -89,6 +100,8 @@ ShipFactory.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
+  gameType: state.gameState.gameType,
+  isFriendConnected: state.gameState.multiplayer.isFriendConnected,
   myShips: state.gameState.myShips,
   myShipsCurrent: state.gameState.myShipsCurrent,
   currentState: state.gameState.currentState

@@ -38,14 +38,22 @@ const gameState = (state = initialState, action) => {
       if (action.currentState === consts.GameState.NOT_STARTED) {
         return initialState;
       } else {
-        return Object.assign({}, state, {
-          currentState: action.currentState,
-          gameId: action.gameInfo === null ? null : action.gameInfo.gameId,
-          isServerTurn:
-            action.gameInfo === null
-              ? state.isServerTurn
-              : !action.gameInfo.yourMove
-        });
+        if (state.gameType == consts.GameType.SINGLEPLAYER) {
+          return {
+            ...state,
+            currentState: action.currentState,
+            gameId: action.gameInfo.gameId
+          };
+        } else
+          return {
+            ...state,
+            currentState: action.currentState,
+            gameId: action.gameInfo === null ? null : action.gameInfo.gameId,
+            isServerTurn:
+              action.gameInfo === null
+                ? state.isServerTurn
+                : !action.gameInfo.yourMove
+          };
       }
 
     case consts.MAKE_FIRE:

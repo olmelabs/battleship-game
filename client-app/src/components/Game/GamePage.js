@@ -83,8 +83,7 @@ class GamePage extends React.Component {
             You are hosting the game. Send this access code to your friend:{" "}
             <b>{this.props.gameAccessCode}</b>
             <p>
-              Setup your fleet while waitning your friend to join. You can start
-              game when you both connected.{" "}
+              You can setup your fleet and start game when you both connected.{" "}
             </p>
           </div>
         </div>
