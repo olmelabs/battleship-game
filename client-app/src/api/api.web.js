@@ -73,9 +73,10 @@ class GameApi {
   }
 
   static startNewGameMultiplayer(gameInfo) {
-    return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/StartNewGame/", {
+    return postDataReturnJsonWithRefreshAsync(
+      "PeerToPeerGame/StartNewGame/",
       gameInfo
-    });
+    );
   }
 
   static fireCannonMultiplayer(shotData) {
