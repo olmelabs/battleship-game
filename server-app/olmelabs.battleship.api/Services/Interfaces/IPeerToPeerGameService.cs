@@ -15,6 +15,8 @@ namespace olmelabs.battleship.api.Services.Interfaces
 
         Task<PeerToPeerSessionState> StartNewGameAsync(PeerToPeerSessionState session);
 
+        Task<PeerToPeerGameState> StopGameAsync(string gameId);
+
         Task<PeerToPeerSessionState> FindActiveSessionAsync(string code, string connectionId);
     }
 }

@@ -4,10 +4,7 @@ using System.Collections.Generic;
 
 namespace olmelabs.battleship.api.Models.Entities
 {
-    //TODO: After implementation look at Game State - may be everything may be merged into one class... 
-    //and SignalR data maty be moved to GameSessionState class. For now just duplicate States to see how it goes
-    //or it hust can be deleted for multiplayer
-
+    //TODO: record events on each move so it may be replayed (may be ?)
     public class PeerToPeerGameState : BsonBase
     {
         public static PeerToPeerGameState CreateNew()
@@ -21,21 +18,10 @@ namespace olmelabs.battleship.api.Models.Entities
             return g;
         }
 
-        public PeerToPeerGameState()
-        {
-            CurrentShipHost = new List<int>();
-            CurrentShipFriend = new List<int>();
-        }
-
         public string GameId { get; set; }
 
         public DateTime DateStart { get; set; }
 
         public DateTime? DateEnd { get; set; }
-
-        public List<int> CurrentShipHost { get; set; }
-
-        public List<int> CurrentShipFriend { get; set; }
-
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace olmelabs.battleship.api.Models.Entities
 {
+    //TODO: make multiple games available within same session
     public class PeerToPeerSessionState
     {
         public PeerToPeerSessionState()

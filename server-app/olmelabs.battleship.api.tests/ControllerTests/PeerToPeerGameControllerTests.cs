@@ -293,8 +293,6 @@ namespace olmelabs.battleship.api.tests.ControllerTests
         [TestMethod]
         public async Task FireCannonProcessResult_Ok()
         {
-            P2PGameKeyDto dto = new P2PGameKeyDto();
-
             var p2pSvc = new Mock<IPeerToPeerGameService>();
 
             p2pSvc.Setup(x => x.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()))
@@ -304,9 +302,31 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var output = await controller.FireCannonProcessResult(new P2PFireCannonCallbackDto { Code = "12345", ConnectionId = "c1" });
 
+            p2pSvc.Verify(p => p.StopGameAsync(It.IsAny<string>()), Times.Never);
+
             _signalRHub.VerifyGet(p => p.Clients, Times.Once);
 
             Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public async Task FireCannonProcessResult_GameOver_Ok()
+        {
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+
+            p2pSvc.Setup(x => x.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new PeerToPeerSessionState() { Code = "12345", HostConnectionId = "c1", FriendShips= new List<ShipInfo>(), HostShips = new List<ShipInfo>() });
+
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object);
+
+            var output = await controller.FireCannonProcessResult(new P2PFireCannonCallbackDto { Code = "12345", ConnectionId = "c1", IsGameOver = true });
+
+            p2pSvc.Verify(p => p.StopGameAsync(It.IsAny<string>()), Times.Once);
+
+            _signalRHub.VerifyGet(p => p.Clients, Times.Once);
+
+            Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
+            Assert.AreEqual(((OkObjectResult)output).Value.GetType(), typeof(GameOverDto));
         }
 
         [TestMethod]

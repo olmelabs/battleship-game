@@ -68,7 +68,7 @@ namespace olmelabs.battleship.api.Services.Implementations
                 {
                     s.FriendShips = new List<ShipInfo>(ships);
                 }
-                
+
                 s.GameStartedCount++;
 
                 s = await _storage.UpdateP2PSessionAsync(s);
@@ -84,11 +84,27 @@ namespace olmelabs.battleship.api.Services.Implementations
             PeerToPeerGameState game = PeerToPeerGameState.CreateNew();
             session.GameId = game.GameId;
 
-            //TODO: Do we need separate game or session here? Merge objects(?)
             game = await _storage.AddP2PGameAsync(game);
             await _storage.UpdateP2PSessionAsync(session);
 
             return session;
+        }
+
+        public virtual async Task<PeerToPeerGameState> StopGameAsync(string gameId)
+        {
+            PeerToPeerGameState g = await FindActiveP2PGameAsync(gameId);
+            if (g == null)
+                return null;
+
+            g.DateEnd = DateTime.Now;
+
+            return await _storage.UpdateP2PGameAsync(g);
+        }
+
+        public virtual async Task<PeerToPeerGameState> FindActiveP2PGameAsync(string gameId)
+        {
+            PeerToPeerGameState g = await _storage.FindActiveP2PGameAsync(gameId);
+            return g;
         }
 
         public async Task<PeerToPeerSessionState> FindActiveSessionAsync(string code, string connectionId)

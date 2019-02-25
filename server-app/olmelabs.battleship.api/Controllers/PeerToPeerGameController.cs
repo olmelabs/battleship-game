@@ -163,6 +163,8 @@ namespace olmelabs.battleship.api.Controllers
 
             if (dto.IsGameOver)
             {
+                await _p2pSvc.StopGameAsync(session.GameId);
+
                 GameOverDto shipsDto = new GameOverDto { Ships = ships.Select(s => s.Cells).ToList() };
                 return Ok(shipsDto);
             }
