@@ -1,1 +1,1 @@
-docker run -p 8091:80 olmelabsbattleshipapi
+docker run -p 8091:80 olmelabs/battleshipapi
