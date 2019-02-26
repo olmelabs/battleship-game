@@ -1,2 +1,2 @@
-export const API_URL = "//localhost:63354/api/";
-export const SIGNALR_URL = "//localhost:63354/game-hub";
+export const API_URL = "//gameapi:8091/api/";
+export const SIGNALR_URL = "//gameapi:8091/game-hub";

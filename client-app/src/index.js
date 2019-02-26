@@ -6,6 +6,7 @@ import { Provider } from "react-redux";
 import { store } from "./helpers/store";
 import App from "./components/App";
 
+// TODO: Move notifications to more modern package. This conflicts with bootsrap and is old
 import "../node_modules/toastr/build/toastr.min.css";
 import "./styles/styles.css";
 
