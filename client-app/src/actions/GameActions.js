@@ -370,13 +370,13 @@ export function fireCannon(cellId) {
 
 export function fireCannonFromServer(fireRequest) {
   return function(dispatch, getState) {
+    dispatch(fireRequestFromServer(fireRequest));
+
     const gameState = getState().gameState;
+
     if (gameState.currentState != consts.GameState.STARTED) {
       return;
     }
-
-    dispatch(fireRequestFromServer(fireRequest));
-
     const cellId = fireRequest.cellId;
     const myBoard = getState().gameState.myBoard;
     const ship =

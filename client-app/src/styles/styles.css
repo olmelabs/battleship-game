@@ -43,6 +43,43 @@ ul {
   background: #f89900;
 }
 
+.cell-fired-hit {
+  -webkit-animation-name: cell-fired-hit; /* Safari 4.0 - 8.0 */
+  -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
+  animation-name: cell-fired-hit;
+  animation-duration: 2s;
+}
+.cell-fired-miss {
+  -webkit-animation-name: cell-fired-miss; /* Safari 4.0 - 8.0 */
+  -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
+  animation-name: cell-fired-miss;
+  animation-duration: 2s;
+}
+
+@keyframes cell-fired-hit {
+  0% {
+    background-color: red;
+  }
+  50% {
+    background-color: rgb(255, 123, 123);
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+
+@keyframes cell-fired-miss {
+  0% {
+    background-color: rgb(4, 248, 4);
+  }
+  50% {
+    background-color: rgb(109, 247, 109);
+  }
+  100% {
+    background-color: #fff;
+  }
+}
+
 .kbd-navigation .square:focus {
   background: #ddd;
 }
@@ -167,14 +204,14 @@ ul {
   background-color: #030303 !important;
 }
 .toast-success {
-  background-color: #51A351 !important;
+  background-color: #51a351 !important;
 }
 .toast-error {
-  background-color: #BD362F !important;
+  background-color: #bd362f !important;
 }
 .toast-info {
-  background-color: #2F96B4 !important;
+  background-color: #2f96b4 !important;
 }
 .toast-warning {
-  background-color: #F89406 !important;
+  background-color: #f89406 !important;
 }

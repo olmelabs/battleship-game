@@ -38,9 +38,13 @@ class GameBoardMyCell extends React.Component {
         }
       });
     }
-    let className = this.props.isShipOnIt ? "cell-selected" : "cell";
+    let className = this.props.isShipOnIt ? " cell-selected" : " cell";
     if (highLightCurrentShip) {
       className += " cell-highlight";
+    }
+
+    if (this.props.isShotFired) {
+      className += this.props.isHit ? " cell-fired-hit" : " cell-fired-miss";
     }
 
     return (
