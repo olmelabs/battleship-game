@@ -120,6 +120,9 @@ namespace olmelabs.battleship.api.Services.Implementations
         {
             GameState g = await FindActiveGameAsync(fireResult.GameId);
 
+            if ( g == null)
+                return null;
+
             g.ClientBoard.Board[fireResult.CellId] = fireResult.Result ? (int)ClientCellState.CellFiredAndShipHit : (int)ClientCellState.CellFiredButEmpty;
             g.IsAwaitingServerTurn = fireResult.Result;
 

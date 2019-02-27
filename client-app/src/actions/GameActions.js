@@ -16,6 +16,10 @@ export const setGameState = (currentState, gameInfo) => ({
   gameInfo
 });
 
+export const resetGame = fireResult => ({
+  type: consts.RESET_GAME
+});
+
 export const makeFire = fireResult => ({
   type: consts.MAKE_FIRE,
   fireResult
@@ -366,10 +370,14 @@ export function fireCannon(cellId) {
 
 export function fireCannonFromServer(fireRequest) {
   return function(dispatch, getState) {
+    const gameState = getState().gameState;
+    if (gameState.currentState != consts.GameState.STARTED) {
+      return;
+    }
+
     dispatch(fireRequestFromServer(fireRequest));
 
     const cellId = fireRequest.cellId;
-    const gameState = getState().gameState;
     const myBoard = getState().gameState.myBoard;
     const ship =
       gameState.lastMyDestroyedShip === null

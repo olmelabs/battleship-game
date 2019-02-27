@@ -9,7 +9,7 @@ import ShipFactory from "./ShipFactory";
 import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import toastr from "toastr";
-import { withRouter, Redirect } from "react-router";
+import { withRouter, Redirect, Prompt } from "react-router";
 
 class GamePage extends React.Component {
   constructor(props, context) {
@@ -35,6 +35,10 @@ class GamePage extends React.Component {
     if (prevProps.connectionId === null && this.props.connectionId !== null) {
       this.setGameType();
     }
+  }
+
+  componentWillUnmount() {
+    this.props.actions.resetGame();
   }
 
   setGameType() {
@@ -91,6 +95,10 @@ class GamePage extends React.Component {
     }
     return (
       <React.Fragment>
+        <Prompt
+          when={this.props.currentState == consts.GameState.STARTED}
+          message="If you navigate from this page your game will end. Are you sure you want to end this game?"
+        />
         {message}
         <div className="row justify-content-center">
           <div className="col">

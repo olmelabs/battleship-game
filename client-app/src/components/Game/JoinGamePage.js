@@ -6,6 +6,7 @@ import { bindActionCreators } from "redux";
 import * as actions from "../../actions";
 import { Redirect } from "react-router";
 
+//this is an example of component immplementation using hooks instead of React.Component
 function JoinGamePage(props) {
   const [code, setCode] = useState("");
 

@@ -13,7 +13,9 @@ class GameMenu extends React.Component {
           this.props.isFriendConnected) ||
         (this.props.gameType === consts.GameType.JOIN &&
           this.props.isFriendConnected));
-    const isStopActive = this.props.currentState === consts.GameState.STARTED;
+    const isStopActive =
+      this.props.gameType === consts.GameType.SINGLEPLAYER &&
+      this.props.currentState === consts.GameState.STARTED;
     const isNewActive = this.props.currentState === consts.GameState.COMPLETED;
 
     return (

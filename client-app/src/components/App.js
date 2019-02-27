@@ -38,6 +38,10 @@ class App extends React.Component {
       });
 
       SignalRService.registerFireFromServer(data => {
+        if (this.props.currentState != consts.GameState.STARTED) {
+          return;
+        }
+
         toastr.info("" + data.cellId); //"0" digit is not displayed, so cast to string ;)
         if (
           this.props.gameType === consts.GameType.HOST ||
@@ -69,7 +73,9 @@ class App extends React.Component {
       });
 
       SignalRService.registerGameStartedYourMove(data => {
-        toastr.success("Your game is now started. You make the first move. Fire!");
+        toastr.success(
+          "Your game is now started. You make the first move. Fire!"
+        );
         this.props.actions.startGameMultiplayerSrCallback(data);
       });
 
@@ -135,11 +141,13 @@ class App extends React.Component {
 
 App.propTypes = {
   gameType: PropTypes.string.isRequired,
+  currentState: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  gameType: state.gameState.gameType
+  gameType: state.gameState.gameType,
+  currentState: state.gameState.currentState
 });
 
 function mapDispatchToProps(dispatch) {

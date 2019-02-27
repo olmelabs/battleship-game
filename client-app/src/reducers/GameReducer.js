@@ -34,6 +34,8 @@ const initialState = {
 
 const gameState = (state = initialState, action) => {
   switch (action.type) {
+    case consts.RESET_GAME:
+      return initialState;
     case consts.SET_GAME_MODE:
       if (action.currentState === consts.GameState.NOT_STARTED) {
         return initialState;
