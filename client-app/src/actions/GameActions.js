@@ -313,12 +313,14 @@ export function stopSinglePlayerGame() {
 
     return gameApi
       .stopSinglePlayerGame({ gameId, ships })
-      .then(gameInfo => {
+      .then(gameOverInfo => {
         dispatch(ajaxCallSuccess());
 
-        dispatch(setGameState(consts.GameState.COMPLETED, null));
+        dispatch(
+          setGameState(consts.GameState.COMPLETED, { gameInfo: { gameId } })
+        );
 
-        dispatch(showEnemyShips(gameInfo.ships));
+        dispatch(showEnemyShips(gameOverInfo.ships));
       })
       .catch(error => {
         dispatch(ajaxCallErrorCheckAuth(error));
