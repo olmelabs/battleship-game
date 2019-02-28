@@ -15,9 +15,13 @@ namespace olmelabs.battleship.api.Models.Entities
 
         public string HostConnectionId { get; set; }
 
+        public bool HostStartedGame { get; set; }
+
         public List<ShipInfo> HostShips { get; set; }
 
         public string FriendConnectionId { get; set; }
+
+        public bool FriendStartedGame { get; set; }
 
         public List<ShipInfo> FriendShips { get; set; }
 

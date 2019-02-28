@@ -42,7 +42,8 @@ class App extends React.Component {
           return;
         }
 
-        toastr.info("" + data.cellId); //"0" digit is not displayed, so cast to string ;)
+        //toastr.info("" + data.cellId); //"0" digit is not displayed, so cast to string ;)
+
         if (
           this.props.gameType === consts.GameType.HOST ||
           this.props.gameType === consts.GameType.JOIN
@@ -69,7 +70,7 @@ class App extends React.Component {
         toastr.info(
           "You started the game. The game will begin when both of you press start. Let's wait for your friend."
         );
-        this.props.actions.joinGameSuccess();
+        //this.props.actions.joinGameSuccess();
       });
 
       SignalRService.registerGameStartedYourMove(data => {

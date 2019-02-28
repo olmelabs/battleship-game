@@ -95,6 +95,10 @@ export const joinGameError = () => ({
   type: consts.JOIN_GAME_ERROR
 });
 
+export const startGameSuccess = () => ({
+  type: consts.START_GAME_SUCCESS
+});
+
 export function initGameType(gameType) {
   return function(dispatch, getState) {
     dispatch(setGameType(gameType));
@@ -158,7 +162,8 @@ export function startNewGameMultiplayer() {
             .startNewGameMultiplayer({ code, connectionId, ships })
             .then(gameInfo => {
               dispatch(ajaxCallSuccess());
-              //game started received via SignalR message
+              dispatch(startGameSuccess());
+              //game started by both parties received via SignalR message
             });
         } else {
           dispatch(ajaxCallSuccess());

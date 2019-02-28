@@ -8,6 +8,7 @@ const initialState = {
     gameAccessCode: null,
     joinGameError: false,
     isFriendConnected: false,
+    startGameSuccess: false,
     cancelLoading: false
   },
   gameId: null,
@@ -36,6 +37,7 @@ const gameState = (state = initialState, action) => {
   switch (action.type) {
     case consts.RESET_GAME:
       return initialState;
+
     case consts.SET_GAME_MODE:
       if (action.currentState === consts.GameState.NOT_STARTED) {
         return initialState;
@@ -272,6 +274,18 @@ const gameState = (state = initialState, action) => {
             isFriendConnected: true
           }
         });
+      }
+      return state;
+
+    case consts.START_GAME_SUCCESS:
+      if (state.currentState === consts.GameState.NOT_STARTED) {
+        return {
+          ...state,
+          multiplayer: {
+            ...state.multiplayer,
+            startGameSuccess: true
+          }
+        };
       }
       return state;
 

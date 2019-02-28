@@ -34,6 +34,7 @@ export const SET_GAME_CODE = "SET_GAME_CODE";
 export const JOIN_GAME = "JOIN_GAME";
 export const JOIN_GAME_SUCCESS = "JOIN_GAME_SUCCESS";
 export const JOIN_GAME_ERROR = "JOIN_GAME_ERROR";
+export const START_GAME_SUCCESS = "START_GAME_SUCCESS";
 
 export const GameState = {
   NOT_STARTED: "NOT_STARTED",

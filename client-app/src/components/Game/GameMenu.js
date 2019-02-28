@@ -10,30 +10,39 @@ class GameMenu extends React.Component {
       this.props.currentState === consts.GameState.NOT_STARTED &&
       (this.props.gameType === consts.GameType.SINGLEPLAYER ||
         (this.props.gameType === consts.GameType.HOST &&
-          this.props.isFriendConnected) ||
+          this.props.isFriendConnected &&
+          !this.props.startGameSuccess) ||
         (this.props.gameType === consts.GameType.JOIN &&
-          this.props.isFriendConnected));
-    const isStopActive =
-      this.props.gameType === consts.GameType.SINGLEPLAYER &&
-      this.props.currentState === consts.GameState.STARTED;
+          this.props.isFriendConnected &&
+          !this.props.startGameSuccess));
+
+    const isStopVisible = this.props.gameType === consts.GameType.SINGLEPLAYER;
+    const isStopActive = this.props.currentState === consts.GameState.STARTED;
+
+    const isNewVisible = this.props.gameType === consts.GameType.SINGLEPLAYER;
     const isNewActive = this.props.currentState === consts.GameState.COMPLETED;
 
     return (
       <div className="game-menu">
-        {/* <div>Current State: {this.props.currentState}</div> */}
-        {/* <span>Actions: </span> */}
         <GameLink newState={consts.GameState.STARTED} isActive={isStartActive}>
           Start
         </GameLink>
-        <GameLink newState={consts.GameState.COMPLETED} isActive={isStopActive}>
-          Finish
-        </GameLink>
-        <GameLink
-          newState={consts.GameState.NOT_STARTED}
-          isActive={isNewActive}
-        >
-          New Game
-        </GameLink>
+        {isStopVisible && (
+          <GameLink
+            newState={consts.GameState.COMPLETED}
+            isActive={isStopActive}
+          >
+            Finish
+          </GameLink>
+        )}
+        {isNewVisible && (
+          <GameLink
+            newState={consts.GameState.NOT_STARTED}
+            isActive={isNewActive}
+          >
+            New Game
+          </GameLink>
+        )}
       </div>
     );
   }
@@ -42,12 +51,14 @@ class GameMenu extends React.Component {
 GameMenu.propTypes = {
   gameType: PropTypes.string.isRequired,
   isFriendConnected: PropTypes.bool.isRequired,
+  startGameSuccess: PropTypes.bool.isRequired,
   currentState: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
   gameType: state.gameState.gameType,
   isFriendConnected: state.gameState.multiplayer.isFriendConnected,
+  startGameSuccess: state.gameState.multiplayer.startGameSuccess,
   currentState: state.gameState.currentState
 });
 

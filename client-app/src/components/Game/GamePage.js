@@ -79,7 +79,8 @@ class GamePage extends React.Component {
     let message = "";
     if (
       this.props.currentState === consts.GameState.NOT_STARTED &&
-      this.props.gameType === consts.GameType.HOST
+      this.props.gameType === consts.GameType.HOST &&
+      !this.props.isFriendConnected
     ) {
       message = (
         <div className="row">
@@ -123,6 +124,7 @@ GamePage.propTypes = {
   gameAccessCode: PropTypes.string,
   connectionId: PropTypes.string,
   authenticated: PropTypes.bool.isRequired,
+  isFriendConnected: PropTypes.bool.isRequired,
   actions: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 };
@@ -132,7 +134,8 @@ const mapStateToProps = (state, ownProps) => ({
   gameType: state.gameState.gameType,
   gameAccessCode: state.gameState.multiplayer.gameAccessCode,
   connectionId: state.signalrState.connectionId,
-  authenticated: state.authState.authenticated
+  authenticated: state.authState.authenticated,
+  isFriendConnected: state.gameState.multiplayer.isFriendConnected
 });
 
 function mapDispatchToProps(dispatch) {

@@ -58,14 +58,22 @@ namespace olmelabs.battleship.api.Services.Implementations
             if (s.GameStartedCount == 2)
                 return null;
 
+            if (s.HostConnectionId == connectionId && s.HostStartedGame)
+                throw new InvalidOperationException("Host already started game");
+
+            if (s.FriendConnectionId == connectionId && s.FriendStartedGame)
+                throw new InvalidOperationException("Friend already started game");
+
             if (s.HostConnectionId == connectionId || s.FriendConnectionId == connectionId)
             {
                 if (s.HostConnectionId == connectionId)
                 {
+                    s.HostStartedGame = true;
                     s.HostShips = new List<ShipInfo>(ships);
                 }
                 else if (s.FriendConnectionId == connectionId)
                 {
+                    s.FriendStartedGame = true;
                     s.FriendShips = new List<ShipInfo>(ships);
                 }
 

@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
+using Microsoft.Extensions.Logging;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
 using olmelabs.battleship.api.Services.Interfaces;
 using olmelabs.battleship.api.SignalRHubs;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -20,17 +22,20 @@ namespace olmelabs.battleship.api.Controllers
         private readonly IPeerToPeerGameService _p2pSvc;
         private readonly IMapper _mapper;
         private readonly IHubContext<GameHub> _gameHubContext;
+        private readonly ILogger<PeerToPeerGameController> _logger;
 
         public PeerToPeerGameController(
             IPeerToPeerGameService p2pSvc,
             IMapper mapper,
-            IHubContext<GameHub> gameHubContext
+            IHubContext<GameHub> gameHubContext,
+            ILogger<PeerToPeerGameController> logger
             )
         {
             _p2pSvc = p2pSvc;
             _mapper = mapper;
             _gameHubContext = gameHubContext;
-        }
+            _logger = logger;
+    }
 
         [HttpPost]
         [ActionName("StartSession")]
@@ -77,9 +82,20 @@ namespace olmelabs.battleship.api.Controllers
             if (dto.Ships == null || dto.Ships.Length != 10)
                 return BadRequest();
 
-            PeerToPeerSessionState session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId, _mapper.Map<IEnumerable<ShipInfo>>(dto.Ships));
+            PeerToPeerSessionState session = null;
+            try
+            {
+                session = await _p2pSvc.AddPeerToSession(dto.Code, dto.ConnectionId, _mapper.Map<IEnumerable<ShipInfo>>(dto.Ships));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, e.Message);
+            }
 
             if (session == null)
+                return BadRequest();
+
+            if (session.HostConnectionId == session.FriendConnectionId)
                 return BadRequest();
 
             if (session.GameStartedCount == 2)
