@@ -160,7 +160,6 @@ namespace olmelabs.battleship.api.Controllers
             if (session == null)
                 return BadRequest();
 
-            //TODO: check if this is correct
             List<ShipInfo> ships = dto.ConnectionId == session.HostConnectionId ? session.FriendShips : session.HostShips;
 
             FireCannonResultDto respDto = new FireCannonResultDto
