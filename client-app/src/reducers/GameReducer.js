@@ -294,7 +294,7 @@ const gameState = (state = initialState, action) => {
         currentState: consts.GameState.NOT_STARTED,
         gameType: state.gameType,
         multiplayer: {
-          ...state.multiplayer,
+          ...initialState.multiplayer,
           gameAccessCode: state.multiplayer.gameAccessCode,
           isFriendConnected: true
         }

@@ -133,7 +133,7 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
     //quick test to end the game after first shot
     //numberOfDestroyedShips = 10;
 
-    const res = {
+    const dto = {
       connectionId: signalrState.connectionId,
       code: gameState.multiplayer.gameAccessCode,
       cellId: cellId,
@@ -144,7 +144,7 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
 
     dispatch(ajaxCallStart());
     return gameApi
-      .fireCannonResponseMultiplayer(res)
+      .fireCannonResponseMultiplayer(dto)
       .then(res => {
         dispatch(ajaxCallSuccess());
 
