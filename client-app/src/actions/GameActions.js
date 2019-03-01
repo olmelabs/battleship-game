@@ -207,8 +207,10 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
 
     //TODO: merge common code with singleplayer fireCannonFromServer somewhere
     const cellId = fireRequest.cellId;
-    const gameState = getState().gameState;
-    const myBoard = getState().gameState.myBoard;
+    const state = getState();
+    const gameState = state.gameState;
+    const signalrState = state.signalrState;
+    const myBoard = gameState.myBoard;
     const ship =
       gameState.lastMyDestroyedShip === null
         ? null
@@ -222,10 +224,11 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
       }
     });
 
-    const state = getState();
+    numberOfDestroyedShips = 10;
+
     const res = {
-      connectionId: state.signalrState.connectionId,
-      code: state.gameState.multiplayer.gameAccessCode,
+      connectionId: signalrState.connectionId,
+      code: gameState.multiplayer.gameAccessCode,
       cellId: cellId,
       result: myBoard[cellId] == 1 || myBoard[cellId] == 3,
       ship: ship,
@@ -241,6 +244,7 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
         if (numberOfDestroyedShips === 10) {
           //Means your friend won. You will be shown his ships
 
+          // eslint-disable-next-line no-console
           // console.log("GAME OVER YOU LOST");
           dispatch(setGameState(consts.GameState.COMPLETED, null));
 
@@ -277,7 +281,7 @@ export function makeFireMultiplayerSrCallback(fireResult) {
       //Means you won as all ships on enemy board are destroyed
 
       // eslint-disable-next-line no-console
-      //console.log("GAME OVER YOU WON");
+      // console.log("GAME OVER YOU WON");
       dispatch(setGameState(consts.GameState.COMPLETED, null));
     }
   };
