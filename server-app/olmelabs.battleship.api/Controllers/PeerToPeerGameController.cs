@@ -191,6 +191,9 @@ namespace olmelabs.battleship.api.Controllers
         [ActionName("RestartGame")]
         public async Task<IActionResult> RestartGame([FromBody]P2PGameKeyDto dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.Code))
+                return BadRequest();
+
             if (string.IsNullOrWhiteSpace(dto.ConnectionId))
                 return BadRequest();
 

@@ -396,6 +396,106 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
         }
-        #endregion 
+        #endregion
+
+        #region RestartGame tests
+        [TestMethod]
+        public async Task RestartGame_Ok()
+        {
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+            var session = new PeerToPeerSessionState() { Code = "12345", HostConnectionId = "c1", };
+
+            p2pSvc.Setup(x => x.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(session);
+
+            p2pSvc.Setup(x => x.RestartGameAsync(It.IsAny<PeerToPeerSessionState>()))
+                .ReturnsAsync(session);
+            
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object, _logger.Object);
+
+            var output = await controller.RestartGame(new P2PGameKeyDto { Code = "12345", ConnectionId = "c1" });
+
+            p2pSvc.Verify(p => p.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            p2pSvc.Verify(p => p.RestartGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Once);
+            
+            _signalRHub.VerifyGet(p => p.Clients, Times.Once);
+
+            Assert.AreEqual(output.GetType(), typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public async Task RestartGame_BadRequest_1()
+        {
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object, _logger.Object);
+
+            var output = await controller.RestartGame(new P2PGameKeyDto { Code = null, ConnectionId = "c1" });
+
+            p2pSvc.Verify(p => p.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            p2pSvc.Verify(p => p.RestartGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Never);
+
+            _signalRHub.VerifyGet(p => p.Clients, Times.Never);
+
+            Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        public async Task RestartGame_BadRequest_2()
+        {
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object, _logger.Object);
+
+            var output = await controller.RestartGame(new P2PGameKeyDto { Code = "12345", ConnectionId = null });
+
+            p2pSvc.Verify(p => p.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Never);
+            p2pSvc.Verify(p => p.RestartGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Never);
+
+            _signalRHub.VerifyGet(p => p.Clients, Times.Never);
+
+            Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
+        }
+
+        [TestMethod]
+        public async Task RestartGame_BadRequest_3()
+        {
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+
+            p2pSvc.Setup(x => x.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync((PeerToPeerSessionState)null);
+
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object, _logger.Object);
+
+            var output = await controller.RestartGame(new P2PGameKeyDto { Code = "12345", ConnectionId = "c1" });
+
+            p2pSvc.Verify(p => p.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            p2pSvc.Verify(p => p.RestartGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Never);
+
+            _signalRHub.VerifyGet(p => p.Clients, Times.Never);
+
+            Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
+        }
+
+        public async Task RestartGame_BadRequest_4()
+        {
+            //HostConnectionId should be the same as already in session, otherwise - bad request
+            var p2pSvc = new Mock<IPeerToPeerGameService>();
+
+            p2pSvc.Setup(x => x.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()))
+                .ReturnsAsync(new PeerToPeerSessionState() { Code = "12345", HostConnectionId = "c1", });
+
+            var controller = new PeerToPeerGameController(p2pSvc.Object, _mapper, _signalRHub.Object, _logger.Object);
+
+            var output = await controller.RestartGame(new P2PGameKeyDto { Code = "12345", ConnectionId = "c2" });
+
+            p2pSvc.Verify(p => p.FindActiveSessionAsync(It.IsAny<string>(), It.IsAny<string>()), Times.Once);
+            p2pSvc.Verify(p => p.RestartGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Never);
+
+            _signalRHub.VerifyGet(p => p.Clients, Times.Never);
+
+            Assert.AreEqual(output.GetType(), typeof(BadRequestResult));
+        }
+        #endregion
     }
 }

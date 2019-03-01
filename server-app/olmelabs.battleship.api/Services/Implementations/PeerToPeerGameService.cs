@@ -52,7 +52,7 @@ namespace olmelabs.battleship.api.Services.Implementations
 
             //game already started by both peers
             if (s.GameStartedCount == 2)
-                return null;
+                throw new InvalidOperationException("Game already has 2 participants");
 
             if (s.HostConnectionId == connectionId && s.HostStartedGame)
                 throw new InvalidOperationException("Host already started game");
@@ -129,12 +129,14 @@ namespace olmelabs.battleship.api.Services.Implementations
 
             return null;
         }
+
         public async Task<PeerToPeerSessionState> RestartGameAsync(PeerToPeerSessionState session)
         {
             session.Reset();
 
             return await _storage.UpdateP2PSessionAsync(session);
         }
+
         private async Task<string> GenerateCode()
         {
             Random rnd = new Random();
