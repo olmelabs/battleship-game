@@ -319,7 +319,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var output = await controller.FireCannonProcessResult(new P2PFireCannonCallbackDto { Code = "12345", ConnectionId = "c1" });
 
-            p2pSvc.Verify(p => p.StopGameAsync(It.IsAny<string>()), Times.Never);
+            p2pSvc.Verify(p => p.StopGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Never);
 
             _signalRHub.VerifyGet(p => p.Clients, Times.Once);
 
@@ -338,7 +338,7 @@ namespace olmelabs.battleship.api.tests.ControllerTests
 
             var output = await controller.FireCannonProcessResult(new P2PFireCannonCallbackDto { Code = "12345", ConnectionId = "c1", IsGameOver = true });
 
-            p2pSvc.Verify(p => p.StopGameAsync(It.IsAny<string>()), Times.Once);
+            p2pSvc.Verify(p => p.StopGameAsync(It.IsAny<PeerToPeerSessionState>()), Times.Once);
 
             _signalRHub.VerifyGet(p => p.Clients, Times.Once);
 

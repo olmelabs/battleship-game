@@ -49,7 +49,6 @@ namespace olmelabs.battleship.api.Controllers
             return Ok(new P2PStartSessionDto { Code = g.Code });
         }
 
-
         [HttpPost]
         [ActionName("JoinSession")]
         public async Task<IActionResult> JoinSession([FromBody] P2PGameKeyDto dto)
@@ -100,7 +99,7 @@ namespace olmelabs.battleship.api.Controllers
 
             if (session.GameStartedCount == 2)
             {
-                //TODO: Implement add board to Game
+                //TODO: Implement add board to Game and track battle history
                 session = await _p2pSvc.StartNewGameAsync(session);
 
                 var connectionId = dto.ConnectionId == session.HostConnectionId ? session.FriendConnectionId : session.HostConnectionId;
@@ -179,11 +178,33 @@ namespace olmelabs.battleship.api.Controllers
 
             if (dto.IsGameOver)
             {
-                await _p2pSvc.StopGameAsync(session.GameId);
+                await _p2pSvc.StopGameAsync(session);
 
                 GameOverDto shipsDto = new GameOverDto { Ships = ships.Select(s => s.Cells).ToList() };
                 return Ok(shipsDto);
             }
+
+            return Ok(new { });
+        }
+
+        [HttpPost]
+        [ActionName("RestartGame")]
+        public async Task<IActionResult> RestartGame([FromBody]P2PGameKeyDto dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.ConnectionId))
+                return BadRequest();
+
+            PeerToPeerSessionState session = await _p2pSvc.FindActiveSessionAsync(dto.Code, dto.ConnectionId);
+            if (session == null)
+                return BadRequest();
+
+            //only host can restart game for now
+            if (dto.ConnectionId != session.HostConnectionId)
+                return BadRequest();
+
+            session = await _p2pSvc.RestartGameAsync(session);
+
+            await _gameHubContext.Clients.Client(session.FriendConnectionId).SendAsync("RestartGame");
 
             return Ok(new { });
         }

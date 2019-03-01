@@ -92,6 +92,13 @@ class GameApi {
       shotResult
     );
   }
+
+  static reStartGameMultiplayer(code, connectionId) {
+    return postDataReturnJsonWithRefreshAsync("PeerToPeerGame/RestartGame", {
+      code,
+      connectionId
+    });
+  }
 }
 
 //https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch

@@ -225,6 +225,14 @@ class GameApi {
     });
   }
 
+  static reStartGameMultiplayer(code, connectionId) {
+    return new Promise((resolve, reject) => {
+      setTimeout(() => {
+        resolve({});
+      }, delay);
+    });
+  }
+
   static fireCannonMultiplayer(shotData) {
     return new Promise((resolve, reject) => {
       setTimeout(() => {

@@ -19,32 +19,28 @@ namespace olmelabs.battleship.api.Services.Implementations
         {
             //fallback afer 1000 tries if game is super popular :) 
             string code = await GenerateCode() ?? hostConnectionId;
-            PeerToPeerSessionState s = new PeerToPeerSessionState()
+            PeerToPeerSessionState session = new PeerToPeerSessionState()
             {
                 HostConnectionId = hostConnectionId,
                 Code = code
             };
 
-            await _storage.AddP2PSessionAsync(s);
-
-            return s;
+            return await _storage.AddP2PSessionAsync(session);
         }
 
         public async Task<PeerToPeerSessionState> JoinSessionAsync(string code, string connectionId)
         {
-            PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
-            if (s == null)
+            PeerToPeerSessionState session = await _storage.FindP2PSessionAsync(code);
+            if (session == null)
                 return null;
 
             //if friend already joined.
-            if (!string.IsNullOrWhiteSpace(s.FriendConnectionId))
+            if (!string.IsNullOrWhiteSpace(session.FriendConnectionId))
                 return null;
 
-            s.FriendConnectionId = connectionId;
+            session.FriendConnectionId = connectionId;
 
-            s = await _storage.UpdateP2PSessionAsync(s);
-
-            return s;
+            return await _storage.UpdateP2PSessionAsync(session);
         }
 
         public async Task<PeerToPeerSessionState> AddPeerToSession(string code, string connectionId, IEnumerable<ShipInfo> ships)
@@ -93,20 +89,24 @@ namespace olmelabs.battleship.api.Services.Implementations
             session.GameId = game.GameId;
 
             game = await _storage.AddP2PGameAsync(game);
-            await _storage.UpdateP2PSessionAsync(session);
 
-            return session;
+            return await _storage.UpdateP2PSessionAsync(session);
         }
 
-        public virtual async Task<PeerToPeerGameState> StopGameAsync(string gameId)
+        public virtual async Task<PeerToPeerSessionState> StopGameAsync(PeerToPeerSessionState session)
         {
-            PeerToPeerGameState g = await FindActiveP2PGameAsync(gameId);
-            if (g == null)
+            
+            PeerToPeerGameState game = await FindActiveP2PGameAsync(session.GameId);
+            if (game == null)
                 return null;
 
-            g.DateEnd = DateTime.Now;
+            game.DateEnd = DateTime.Now;
+            await _storage.UpdateP2PGameAsync(game);
 
-            return await _storage.UpdateP2PGameAsync(g);
+            session.PreviousGames.Add(session.GameId);
+            session.GameId = null;
+
+            return await _storage.UpdateP2PSessionAsync(session);
         }
 
         public virtual async Task<PeerToPeerGameState> FindActiveP2PGameAsync(string gameId)
@@ -117,19 +117,24 @@ namespace olmelabs.battleship.api.Services.Implementations
 
         public async Task<PeerToPeerSessionState> FindActiveSessionAsync(string code, string connectionId)
         {
-            PeerToPeerSessionState s = await _storage.FindP2PSessionAsync(code);
+            PeerToPeerSessionState session = await _storage.FindP2PSessionAsync(code);
 
-            if (s == null)
+            if (session == null)
                 return null;
 
-            if (s.HostConnectionId == connectionId || s.FriendConnectionId == connectionId)
+            if (session.HostConnectionId == connectionId || session.FriendConnectionId == connectionId)
             {
-                return s;
+                return session;
             }
 
             return null;
         }
+        public async Task<PeerToPeerSessionState> RestartGameAsync(PeerToPeerSessionState session)
+        {
+            session.Reset();
 
+            return await _storage.UpdateP2PSessionAsync(session);
+        }
         private async Task<string> GenerateCode()
         {
             Random rnd = new Random();
@@ -147,5 +152,6 @@ namespace olmelabs.battleship.api.Services.Implementations
             }
             return null;
         }
+
     }
 }

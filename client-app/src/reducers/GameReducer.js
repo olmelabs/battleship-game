@@ -289,6 +289,18 @@ const gameState = (state = initialState, action) => {
       }
       return state;
 
+    case consts.RESTART_GAME: {
+      return Object.assign({}, initialState, {
+        currentState: consts.GameState.NOT_STARTED,
+        gameType: state.gameType,
+        multiplayer: {
+          ...state.multiplayer,
+          gameAccessCode: state.multiplayer.gameAccessCode,
+          isFriendConnected: true
+        }
+      });
+    }
+
     default:
       return state;
   }

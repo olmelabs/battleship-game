@@ -1,14 +1,15 @@
 ﻿
+using System;
 using System.Collections.Generic;
 
 namespace olmelabs.battleship.api.Models.Entities
 {
     //TODO: make multiple games available within same session
-    public class PeerToPeerSessionState
+    public class PeerToPeerSessionState : BsonBase
     {
         public PeerToPeerSessionState()
         {
-
+            PreviousGames = new List<string>();
         }
 
         public string Code { get; set; }
@@ -29,5 +30,18 @@ namespace olmelabs.battleship.api.Models.Entities
 
         public string GameId { get; set; }
 
+        public List<string> PreviousGames { get; private set; }
+
+        internal void Reset()
+        {
+            HostShips = null;
+            HostStartedGame = false;
+
+            FriendShips = null;
+            FriendStartedGame = false;
+
+            GameStartedCount = 0;
+            GameId = null;
+        }
     }
 }

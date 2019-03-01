@@ -16,6 +16,11 @@ class GameMenu extends React.Component {
           this.props.isFriendConnected &&
           !this.props.startGameSuccess));
 
+    const isRestartVisible =
+      this.props.gameType === consts.GameType.HOST &&
+      this.props.currentState === consts.GameState.COMPLETED;
+    const isRestartActive = isRestartVisible;
+
     const isStopVisible = this.props.gameType === consts.GameType.SINGLEPLAYER;
     const isStopActive = this.props.currentState === consts.GameState.STARTED;
 
@@ -24,12 +29,17 @@ class GameMenu extends React.Component {
 
     return (
       <div className="game-menu">
-        <GameLink newState={consts.GameState.STARTED} isActive={isStartActive}>
+        <GameLink newAction={consts.GameState.STARTED} isActive={isStartActive}>
           Start
         </GameLink>
+        {isRestartVisible && (
+          <GameLink newAction={consts.RESTART_GAME} isActive={isRestartActive}>
+            Play again
+          </GameLink>
+        )}
         {isStopVisible && (
           <GameLink
-            newState={consts.GameState.COMPLETED}
+            newAction={consts.GameState.COMPLETED}
             isActive={isStopActive}
           >
             Finish
@@ -37,7 +47,7 @@ class GameMenu extends React.Component {
         )}
         {isNewVisible && (
           <GameLink
-            newState={consts.GameState.NOT_STARTED}
+            newAction={consts.GameState.NOT_STARTED}
             isActive={isNewActive}
           >
             New Game

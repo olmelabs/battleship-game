@@ -67,8 +67,14 @@ class WebSocketService {
     });
   }
 
-  registerMakeFireProcessResult(callback){
+  registerMakeFireProcessResult(callback) {
     this.connection.on("MakeFireProcessResult", message => {
+      callback(message);
+    });
+  }
+
+  registerRestartGame(callback) {
+    this.connection.on("RestartGame", message => {
       callback(message);
     });
   }

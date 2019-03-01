@@ -76,6 +76,7 @@ class GamePage extends React.Component {
         <ShipFactory />
       );
 
+    //TODO: move message into separate component as it is growing
     let message = "";
     if (
       this.props.currentState === consts.GameState.NOT_STARTED &&
@@ -90,6 +91,17 @@ class GamePage extends React.Component {
             <p>
               You can setup your fleet and start game when you both connected.{" "}
             </p>
+          </div>
+        </div>
+      );
+    } else if (
+      this.props.currentState === consts.GameState.COMPLETED &&
+      this.props.gameType === consts.GameType.JOIN
+    ) {
+      message = (
+        <div className="row">
+          <div className="col alert alert-primary game-top-message">
+            Waiting for host to start new round....
           </div>
         </div>
       );

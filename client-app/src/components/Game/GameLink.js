@@ -13,7 +13,7 @@ class GameLink extends React.Component {
   }
 
   onButtonClick() {
-    switch (this.props.newState) {
+    switch (this.props.newAction) {
       case consts.GameState.NOT_STARTED:
         this.props.actions.setGameState(consts.GameState.NOT_STARTED, null);
         break;
@@ -27,6 +27,11 @@ class GameLink extends React.Component {
       case consts.GameState.COMPLETED:
         this.props.actions.stopSinglePlayerGame();
         break;
+
+      case consts.RESTART_GAME:
+        this.props.actions.reStartNewGameMultiplayer(); //fired only on host
+        break;
+
       default:
         break;
     }
@@ -52,7 +57,7 @@ GameLink.propTypes = {
   gameType: PropTypes.string.isRequired,
   isActive: PropTypes.bool.isRequired,
   children: PropTypes.node.isRequired,
-  newState: PropTypes.string.isRequired,
+  newAction: PropTypes.string.isRequired,
   actions: PropTypes.object.isRequired
 };
 
