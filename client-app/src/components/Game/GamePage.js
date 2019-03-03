@@ -52,15 +52,6 @@ class GamePage extends React.Component {
   }
 
   render() {
-    //TODO: Redevelop this to show overlay/popup asking to relogin.
-    if (
-      (this.props.gameType === consts.GameType.HOST ||
-        this.props.gameType === consts.GameType.JOIN) &&
-      !this.props.authenticated
-    ) {
-      return <Redirect to="/login" />;
-    }
-
     if (
       this.props.gameType === consts.GameType.JOIN &&
       this.props.gameAccessCode == null

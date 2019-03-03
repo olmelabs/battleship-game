@@ -111,8 +111,6 @@ class App extends React.Component {
             <div className="container">
               <Switch>
                 <Route exact path="/" component={HomePage} />
-                <Route exact path="/login" component={LoginPage} />
-                <Route exact path="/register" component={RegisterPage} />
                 <Route
                   exact
                   path="/password_reset_link"
@@ -129,10 +127,14 @@ class App extends React.Component {
                   component={ConfirmEmailPage}
                 />
                 <Route exact path="/game" component={GamePage} />
-                <PrivateRoute exact path="/host" component={GamePage} />
-                <PrivateRoute exact path="/join" component={GamePage} />
-                <PrivateRoute exact path="/code" component={JoinGamePage} />
+                <Route exact path="/host" component={GamePage} />
+                <Route exact path="/join" component={GamePage} />
+                <Route exact path="/code" component={JoinGamePage} />
+                {/*
+                <Route exact path="/login" component={LoginPage} />
+                <Route exact path="/register" component={RegisterPage} />
                 <PrivateRoute exact path="/profile" component={ProfilePage} />
+                */}
                 <Route component={_NotFound} />
               </Switch>
             </div>

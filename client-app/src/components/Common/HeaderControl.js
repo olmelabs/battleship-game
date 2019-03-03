@@ -27,7 +27,7 @@ export class HeaderControl extends React.Component {
         Logout
       </a>
     ) : (
-      <Link className="p-2 text-dark aaaa" test-id="login-link" to="login">
+      <Link className="p-2 text-dark" test-id="login-link" to="login">
         Login
       </Link>
     );
@@ -39,13 +39,10 @@ export class HeaderControl extends React.Component {
           <Link className="p-2 text-dark" to="/">
             Home
           </Link>
-          {/* <Link className="p-2 text-dark" to="game">
-            Game
-          </Link> */}
-          <Link className="p-2 text-dark" to="profile">
+          {/* <Link className="p-2 text-dark" to="profile">
             Profile
           </Link>
-          {accountLink}
+          {accountLink} */}
         </nav>
       </div>
     );

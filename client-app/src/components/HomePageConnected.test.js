@@ -19,25 +19,13 @@ function setup() {
 }
 
 describe("Home Page Connected", () => {
-  it("login links block is hidden for authenticated", () => {
+  it("game options visible", () => {
     const wrapper = setup();
     store.dispatch(actions.loginSuccess());
 
     //console.log(wrapper.html());
     wrapper.update();
 
-    expect(wrapper.exists("[test-id='authorized-text']")).toBe(true);
-    expect(wrapper.exists("[test-id='unauthorized-text']")).toBe(false);
-  });
-
-  it("login links block is visible for not-authenticated", () => {
-    const wrapper = setup();
-    store.dispatch(actions.loginFailed());
-
-    //console.log(wrapper.html());
-    wrapper.update();
-
-    expect(wrapper.exists("[test-id='authorized-text']")).toBe(false);
-    expect(wrapper.exists("[test-id='unauthorized-text']")).toBe(true);
+    expect(wrapper.exists("[test-id='homepage-text']")).toBe(true);
   });
 });

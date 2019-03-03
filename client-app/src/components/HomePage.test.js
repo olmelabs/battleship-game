@@ -11,17 +11,9 @@ function setup(authenticated) {
 }
 
 describe("Home Page", () => {
-  it("login links block is hidden for authenticated", () => {
+  it("game options visible", () => {
     const wrapper = setup(true);
 
-    expect(wrapper.exists("[test-id='authorized-text']")).toBe(true);
-    expect(wrapper.exists("[test-id='unauthorized-text']")).toBe(false);
-  });
-
-  it("login links block is visible for non-authenticated", () => {
-    const wrapper = setup(false);
-
-    expect(wrapper.exists("[test-id='authorized-text']")).toBe(false);
-    expect(wrapper.exists("[test-id='unauthorized-text']")).toBe(true);
+    expect(wrapper.exists("[test-id='homepage-text']")).toBe(true);
   });
 });

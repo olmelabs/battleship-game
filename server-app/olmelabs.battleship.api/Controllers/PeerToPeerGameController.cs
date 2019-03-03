@@ -16,7 +16,7 @@ namespace olmelabs.battleship.api.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    [Authorize]
+    //[Authorize]
     public class PeerToPeerGameController : Controller
     {
         private readonly IPeerToPeerGameService _p2pSvc;
