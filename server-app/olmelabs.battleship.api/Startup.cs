@@ -94,6 +94,7 @@ namespace olmelabs.battleship.api
             services.AddSingleton<IHostedService, MailerService>();
             services.AddSingleton<IHostedService, PlayerService>();
             services.AddSingleton<IHostedService, StatisticsCollectorService>();
+            services.AddSingleton<IHostedService, CleanupService>();
 
             services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
                 .AddJwtBearer(options =>
