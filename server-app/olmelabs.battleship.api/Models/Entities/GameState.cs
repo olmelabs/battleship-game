@@ -45,5 +45,7 @@ namespace olmelabs.battleship.api.Models.Entities
         /// Whether next move is for server
         /// </summary>
         public bool IsAwaitingServerTurn { get; set; }
+
+        public DateTime LastUpdated { get; set; }
     }
 }

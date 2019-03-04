@@ -3,6 +3,7 @@ using olmelabs.battleship.api.Logic;
 using olmelabs.battleship.api.Models.Dto;
 using olmelabs.battleship.api.Models.Entities;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace olmelabs.battleship.api.tests.Logic
@@ -22,16 +23,15 @@ namespace olmelabs.battleship.api.tests.Logic
         }
 
         [TestMethod]
-        public void GenerateShipTest()
+        public void GenerateMultipleBoardsTest()
         {
-            //GameLogic gameLogic = new GameLogic();
-
-            //for (int i = 0; i < 1000; i++)
-            //{
-            //    ShipInfo shipInfo = gameLogic.GenerateShip(4);
-
-            //    Assert.IsFalse(shipInfo.Cells.Any(x => x > 99));
-            //}
+            //TODO: fix board generations
+            GameLogic gameLogic = new GameLogic();
+            for (int i = 0; i < 1000; i++)
+            {
+                Trace.WriteIf(i % 10 == 0, i);
+                gameLogic.GenerateBoad();
+            }
         }
 
         #region ValidateClientBoard tests

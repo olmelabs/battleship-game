@@ -18,7 +18,7 @@ class GameBoardMyCell extends React.Component {
     ) {
       return;
     }
-    if (this.props.myShipsCurrent >= 0) {
+    if (this.props.myShipsCurrent >= 0 && !this.props.startGameSuccess) {
       this.props.actions.shipMoved({
         cellId: this.props.cellId
       });
@@ -63,11 +63,13 @@ GameBoardMyCell.propTypes = {
   isHit: PropTypes.bool.isRequired,
   myShips: PropTypes.array.isRequired,
   myShipsCurrent: PropTypes.number.isRequired,
+  startGameSuccess: PropTypes.bool.isRequired,
   actions: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
   currentState: state.gameState.currentState,
+  startGameSuccess: state.gameState.multiplayer.startGameSuccess,
   isShipOnIt:
     state.gameState.myBoard[ownProps.cellId] === 1 ||
     state.gameState.myBoard[ownProps.cellId] === 3,

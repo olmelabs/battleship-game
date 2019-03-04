@@ -43,9 +43,11 @@ class ShipFactory extends React.Component {
       this.props.currentState === consts.GameState.NOT_STARTED &&
       (this.props.gameType === consts.GameType.SINGLEPLAYER ||
         (this.props.gameType === consts.GameType.HOST &&
-          this.props.isFriendConnected) ||
+          this.props.isFriendConnected &&
+          !this.props.startGameSuccess) ||
         (this.props.gameType === consts.GameType.JOIN &&
-          this.props.isFriendConnected));
+          this.props.isFriendConnected &&
+          !this.props.startGameSuccess));
 
     return (
       <React.Fragment>
@@ -59,6 +61,7 @@ class ShipFactory extends React.Component {
               key={index}
               index={index}
               ship={ship}
+              active={isGenerateActive}
               currentShip={this.props.myShipsCurrent}
             />
           ))}
@@ -93,6 +96,7 @@ class ShipFactory extends React.Component {
 ShipFactory.propTypes = {
   gameType: PropTypes.string.isRequired,
   isFriendConnected: PropTypes.bool.isRequired,
+  startGameSuccess: PropTypes.bool.isRequired,
   myShips: PropTypes.array.isRequired,
   myShipsCurrent: PropTypes.number.isRequired,
   currentState: PropTypes.string.isRequired,
@@ -102,6 +106,7 @@ ShipFactory.propTypes = {
 const mapStateToProps = (state, ownProps) => ({
   gameType: state.gameState.gameType,
   isFriendConnected: state.gameState.multiplayer.isFriendConnected,
+  startGameSuccess: state.gameState.multiplayer.startGameSuccess,
   myShips: state.gameState.myShips,
   myShipsCurrent: state.gameState.myShipsCurrent,
   currentState: state.gameState.currentState

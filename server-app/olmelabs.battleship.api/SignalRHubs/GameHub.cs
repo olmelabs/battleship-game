@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.SignalR;
-using olmelabs.battleship.api.Models.Dto;
-using olmelabs.battleship.api.Services;
 using System;
 using System.Threading.Tasks;
 

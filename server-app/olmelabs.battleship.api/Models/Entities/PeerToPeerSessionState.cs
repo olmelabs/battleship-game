@@ -1,5 +1,4 @@
-﻿
-using System;
+﻿using System;
 using System.Collections.Generic;
 
 namespace olmelabs.battleship.api.Models.Entities
@@ -43,5 +42,7 @@ namespace olmelabs.battleship.api.Models.Entities
             GameStartedCount = 0;
             GameId = null;
         }
+
+        public DateTime LastUpdated { get; set; }
     }
 }

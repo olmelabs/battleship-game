@@ -38,6 +38,19 @@ namespace olmelabs.battleship.api.Repositories
             _p2pGames = new ConcurrentDictionary<string, PeerToPeerGameState>();
         }
 
+        public InMemoryStaticStorage()
+        {
+            HoursToLive = 4;
+        }
+
+        public int PeerToPeerSessionsCount => _p2pSessions.Count;
+
+        public int PeerToPeerGamesCount => _p2pGames.Count;
+
+        public int GamesCount => _games.Count;
+
+        public int HoursToLive { get; set; }
+
         public Task Prepare()
         {
             var user = new User { FirstName = "John", LastName = "Doe", Email = "user@domain.com", PasswordHash = "AQAAAAEAACcQAAAAEEI1y09DRnWeVEUmJfBSYoLkYp6Ps+yQZTdxGB3PKWzX/GNs/P8BxIyqGOc/VGIEDA==", IsEmailConfirmed = true };
@@ -45,6 +58,52 @@ namespace olmelabs.battleship.api.Repositories
 
             ClientStatistics stat = ClientStatistics.CreateNew();
             _clientStatistics.GetOrAdd(typeof(ClientStatistics).ToString(), stat);
+
+            return Task.FromResult(0);
+        }
+
+        /// <summary>
+        /// Cleanup old objects from memory storage
+        /// </summary>
+        /// <returns></returns>
+        public Task Cleanup()
+        {
+            DateTime now = DateTime.Now;
+
+            if (_games.Count > 500)
+            {
+                foreach (string key in _games.Keys)
+                {
+                    GameState g = _games[key];
+                    TimeSpan ts = now - g.LastUpdated;
+                    if (ts.TotalHours >= HoursToLive)
+                        _games.TryRemove(key, out _);
+                }
+            }
+
+            if (_p2pGames.Count > 500)
+            {
+                foreach (string key in _p2pGames.Keys)
+                {
+                    PeerToPeerGameState g = _p2pGames[key];
+                    TimeSpan ts = now - g.LastUpdated;
+                    if (ts.TotalHours >= HoursToLive)
+                        _p2pGames.TryRemove(key, out _);
+                }
+            }
+
+            if (_p2pSessions.Count > 500)
+            {
+                foreach (string key in _p2pSessions.Keys)
+                {
+                    PeerToPeerSessionState g = _p2pSessions[key];
+                    TimeSpan ts = now - g.LastUpdated;
+                    if (ts.TotalHours >= HoursToLive)
+                        _p2pSessions.TryRemove(key, out _);
+                }
+            }
+
+            _clientStatistics.Clear();
 
             return Task.FromResult(0);
         }
@@ -70,19 +129,21 @@ namespace olmelabs.battleship.api.Repositories
 
         public Task<GameState> AddGameAsync(GameState game)
         {
+            game.LastUpdated = DateTime.Now;
             game = _games.GetOrAdd(game.GameId, game);
             return Task.FromResult(game);
         }
 
         public Task<GameState> UpdateGameAsync(GameState game)
         {
+            game.LastUpdated = DateTime.Now;
             game = _games.AddOrUpdate(game.GameId, game, (key, val) => game);
             return Task.FromResult(game);
         }
         #endregion
 
         #region P2P (multiplayer)
-        public Task<PeerToPeerSessionState> FindP2PSessionAsync(string code)
+       public Task<PeerToPeerSessionState> FindP2PSessionAsync(string code)
         {
             PeerToPeerSessionState p2pSession = _p2pSessions.FirstOrDefault(u => u.Key == code).Value;
             return Task.FromResult(p2pSession);
@@ -90,12 +151,14 @@ namespace olmelabs.battleship.api.Repositories
 
         public Task<PeerToPeerSessionState> AddP2PSessionAsync(PeerToPeerSessionState p2pSession)
         {
+            p2pSession.LastUpdated = DateTime.Now;
             p2pSession = _p2pSessions.GetOrAdd(p2pSession.Code, p2pSession);
             return Task.FromResult(p2pSession);
         }
 
         public Task<PeerToPeerSessionState> UpdateP2PSessionAsync(PeerToPeerSessionState p2pSession)
         {
+            p2pSession.LastUpdated = DateTime.Now;
             p2pSession = _p2pSessions.AddOrUpdate(p2pSession.Code, p2pSession, (key, val) => p2pSession);
             return Task.FromResult(p2pSession);
         }
@@ -108,12 +171,14 @@ namespace olmelabs.battleship.api.Repositories
 
         public Task<PeerToPeerGameState> AddP2PGameAsync(PeerToPeerGameState game)
         {
+            game.LastUpdated = DateTime.Now;
             game = _p2pGames.GetOrAdd(game.GameId, game);
             return Task.FromResult(game);
         }
 
         public Task<PeerToPeerGameState> UpdateP2PGameAsync(PeerToPeerGameState game)
         {
+            game.LastUpdated = DateTime.Now;
             game = _p2pGames.AddOrUpdate(game.GameId, game, (key, val) => game);
             return Task.FromResult(game);
         }

@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using olmelabs.battleship.api.Services;
 using olmelabs.battleship.api.Services.Interfaces;
 using System;
 using System.Collections.Generic;

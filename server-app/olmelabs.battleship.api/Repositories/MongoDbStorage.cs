@@ -44,6 +44,11 @@ namespace olmelabs.battleship.api.Repositories
             }
         }
 
+        public Task Cleanup()
+        {
+            return Task.FromResult(0);
+        }
+
         public virtual IMongoCollection<User> Users => _database.GetCollection<User>("user");
 
         public virtual IMongoCollection<GameState> Games => _database.GetCollection<GameState>("game");
@@ -202,6 +207,6 @@ namespace olmelabs.battleship.api.Repositories
             await ConfirmEmailCodes.DeleteOneAsync(t => t.Key == code);
         }
         #endregion
- 
+
     }
 }

@@ -10,6 +10,8 @@ namespace olmelabs.battleship.api.Repositories
     {
         Task Prepare();
 
+        Task Cleanup();
+
         #region Singleplayer
         Task<GameState> FindActiveGameAsync(string gameId);
 

@@ -1,6 +1,4 @@
-﻿using Newtonsoft.Json;
-
-namespace olmelabs.battleship.api.Models.Dto
+﻿namespace olmelabs.battleship.api.Models.Dto
 {
     public class RefreshTokenModelDto
     {

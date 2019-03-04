@@ -28,6 +28,7 @@ class ShipDefinition extends React.Component {
     return (
       <button
         className={className}
+        disabled={!this.props.active}
         title="Select Ship"
         onClick={this.onSelectShipClick}
       >
@@ -39,6 +40,7 @@ class ShipDefinition extends React.Component {
 
 ShipDefinition.propTypes = {
   ship: PropTypes.object.isRequired,
+  active: PropTypes.bool.isRequired,
   currentShip: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
   actions: PropTypes.object.isRequired

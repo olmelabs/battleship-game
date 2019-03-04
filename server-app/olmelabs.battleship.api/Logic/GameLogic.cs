@@ -20,10 +20,16 @@ namespace olmelabs.battleship.api.Logic
             {
                 for (int j = 0; j <= 4 - i; j++)
                 {
+                    int retries = 0;
                     shipInfo = GenerateShip(i);
                     while (!CanPlaceShipOnBoard(shipInfo, boardInfo.Board))
                     {
                         shipInfo = GenerateShip(i);
+                        retries++;
+
+                        //TODO: improve generation with more gentle checks. So it is not failing
+                        if (retries > 1000)
+                            throw new Exception("Generate Board failed. Max retries level reached.");
                     }
 
                     PlaceShipOnBoard(shipInfo, boardInfo.Board);

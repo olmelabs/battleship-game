@@ -1,6 +1,4 @@
-﻿using olmelabs.battleship.api.Models.Dto;
-using System;
-using System.Collections.Generic;
+﻿using System;
 
 namespace olmelabs.battleship.api.Models.Entities
 {
@@ -23,5 +21,7 @@ namespace olmelabs.battleship.api.Models.Entities
         public DateTime DateStart { get; set; }
 
         public DateTime? DateEnd { get; set; }
+
+        public DateTime LastUpdated { get; set; }
     }
 }

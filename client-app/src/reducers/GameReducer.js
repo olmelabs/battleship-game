@@ -281,6 +281,7 @@ const gameState = (state = initialState, action) => {
       if (state.currentState === consts.GameState.NOT_STARTED) {
         return {
           ...state,
+          myShipsCurrent: -1,
           multiplayer: {
             ...state.multiplayer,
             startGameSuccess: true
