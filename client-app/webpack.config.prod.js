@@ -9,7 +9,7 @@ const GLOBALS = {
 };
 
 export default {
-  devtool: "source-map",
+  // devtool: "source-map",
   mode: "production",
   entry: path.resolve(__dirname, "src/index"),
   target: "web",
