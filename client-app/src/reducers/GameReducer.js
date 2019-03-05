@@ -9,11 +9,13 @@ const initialState = {
     joinGameError: false,
     isFriendConnected: false,
     startGameSuccess: false,
-    cancelLoading: false
+    moveInProgressOnCellId: -1
   },
   gameId: null,
   //server turn in singleplayer game, friends turn in mulitplayer game
   isServerTurn: false,
+  //when true no clicks allowed on enemy board
+  myBoardLocked: false,
   myShips: [
     { title: "4X", vertical: false, cells: Array(4).fill(null), hits: 0 },
     { title: "3X", vertical: false, cells: Array(3).fill(null), hits: 0 },
@@ -68,6 +70,7 @@ const gameState = (state = initialState, action) => {
           : (enemyBoard[action.fireResult.cellId] = 1);
         return Object.assign({}, state, {
           enemyBoard,
+          myBoardLocked: action.fireResult.serverturn,
           isServerTurn: action.fireResult.serverturn
         });
       }
@@ -84,21 +87,33 @@ const gameState = (state = initialState, action) => {
           ...state,
           enemyBoard,
           isServerTurn: action.fireResult.serverturn,
+          myBoardLocked: action.fireResult.serverturn,
           multiplayer: {
-            ...state.multiplayer,
-            cancelLoading: true
+            ...state.multiplayer
           }
         };
       }
       return state;
 
-    case consts.CANCEL_LOADING:
+    case consts.SET_MOVE_IN_PROGRESS_MULTIPLAYER:
       if (state.currentState === consts.GameState.STARTED) {
         return {
           ...state,
           multiplayer: {
             ...state.multiplayer,
-            cancelLoading: false
+            moveInProgressOnCellId: action.cellId
+          }
+        };
+      }
+      return state;
+
+    case consts.RESET_MOVE_IN_PROGRESS_MULTIPLAYER:
+      if (state.currentState === consts.GameState.STARTED) {
+        return {
+          ...state,
+          multiplayer: {
+            ...state.multiplayer,
+            moveInProgressOnCellId: -1
           }
         };
       }
@@ -115,7 +130,8 @@ const gameState = (state = initialState, action) => {
         if (!isHit) {
           return Object.assign({}, state, {
             myBoard,
-            isServerTurn: isHit,
+            isServerTurn: false,
+            myBoardLocked: false,
             lastMyDestroyedShip: null
           });
         }
@@ -140,7 +156,8 @@ const gameState = (state = initialState, action) => {
         return Object.assign({}, state, {
           myBoard,
           myShips,
-          isServerTurn: isHit,
+          isServerTurn: true,
+          myBoardLocked: true,
           lastMyDestroyedShip
         });
       }
@@ -154,7 +171,10 @@ const gameState = (state = initialState, action) => {
             enemyBoard[cellId] += 10;
           });
         }
-        return Object.assign({}, state, { enemyBoard: enemyBoard });
+        return Object.assign({}, state, {
+          myBoardLocked: false,
+          enemyBoard: enemyBoard
+        });
       }
       return state;
 
@@ -300,6 +320,13 @@ const gameState = (state = initialState, action) => {
           isFriendConnected: true
         }
       });
+    }
+
+    case consts.LOCK_BOARD: {
+      return {
+        ...state,
+        myBoardLocked: true
+      };
     }
 
     default:

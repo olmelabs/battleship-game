@@ -15,14 +15,6 @@ class GameBoardEnemyCell extends React.Component {
     };
   }
 
-  componentDidUpdate(prevProps) {
-    //TODO: refactor this state setting
-    if (prevProps.cancelLoading !== this.props.cancelLoading) {
-      //eslint-disable-next-line react/no-did-update-set-state
-      this.setState({ loading: false }); //always false as property change indicates stop loading
-    }
-  }
-
   onCellClick() {
     if (
       this.props.currentState === consts.GameState.NOT_STARTED ||
@@ -30,27 +22,24 @@ class GameBoardEnemyCell extends React.Component {
     ) {
       return;
     }
-
-    if (this.props.isServerTurn) {
+    if (this.props.isServerTurn || this.props.myBoardLocked) {
       return;
     }
-
     if (this.props.isShotFired || this.state.loading == true) {
       return;
     }
+    this.props.actions.lockBoard();
 
-    this.setState({ loading: true });
     if (
       this.props.gameType === consts.GameType.HOST ||
       this.props.gameType === consts.GameType.JOIN
     ) {
       this.props.actions
         .fireCannonMultiplayer(this.props.cellId)
-        .catch(error => {
-          this.setState({ loading: false });
-        });
+        .catch(error => {});
     } else {
       //singleplayer
+      this.setState({ loading: true });
       this.props.actions
         .fireCannon(this.props.cellId)
         .then(() => this.setState({ loading: false }))
@@ -67,14 +56,21 @@ class GameBoardEnemyCell extends React.Component {
         onClick={this.onCellClick}
       >
         {this.props.isShotFired ? (this.props.isShipOnIt ? "X" : "-") : ""}
-        <ClipLoader color={"#868e96"} loading={this.state.loading} />
+        <ClipLoader
+          color={"#868e96"}
+          loading={
+            this.state.loading || //singleplayer
+            this.props.moveInProgressOnCellId == this.props.cellId //multiplayer
+          }
+        />
       </button>
     );
   }
 }
 
 GameBoardEnemyCell.propTypes = {
-  cancelLoading: PropTypes.bool.isRequired,
+  myBoardLocked: PropTypes.bool.isRequired,
+  moveInProgressOnCellId: PropTypes.number.isRequired,
   cellId: PropTypes.number.isRequired,
   isShotFired: PropTypes.bool.isRequired,
   isShipOnIt: PropTypes.bool.isRequired,
@@ -93,7 +89,8 @@ GameBoardEnemyCell.propTypes = {
 // 12 - shot fired and ship destroyed. draw borders around cells in destroyed ship[]
 
 const mapStateToProps = (state, ownProps) => ({
-  cancelLoading: state.gameState.multiplayer.cancelLoading,
+  myBoardLocked: state.gameState.myBoardLocked,
+  moveInProgressOnCellId: state.gameState.multiplayer.moveInProgressOnCellId,
   isShotFired: state.gameState.enemyBoard[ownProps.cellId] % 10 !== 0,
   isShipOnIt: state.gameState.enemyBoard[ownProps.cellId] % 10 === 2,
   drawBorder: state.gameState.enemyBoard[ownProps.cellId] >= 10,

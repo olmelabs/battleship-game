@@ -103,8 +103,6 @@ namespace olmelabs.battleship.api.Repositories
                 }
             }
 
-            _clientStatistics.Clear();
-
             return Task.FromResult(0);
         }
 

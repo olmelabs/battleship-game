@@ -84,12 +84,14 @@ export function reStartNewGameMultiplayer() {
   };
 }
 
+// fired when you make a move
 export function fireCannonMultiplayer(cellId) {
   return function(dispatch, getState) {
     if (getState().ajaxState.ajaxCallIsnProgress > 0) {
       return Promise.resolve();
     }
-    dispatch(simpleActions.cancelLoadingMultiplayer());
+    dispatch(simpleActions.setMoveInProgressMultiplayer(cellId));
+
     dispatch(ajaxCallStart());
 
     const connectionId = getState().signalrState.connectionId;
@@ -107,6 +109,8 @@ export function fireCannonMultiplayer(cellId) {
   };
 }
 
+//Actions fired from SignalR
+//a move from other party (server or friend)
 export function fireCannonFromServerMultiplayer(fireRequest) {
   return function(dispatch, getState) {
     dispatch(simpleActions.fireRequestFromServer(fireRequest));
@@ -167,15 +171,18 @@ export function fireCannonFromServerMultiplayer(fireRequest) {
   };
 }
 
-//From SignlaR
+// start game callback
 export function startGameMultiplayerSrCallback(gameInfo) {
   return function(dispatch, getState) {
     dispatch(simpleActions.setGameState(consts.GameState.STARTED, gameInfo));
   };
 }
 
-export function makeFireMultiplayerSrCallback(fireResult) {
+//eventual callback from signalr to respond on fireCannonMultiplayer
+export function fireCannonMultiplayerSrCallback(fireResult) {
   return function(dispatch, getState) {
+    dispatch(simpleActions.resetMoveInProgressMultiplayer());
+
     dispatch(simpleActions.makeFireMultiplayer(fireResult));
 
     if (

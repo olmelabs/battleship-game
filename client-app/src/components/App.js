@@ -88,7 +88,7 @@ class App extends React.Component {
       });
 
       SignalRService.registerMakeFireProcessResult(data => {
-        this.props.actions.makeFireMultiplayerSrCallback(data);
+        this.props.actions.fireCannonMultiplayerSrCallback(data);
       });
       SignalRService.registerRestartGame(_ => {
         toastr.info("Prepare for new battle! Press Start once ready");

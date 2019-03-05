@@ -24,10 +24,6 @@ export const makeFireMultiplayer = fireResult => ({
   fireResult
 });
 
-export const cancelLoadingMultiplayer = () => ({
-  type: consts.CANCEL_LOADING
-});
-
 export const shipDestroyed = fireResult => ({
   type: consts.SHIP_DESTROYED,
   fireResult
@@ -95,4 +91,17 @@ export const startGameSuccess = () => ({
 
 export const restartGameMultiplayer = () => ({
   type: consts.RESTART_GAME
+});
+
+export const lockBoard = () => ({
+  type: consts.LOCK_BOARD
+});
+
+export const setMoveInProgressMultiplayer = cellId => ({
+  type: consts.SET_MOVE_IN_PROGRESS_MULTIPLAYER,
+  cellId
+});
+
+export const resetMoveInProgressMultiplayer = () => ({
+  type: consts.RESET_MOVE_IN_PROGRESS_MULTIPLAYER
 });
