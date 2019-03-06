@@ -2,5 +2,3 @@ version: '3.7'
 
 services:
   olmelabs.battleship.api:
-    environment: 
-      - Cors__AllowedOrigins=http://192.168.0.108:8092
