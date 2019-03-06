@@ -9,6 +9,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using olmelabs.battleship.api.BackgroundServices;
 using olmelabs.battleship.api.Logic;
+using olmelabs.battleship.api.Middleware;
 using olmelabs.battleship.api.Models;
 using olmelabs.battleship.api.Repositories;
 using olmelabs.battleship.api.Services.Implementations;
@@ -139,8 +140,7 @@ namespace olmelabs.battleship.api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            //loggerFactory.AddConsole(Configuration.GetSection("Logging"));
-            //loggerFactory.AddDebug();
+            app.UseMiddleware<PipelineExceptions>();
 
             if (env.IsDevelopment())
             {
