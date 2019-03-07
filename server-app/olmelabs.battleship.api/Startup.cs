@@ -140,11 +140,13 @@ namespace olmelabs.battleship.api
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
         {
-            app.UseMiddleware<PipelineExceptions>();
-
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseMiddleware<PipelineExceptions>();
             }
 
             IStorage storage = app.ApplicationServices.GetService<IStorage>();

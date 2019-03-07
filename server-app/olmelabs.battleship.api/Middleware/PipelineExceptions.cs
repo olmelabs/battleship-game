@@ -28,7 +28,7 @@ namespace olmelabs.battleship.api.Middleware
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex.GetHashCode(), ex.ToString());
+                _logger.LogError(ex.GetHashCode(), $"{DateTime.UtcNow}  {DateTime.Now}  {ex.ToString()}");
                 await HandleExceptionAsync(httpContext);
             }
         }
