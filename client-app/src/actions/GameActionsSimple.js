@@ -44,6 +44,11 @@ export const shipChanged = data => ({
   data
 });
 
+export const highLightShip = data => ({
+  type: consts.SHIP_HIGHLIGHT,
+  data
+});
+
 export const shipMoved = data => ({
   type: consts.SHIP_MOVED,
   data

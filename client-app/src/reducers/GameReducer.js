@@ -29,6 +29,7 @@ const initialState = {
     { title: "1X", vertical: false, cells: Array(1).fill(null), hits: 0 }
   ],
   myShipsCurrent: -1,
+  myShipsHighlighted: -1,
   myBoard: Array(100).fill(null),
   enemyBoard: Array(100).fill(0),
   lastMyDestroyedShip: null,
@@ -218,6 +219,15 @@ const gameState = (state = initialState, action) => {
           myShips: newShips,
           myBoard: newBoard
         });
+      }
+      return state;
+
+    case consts.SHIP_HIGHLIGHT:
+      if (state.currentState === consts.GameState.NOT_STARTED) {
+        return {
+          ...state,
+          myShipsHighlighted: action.data.highlight ? action.data.index : -1
+        };
       }
       return state;
 

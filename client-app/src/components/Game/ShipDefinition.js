@@ -9,11 +9,27 @@ class ShipDefinition extends React.Component {
     super(props, context);
 
     this.onSelectShipClick = this.onSelectShipClick.bind(this);
+    this.onMouseEnter = this.onMouseEnter.bind(this);
+    this.onMouseLeave = this.onMouseLeave.bind(this);
   }
 
   onSelectShipClick() {
     this.props.actions.shipChanged({
       index: this.props.index
+    });
+  }
+
+  onMouseEnter() {
+    this.props.actions.highLightShip({
+      index: this.props.index,
+      highlight: true
+    });
+  }
+
+  onMouseLeave() {
+    this.props.actions.highLightShip({
+      index: this.props.index,
+      highlight: false
     });
   }
 
@@ -31,6 +47,8 @@ class ShipDefinition extends React.Component {
         disabled={!this.props.active}
         title="Select Ship"
         onClick={this.onSelectShipClick}
+        onMouseEnter={this.onMouseEnter}
+        onMouseLeave={this.onMouseLeave}
       >
         {this.props.ship.title}
       </button>

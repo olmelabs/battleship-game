@@ -43,6 +43,10 @@ ul {
   background: #f89900;
 }
 
+.cell-light-highlight {
+  background: #acf855;
+}
+
 .cell-fired-hit {
   -webkit-animation-name: cell-fired-hit; /* Safari 4.0 - 8.0 */
   -webkit-animation-duration: 2s; /* Safari 4.0 - 8.0 */
