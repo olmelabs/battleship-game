@@ -9,10 +9,11 @@ class FooterControl extends React.Component {
   }
 
   render() {
+    const year = new Date().getFullYear();
     return (
       <footer className="footer">
         <div className="container text-center">
-          &copy; olmelabs 2018.{" "}
+          &copy; olmelabs 2018 - {year}.{" "}
           <a href="//github.com/olmelabs/battleship-game" target="_blank">
             Project dev site
           </a>
