@@ -12,7 +12,7 @@ export class HomePage extends React.Component {
   render() {
     return (
       <div className="px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
-        <p className="lead">Welcome to battle-ship game. Enjoy playing in singlemode or wit friends.</p>
+        <p className="lead">Welcome to battle-ship game. Enjoy playing in singlemode or with friends.</p>
         <p test-id="homepage-text">
           <Link to="game">
             <button className="round-button round-button-80" title="Sigleplayer Game">
