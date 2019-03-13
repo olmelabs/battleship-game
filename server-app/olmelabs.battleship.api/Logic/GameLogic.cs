@@ -27,9 +27,36 @@ namespace olmelabs.battleship.api.Logic
                         shipInfo = GenerateShip(i);
                         retries++;
 
-                        //TODO: improve generation with more gentle checks. So it is not failing
                         if (retries > 1000)
-                            throw new Exception("Generate Board failed. Max retries level reached.");
+                        {
+                            shipInfo = null;
+
+                            //if random fail - try to find cells iterating "manually" through the board
+                            for (int k = 0; k < boardInfo.Board.Length; ++k)
+                            {
+                                if (boardInfo.Board[k] == (int)ClientCellState.CellNotFired)
+                                {
+                                    ShipInfo tempShipInfo = GenerateShip(i, k, true);
+                                    if (CanPlaceShipOnBoard(tempShipInfo, boardInfo.Board))
+                                    {
+                                        shipInfo = tempShipInfo;
+                                        break;
+                                    }
+
+                                    tempShipInfo = GenerateShip(i, k, false);
+                                    if (CanPlaceShipOnBoard(tempShipInfo, boardInfo.Board))
+                                    {
+                                        shipInfo = tempShipInfo;
+                                        break;
+                                    }
+                                }
+                            }
+
+                            if (shipInfo == null)
+                            {
+                                throw new Exception("Generate Board failed. Max retries level reached.");
+                            }
+                        }
                     }
 
                     PlaceShipOnBoard(shipInfo, boardInfo.Board);
@@ -104,7 +131,23 @@ namespace olmelabs.battleship.api.Logic
             }
 
             return new ShipInfo(isVertical, cells);
+        }
 
+        private ShipInfo GenerateShip(int size, int cellId, bool isVertical)
+        {
+            int[] cells = new int[size];
+            cells[0] = cellId;
+
+            for (int i = 1; i < size; i++)
+            {
+                if (isVertical)
+                    cells[i] = cellId += 10;
+                else
+                    cells[i] = cellId += 1;
+
+            }
+
+            return new ShipInfo(isVertical, cells);
         }
 
         private void PlaceShipOnBoard(ShipInfo shipInfo, int[] board)
@@ -122,6 +165,9 @@ namespace olmelabs.battleship.api.Logic
             //check all ship cells are empty
             foreach (int i in shipInfo.Cells)
             {
+                if (i > board.Length - 1)
+                    return false;
+
                 if (board[i] == (int)ServerCellState.CellHasShip)
                     return false;
             }
@@ -386,11 +432,11 @@ namespace olmelabs.battleship.api.Logic
                 return null;
             }
 
-            int longestIntervalStart = -1;
-            int longestIntervalEnd = -1;
+            int longestIntervalStart = 0;
+            int longestIntervalEnd = 0;
             bool intervalReset = false;
-            int intervalStart = -1;
-            int intervalEnd = -1;
+            int intervalStart = 0;
+            int intervalEnd = 0;
 
             for (int i = 0; i < board.Length; i++)
             {
@@ -403,8 +449,12 @@ namespace olmelabs.battleship.api.Logic
                     }
                     intervalEnd = i;
                 }
-                else
+
+                if (board[i] != (int)ClientCellState.CellNotFired || i == board.Length - 1)
                 {
+                    if (intervalReset)
+                        continue;
+
                     if (intervalEnd - intervalStart > longestIntervalEnd - longestIntervalStart)
                     {
                         longestIntervalStart = intervalStart;

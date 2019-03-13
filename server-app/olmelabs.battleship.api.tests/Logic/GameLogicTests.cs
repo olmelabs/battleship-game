@@ -27,9 +27,8 @@ namespace olmelabs.battleship.api.tests.Logic
         {
             //TODO: fix board generations
             GameLogic gameLogic = new GameLogic();
-            for (int i = 0; i < 1000; i++)
+            for (int i = 0; i < 10000; i++)
             {
-                Trace.WriteIf(i % 10 == 0, i);
                 gameLogic.GenerateBoad();
             }
         }
@@ -355,6 +354,27 @@ namespace olmelabs.battleship.api.tests.Logic
             Assert.IsTrue(res4 >= 8 && res4 <= 14);
             Assert.IsTrue(res5 >= 8 && res5 <= 14);
             Assert.IsTrue(res6 >= 8 && res6 <= 14);
+        }
+
+        [TestMethod]
+        public void GetCellFromUnFiredSpace_Test2()
+        {
+            int[] board = new[] { 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+
+            GameLogic gameLogic = new GameLogic();
+            int? res1 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res2 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res3 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res4 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res5 = gameLogic.GetCellIndexFromLongestSpace(board);
+            int? res6 = gameLogic.GetCellIndexFromLongestSpace(board);
+
+            Assert.IsTrue(res1 >= 78 && res1 <= 99);
+            Assert.IsTrue(res2 >= 78 && res2 <= 99);
+            Assert.IsTrue(res3 >= 78 && res3 <= 99);
+            Assert.IsTrue(res4 >= 78 && res4 <= 99);
+            Assert.IsTrue(res5 >= 78 && res5 <= 99);
+            Assert.IsTrue(res6 >= 78 && res6 <= 99);
         }
     }
 }
