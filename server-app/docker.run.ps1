@@ -1,1 +1,1 @@
-docker run -d -p 8091:80 --env Cors__AllowedOrigins=http://192.168.0.108:8092 olmelabs/battleshipapidocker 
+docker run -d -p 8091:80 --env Cors__AllowedOrigins=http://192.168.0.108:8092 olmelabs/battleshipapi
