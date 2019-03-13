@@ -14,8 +14,14 @@ namespace olmelabs.battleship.api.tests.RepositoryTests
         [TestMethod]
         public async Task CleanupTest()
         {
-            InMemoryStaticStorage s = new InMemoryStaticStorage();
-            s.HoursToLive = 0;
+            InMemoryStaticStorage s = new InMemoryStaticStorage
+            {
+                HoursToLive = 0
+            };
+
+
+            //clean results of older runs
+            await s.Cleanup();
 
             for (int i = 0; i < 1000; i++)
             {
@@ -25,21 +31,21 @@ namespace olmelabs.battleship.api.tests.RepositoryTests
 
             for (int i = 0; i < 1000; i++)
             {
-                var session = new PeerToPeerSessionState();
-                session.Code = session.GetHashCode().ToString();
+                var session = new PeerToPeerSessionState()
+                {
+                    Code = i.ToString(),
+                };
                 await s.AddP2PSessionAsync(session);
             }
 
             for (int i = 0; i < 1000; i++)
             {
-                var game = new GameState();
-                game.GameId = Guid.NewGuid().ToString();
+                var game = new GameState
+                {
+                    GameId = Guid.NewGuid().ToString()
+                };
                 await s.AddGameAsync(game);
             }
-
-            Assert.AreEqual(1000, s.PeerToPeerGamesCount);
-            Assert.AreEqual(1000, s.PeerToPeerSessionsCount);
-            Assert.AreEqual(1000, s.GamesCount);
 
             await s.Cleanup();
 
