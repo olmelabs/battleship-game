@@ -1,23 +1,23 @@
 # battleship-game
-"Battle Ship" game project to demo react, redux, netcore, signalr, wep api in docker and also some approaches like JWT authentication, refresh tokens etc.
+"Battle Ship" game project to demo React, Redux, .NET Core, SignalR, WepApi in docker and also some approaches like JWT authentication, refresh tokens etc.
 
 ## server-app
 Server app uses Automapper, SignalR and Swagger, MongoDB (optional).
-Shows:
+Show some common pieces for modern applications like:
  - JWT authentication and Refresh Tokens.
- - .Net Core 2.1 BackgroundService class usage.
+ - .Net Core BackgroundService class usage.
  - Switching Storage based on configuration (InMemory, MongoDb)
 
 ### requirements
-Requires .NET Core 2.1.3 and VS2017 15.8 to run the project. 
-Requires Mailtrap.io free account to get sample emails.
+Requires .NET Core 2.2.3 and Visual Studio 15.9.9 to run the project. 
 If MongoDB will be used as storage - requires Mongo Server v4.
+Preconfigured to use Mailtrap.io free account to get emails in development mode.
 
 ### storage
 By default InMemory storage is used. It does not require any DB to be installed, but the data are not persisted.
 This is for easy start. To switch to persistent storage - specify MongoDb in appsettings.json.
 
-### starting from VS 2017
+### starting from Visual Studio
 Open solution in VS2017. 
 Create user secret file in VS. Sample data are placed in "secret.json.template" 
 If you do not have docker running, you will receive error message - just disregard it.
@@ -46,7 +46,11 @@ Run
 ```
 docker-compose build
 ```
-Open powershell and run  
+Modify "docker.run.ps1" script. For example if you  forward port 80 from docker to port 8091 on docker host and your client app is runing on http://localhost:8092 command line will look like
+```
+docker run -d -p 8091:80 --env Cors__AllowedOrigins=http://localhost:8092 olmelabs/battleshipapi
+```
+Open powershell and run modified script. This will run dettached process. 
 ```
 .\docker.run.ps1
 ```
@@ -74,9 +78,16 @@ Adjust server url in src\helpers\api.config.prod.js
 npm install
 npm run build
 ```
-Login credentials for demo user: **user@domain.com / password**
+User accounts are currently disabled, but login credentials for demo user: **user@domain.com / password**
 
-## Release notes for 0.3.3:
+## Release notes 
+## 0.3.4:
+ - implemented multiplayer game mode
+ - improved ships layout experience
+ - migrated server to latest .NET Core 2.2.3
+ - migrated client to React 16.8
+ - many other bugfixes and improvements
+## 0.3.3:
  - backend migrated to .netcore 2.2.1.
  - docker image updated
  - all other backend packages updated to latest versions.
