@@ -1,5 +1,6 @@
 # battleship-game
 "Battle Ship" game project to demo React, Redux, .NET Core, SignalR, WepApi in docker and also some approaches like JWT authentication, refresh tokens etc.
+The game is running on http://battle-ship.xyz
 
 ## server-app
 Server app uses Automapper, SignalR and Swagger, MongoDB (optional).
