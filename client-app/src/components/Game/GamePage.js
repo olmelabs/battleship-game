@@ -6,6 +6,7 @@ import GameBoard from "./GameBoard";
 import BoardStatus from "./BoardStatus";
 import GameMenu from "./GameMenu";
 import ShipFactory from "./ShipFactory";
+import MoveSemaphore from "./MoveSemaphore";
 import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import toastr from "toastr";
@@ -62,7 +63,12 @@ class GamePage extends React.Component {
     const enemyBoard =
       this.props.currentState === consts.GameState.STARTED ||
       this.props.currentState === consts.GameState.COMPLETED ? (
-        <GameBoard boardType={consts.BoardType.ENEMY_BOARD} />
+        <React.Fragment>
+          <GameBoard boardType={consts.BoardType.ENEMY_BOARD} />
+          {this.props.currentState === consts.GameState.STARTED && (
+            <MoveSemaphore />
+          )}
+        </React.Fragment>
       ) : (
         <ShipFactory />
       );
