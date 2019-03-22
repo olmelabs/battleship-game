@@ -1,3 +1,7 @@
+0.3.5
+ - added localization
+ - added move "traffic lights"
+
 0.3.4
  - implemented multiplayer game mode
  - improved ships layout experience

@@ -83,6 +83,9 @@ User accounts are currently disabled, but login credentials for demo user: **use
 
 ## Release notes 
 ## 0.3.4:
+ - added localization
+ - added move "traffic lights"
+## 0.3.4:
  - implemented multiplayer game mode
  - improved ships layout experience
  - migrated server to latest .NET Core 2.2.3

@@ -48,7 +48,6 @@ export class HeaderControl extends React.Component {
           <Link className="p-2 text-dark" to="/">
             {i18n.t("common.header.home")}
           </Link>
-          Lang:{" "}
           <a href="#" onClick={() => this.setLanguageCode("ru")}>
             ru
           </a>
