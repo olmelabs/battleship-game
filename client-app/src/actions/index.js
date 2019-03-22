@@ -5,3 +5,4 @@ export * from "./GameActionsMultiPlayer";
 export * from "./AjaxStatusActions";
 export * from "./SignalrActions";
 export * from "./AuthActions";
+export * from "./Localization";

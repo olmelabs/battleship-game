@@ -1,3 +1,4 @@
+/* eslint-disable react/jsx-no-bind */
 import React from "react";
 import { Link } from "react-router-dom";
 import { connect } from "react-redux";
@@ -10,10 +11,16 @@ export class HeaderControl extends React.Component {
     super(props, context);
 
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
+    this.setLanguageCode = this.setLanguageCode.bind(this);
   }
 
   handleLogoutClick(e) {
     this.props.actions.logout();
+  }
+
+  setLanguageCode(lang) {
+    this.props.actions.setLanguage(lang);
+    localStorage.setItem("localizationState.languageCode", lang);
   }
 
   render() {
@@ -39,6 +46,14 @@ export class HeaderControl extends React.Component {
           <Link className="p-2 text-dark" to="/">
             Home
           </Link>
+          Lang:{" "}
+          <a href="#" onClick={() => this.setLanguageCode("ru")}>
+            ru
+          </a>
+          {" | "}
+          <a href="#" onClick={() => this.setLanguageCode("en")}>
+            en
+          </a>
           {/* <Link className="p-2 text-dark" to="profile">
             Profile
           </Link>
