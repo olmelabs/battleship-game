@@ -1,6 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
+import i18n from "../../helpers/i18n";
 
 class BoardStatus extends React.Component {
   constructor(props, context) {
@@ -10,7 +11,7 @@ class BoardStatus extends React.Component {
   render() {
     let message = "";
     if (!this.props.isMyBoardValid) {
-      message = "Your board is not valid";
+      message = i18n.t("game.boardStatus.message");
     }
 
     return (
@@ -22,11 +23,13 @@ class BoardStatus extends React.Component {
 }
 
 BoardStatus.propTypes = {
-  isMyBoardValid: PropTypes.bool.isRequired
+  isMyBoardValid: PropTypes.bool.isRequired,
+  lng: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  isMyBoardValid: state.gameState.isMyBoardValid
+  isMyBoardValid: state.gameState.isMyBoardValid,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 export default connect(mapStateToProps)(BoardStatus);

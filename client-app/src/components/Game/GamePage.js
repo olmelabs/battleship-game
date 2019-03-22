@@ -6,10 +6,12 @@ import GameBoard from "./GameBoard";
 import BoardStatus from "./BoardStatus";
 import GameMenu from "./GameMenu";
 import ShipFactory from "./ShipFactory";
+import MoveSemaphore from "./MoveSemaphore";
 import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import toastr from "toastr";
 import { withRouter, Redirect, Prompt } from "react-router";
+import i18n from "../../helpers/i18n";
 
 class GamePage extends React.Component {
   constructor(props, context) {
@@ -27,7 +29,7 @@ class GamePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentState == consts.GameState.COMPLETED) {
-      toastr.success("Game Over");
+      toastr.success(i18n.t("game.gamePage.gameOver"));
     }
   }
 
@@ -62,7 +64,12 @@ class GamePage extends React.Component {
     const enemyBoard =
       this.props.currentState === consts.GameState.STARTED ||
       this.props.currentState === consts.GameState.COMPLETED ? (
-        <GameBoard boardType={consts.BoardType.ENEMY_BOARD} />
+        <React.Fragment>
+          <GameBoard boardType={consts.BoardType.ENEMY_BOARD} />
+          {this.props.currentState === consts.GameState.STARTED && (
+            <MoveSemaphore />
+          )}
+        </React.Fragment>
       ) : (
         <ShipFactory />
       );
@@ -77,11 +84,9 @@ class GamePage extends React.Component {
       message = (
         <div className="row">
           <div className="col alert alert-primary game-top-message">
-            You are hosting the game. Send this access code to your friend:{" "}
+            {i18n.t("game.gamePage.message.part1")}:{" "}
             <b>{this.props.gameAccessCode}</b>
-            <p>
-              You can setup your fleet and start game when you both connected.{" "}
-            </p>
+            <p>{i18n.t("game.gamePage.message.part2")} </p>
           </div>
         </div>
       );
@@ -92,7 +97,7 @@ class GamePage extends React.Component {
       message = (
         <div className="row">
           <div className="col alert alert-primary game-top-message">
-            Waiting for host to start new round....
+            {i18n.t("game.gamePage.message.waiting")}
           </div>
         </div>
       );
@@ -101,7 +106,7 @@ class GamePage extends React.Component {
       <React.Fragment>
         <Prompt
           when={this.props.currentState == consts.GameState.STARTED}
-          message="If you navigate from this page your game will end. Are you sure you want to end this game?"
+          message={i18n.t("game.gamePage.navigateWarning")}
         />
         {message}
         <div className="row justify-content-center">
@@ -128,6 +133,7 @@ GamePage.propTypes = {
   connectionId: PropTypes.string,
   authenticated: PropTypes.bool.isRequired,
   isFriendConnected: PropTypes.bool.isRequired,
+  lng: PropTypes.string,
   actions: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 };
@@ -138,7 +144,8 @@ const mapStateToProps = (state, ownProps) => ({
   gameAccessCode: state.gameState.multiplayer.gameAccessCode,
   connectionId: state.signalrState.connectionId,
   authenticated: state.authState.authenticated,
-  isFriendConnected: state.gameState.multiplayer.isFriendConnected
+  isFriendConnected: state.gameState.multiplayer.isFriendConnected,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 function mapDispatchToProps(dispatch) {

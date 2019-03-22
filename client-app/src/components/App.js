@@ -19,6 +19,7 @@ import FooterControl from "./Common/FooterControl";
 import _NotFound from "./Common/_NotFound";
 import { API_MODE } from "./../api/api";
 import * as consts from "./../helpers/const";
+import i18n from "../helpers/i18n";
 
 import toastr from "toastr";
 import * as actions from "../actions";
@@ -33,7 +34,7 @@ class App extends React.Component {
   componentDidMount() {
     if (API_MODE === consts.ApiMode.WEB) {
       SignalRService.registerConnection(connectionId => {
-        toastr.info("Connected to Server.");
+        toastr.info(i18n.t("app.connected"));
         this.props.actions.signalrConnected(connectionId);
       });
 
@@ -41,8 +42,6 @@ class App extends React.Component {
         if (this.props.currentState != consts.GameState.STARTED) {
           return;
         }
-
-        //toastr.info("" + data.cellId); //"0" digit is not displayed, so cast to string ;)
 
         if (
           this.props.gameType === consts.GameType.HOST ||
@@ -55,35 +54,26 @@ class App extends React.Component {
       });
 
       SignalRService.registerFriendConnected(_ => {
-        toastr.info("Your friend joined the game.");
+        toastr.info(i18n.t("app.friendJoined"));
         this.props.actions.joinGameSuccess();
       });
 
       SignalRService.registerFriendStartedGame(_ => {
-        toastr.info(
-          "Your friend started the game. The game will begin when both of you press start."
-        );
+        toastr.info(i18n.t("app.friendStartedGame"));
         this.props.actions.joinGameSuccess();
       });
 
       SignalRService.registerYouStartedGame(_ => {
-        toastr.info(
-          "You started the game. The game will begin when both of you press start. Let's wait for your friend."
-        );
-        //this.props.actions.joinGameSuccess();
+        toastr.info(i18n.t("app.youStartedGame"));
       });
 
       SignalRService.registerGameStartedYourMove(data => {
-        toastr.success(
-          "Your game is now started. You make the first move. Fire!"
-        );
+        toastr.info(i18n.t("app.gameStartedYourMove"));
         this.props.actions.startGameMultiplayerSrCallback(data);
       });
 
       SignalRService.registerGameStartedFriendsMove(data => {
-        toastr.success(
-          "Your game is now started. Your are now waiting for first move from your friend."
-        );
+        toastr.info(i18n.t("app.gameStartedFriendMove"));
         this.props.actions.startGameMultiplayerSrCallback(data);
       });
 
@@ -91,7 +81,7 @@ class App extends React.Component {
         this.props.actions.fireCannonMultiplayerSrCallback(data);
       });
       SignalRService.registerRestartGame(_ => {
-        toastr.info("Prepare for new battle! Press Start once ready");
+        toastr.info(i18n.t("app.gameRestart"));
         this.props.actions.restartGameMultiplayer();
       });
     }

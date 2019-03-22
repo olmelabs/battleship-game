@@ -1,0 +1,23 @@
+.semaphore-container {
+  /* text-align: center; */
+  padding: 10px 0 10px 140px;
+}
+
+.circle-base {
+  margin-left: 5px;
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  border: 1px solid;
+}
+
+.semaphore-red {
+  background: #cc3232;
+}
+.semaphore-yellow {
+  background: #e7b416;
+}
+.semaphore-green {
+  background: #2dc937;
+}

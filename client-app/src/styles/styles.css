@@ -119,6 +119,7 @@ ul {
 
 .round-button {
   border: none;
+  background-color: lightgray;
   color: white;
   padding: 20px;
   text-align: center;

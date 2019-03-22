@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions";
+import i18n from "../../helpers/i18n";
 
 class ShipDefinition extends React.Component {
   constructor(props, context) {
@@ -45,7 +46,7 @@ class ShipDefinition extends React.Component {
       <button
         className={className}
         disabled={!this.props.active}
-        title="Select Ship"
+        title={i18n.t("game.shipDefinition.selectShip")}
         onClick={this.onSelectShipClick}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}
@@ -61,10 +62,13 @@ ShipDefinition.propTypes = {
   active: PropTypes.bool.isRequired,
   currentShip: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
+  lng: PropTypes.string,
   actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+  lng: state.localizationState.languageCode //required to switch anf on the fly
+});
 
 function mapDispatchToProps(dispatch) {
   return {
