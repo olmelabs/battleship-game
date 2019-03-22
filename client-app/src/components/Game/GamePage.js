@@ -11,6 +11,7 @@ import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import toastr from "toastr";
 import { withRouter, Redirect, Prompt } from "react-router";
+import i18n from "../../helpers/i18n";
 
 class GamePage extends React.Component {
   constructor(props, context) {
@@ -28,7 +29,7 @@ class GamePage extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.currentState == consts.GameState.COMPLETED) {
-      toastr.success("Game Over");
+      toastr.success(i18n.t("game.gamePage.gameOver"));
     }
   }
 
@@ -83,11 +84,9 @@ class GamePage extends React.Component {
       message = (
         <div className="row">
           <div className="col alert alert-primary game-top-message">
-            You are hosting the game. Send this access code to your friend:{" "}
+            {i18n.t("game.gamePage.message.part1")}:{" "}
             <b>{this.props.gameAccessCode}</b>
-            <p>
-              You can setup your fleet and start game when you both connected.{" "}
-            </p>
+            <p>{i18n.t("game.gamePage.message.part2")} </p>
           </div>
         </div>
       );
@@ -98,7 +97,7 @@ class GamePage extends React.Component {
       message = (
         <div className="row">
           <div className="col alert alert-primary game-top-message">
-            Waiting for host to start new round....
+            {i18n.t("game.gamePage.message.waiting")}
           </div>
         </div>
       );
@@ -107,7 +106,7 @@ class GamePage extends React.Component {
       <React.Fragment>
         <Prompt
           when={this.props.currentState == consts.GameState.STARTED}
-          message="If you navigate from this page your game will end. Are you sure you want to end this game?"
+          message={i18n.t("game.gamePage.navigateWarning")}
         />
         {message}
         <div className="row justify-content-center">

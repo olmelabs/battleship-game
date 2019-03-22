@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import GameLink from "./GameLink";
 import * as consts from "../../helpers/const";
+import i18n from "../../helpers/i18n";
 
 class GameMenu extends React.Component {
   render() {
@@ -30,11 +31,11 @@ class GameMenu extends React.Component {
     return (
       <div className="game-menu">
         <GameLink newAction={consts.GameState.STARTED} isActive={isStartActive}>
-          Start
+          {i18n.t("game.gameMenu.start")}
         </GameLink>
         {isRestartVisible && (
           <GameLink newAction={consts.RESTART_GAME} isActive={isRestartActive}>
-            Play again
+            {i18n.t("game.gameMenu.playAgain")}
           </GameLink>
         )}
         {isStopVisible && (
@@ -42,7 +43,7 @@ class GameMenu extends React.Component {
             newAction={consts.GameState.COMPLETED}
             isActive={isStopActive}
           >
-            Finish
+            {i18n.t("game.gameMenu.finish")}
           </GameLink>
         )}
         {isNewVisible && (
@@ -50,7 +51,7 @@ class GameMenu extends React.Component {
             newAction={consts.GameState.NOT_STARTED}
             isActive={isNewActive}
           >
-            New Game
+            {i18n.t("game.gameMenu.newGame")}
           </GameLink>
         )}
       </div>

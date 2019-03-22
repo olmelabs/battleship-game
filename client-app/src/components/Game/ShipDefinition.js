@@ -3,6 +3,7 @@ import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions";
+import i18n from "../../helpers/i18n";
 
 class ShipDefinition extends React.Component {
   constructor(props, context) {
@@ -45,7 +46,7 @@ class ShipDefinition extends React.Component {
       <button
         className={className}
         disabled={!this.props.active}
-        title="Select Ship"
+        title={i18n.t("game.shipDefinition.selectShip")}
         onClick={this.onSelectShipClick}
         onMouseEnter={this.onMouseEnter}
         onMouseLeave={this.onMouseLeave}

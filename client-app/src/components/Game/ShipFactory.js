@@ -5,6 +5,7 @@ import { bindActionCreators } from "redux";
 import * as actions from "../../actions";
 import * as consts from "../../helpers/const";
 import ShipDefinition from "./ShipDefinition";
+import i18n from "../../helpers/i18n";
 
 class ShipFactory extends React.Component {
   constructor(props, context) {
@@ -52,10 +53,7 @@ class ShipFactory extends React.Component {
     return (
       <React.Fragment>
         <div className="centered text-center">
-          <p>
-            Setup your fleet. Click on round buttons to setup ships. Click on
-            cell on the board to place ship.
-          </p>
+          <p>{i18n.t("game.shipFactory.setupFleet")}</p>
           {this.props.myShips.map((ship, index) => (
             <ShipDefinition
               key={index}
@@ -70,7 +68,7 @@ class ShipFactory extends React.Component {
           <div className="centered text-center">
             <button
               className="round-button round-button-80"
-              title="Rotate Ship"
+              title={i18n.t("game.shipFactory.rotate")}
               onClick={this.onRotateShipClick}
             >
               <i className="fa fa-redo fa-2x" />
@@ -78,14 +76,14 @@ class ShipFactory extends React.Component {
           </div>
         </div>
         <div className="centered text-center">
-          <p>Or click the button below to quickly generate board.</p>
+          <p>{i18n.t("game.shipFactory.generateBoard")}</p>
           <button
             disabled={!isGenerateActive}
             className="control-button btn btn-primary"
-            title="Generate"
+            title={i18n.t("game.shipFactory.generate")}
             onClick={this.onGenerateBoardClick}
           >
-            Generate
+            {i18n.t("game.shipFactory.generate")}
           </button>
         </div>
       </React.Fragment>

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
+import i18n from "../../helpers/i18n";
 
 import "./MoveSemaphore.css";
 
@@ -21,9 +22,15 @@ function MoveSemaphore(props) {
 
   return (
     <div className="semaphore-container">
-      <div className={redClassName} title="Not your move" />
-      <div className={yellowClassName} title="Move in progress" />
-      <div className={greenClassName} title="Your move" />
+      <div className={redClassName} title={i18n.t("game.moveSemaphore.red")} />
+      <div
+        className={yellowClassName}
+        title={i18n.t("game.moveSemaphore.yellow")}
+      />
+      <div
+        className={greenClassName}
+        title={i18n.t("game.moveSemaphore.green")}
+      />
     </div>
   );
 }

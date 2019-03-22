@@ -2,7 +2,9 @@ import React from "react";
 import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { BarLoader } from "react-spinners";
+import i18n from "../../helpers/i18n";
 
+//TODO: Fix localization
 class FooterControl extends React.Component {
   constructor(props, context) {
     super(props, context);
@@ -15,7 +17,7 @@ class FooterControl extends React.Component {
         <div className="container text-center">
           &copy; olmelabs 2018 - {year}.{" "}
           <a href="//github.com/olmelabs/battleship-game" target="_blank">
-            Project dev site
+            {i18n.t("common.footer.devsite")}
           </a>
         </div>
         <div className="container center">

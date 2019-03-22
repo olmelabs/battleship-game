@@ -1,0 +1,76 @@
+{
+  "app": {
+    "connected": "Connected to Server.",
+    "friendJoined": "Your friend joined the game.",
+    "friendStartedGame": "Your friend started the game. The game will begin when both of you press start.",
+    "youStartedGame": "You started the game. The game will begin when both of you press start. Let's wait for your friend.",
+    "gameStartedYourMove": "Your game is now started. You make the first move. Fire!",
+    "gameStartedFriendMove": "Your game is now started. Your are now waiting for first move from your friend.",
+    "gameRestart": "Prepare for new battle! Press Start once ready"
+  },
+  "homepage": {
+    "welcome": "Welcome to Battleship game",
+    "button1": "Singleplayer Game",
+    "button2": "Host Game",
+    "button3": "Join Game",
+    "description": {
+      "part1": "Battleship is a guessing game. You can find out more in this ",
+      "link": {
+        "href": "https://en.wikipedia.org/wiki/Battleship_(game)",
+        "text": "wikipedia article"
+      },
+      "part2": "On this site you can have a quick game with computer or enjoy session with your friend. This game is intentionally kept simple and close to pen-and-paper version so popular in my childhood."
+    }
+  },
+  "common": {
+    "header": {
+      "home": "Home"
+    },
+    "footer": {
+      "devsite": "Project dev site"
+    },
+    "notFound": {
+      "message": "Nothing is here."
+    }
+  },
+  "game": {
+    "shipFactory": {
+      "setupFleet": "Setup your fleet. Click on round buttons to setup ships. Click on cell on the board to place ship.",
+      "generateBoard": "Or click the button below to quickly generate board.",
+      "generate": "Generate",
+      "rotate": "Rotate Ship"
+    },
+    "shipDefinition": {
+      "selectShip": "Select Ship"
+    },
+    "moveSemaphore": {
+      "green": "Your move",
+      "yellow": "Move in progress",
+      "red": "Not your move"
+    },
+    "joinGamePage": {
+      "message": "You are joining the game. You freind who is hosting the game you are about to join is supposed to send you game access code. Please input it in the textbox below.",
+      "accessCode": "Access Code",
+      "errorJoining": "Error Joining Game. Check your code",
+      "join": "Join"
+    },
+    "gamePage": {
+      "gameOver": "Game Over",
+      "message": {
+        "part1": "You are hosting the game. Send this access code to your friend",
+        "part2": "You can setup your fleet and start game when you both connected.",
+        "waiting": "Waiting for host to start new round...."
+      },
+      "navigateWarning": "If you navigate from this page your game will end. Are you sure you want to end this game?"
+    },
+    "gameMenu": {
+      "start": "Start",
+      "finish": "Finish",
+      "playAgain": "Play Again",
+      "newGame": "New Game"
+    },
+    "boardStatus": {
+      "message": "Your board is not valid"
+    }
+  }
+}

@@ -5,6 +5,7 @@ import { connect } from "react-redux";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions";
 import { Redirect } from "react-router";
+import i18n from "../../helpers/i18n";
 
 //this is an example of component immplementation using hooks instead of React.Component
 function JoinGamePage(props) {
@@ -22,9 +23,7 @@ function JoinGamePage(props) {
     <React.Fragment>
       <div className="row">
         <div className="col alert alert-primary game-top-message">
-          You are joining the game. You freind who is hosting the game you are
-          about to join is supposed to send you game access code. Please input
-          it in the textbox below.
+          {i18n.t("game.joinGamePage.message")}
         </div>
       </div>
       <div className="row justify-content-center">
@@ -35,14 +34,14 @@ function JoinGamePage(props) {
                 type="text"
                 className="form-control"
                 id="txtCode"
-                placeholder="Access Code"
+                placeholder={i18n.t("game.joinGamePage.accessCode")}
                 onChange={e => setCode(e.target.value)}
               />
             </div>
             {props.joinGameError}
             {props.joinGameError && (
               <div className="alert alert-warning" role="alert">
-                Error Joining Game. Check your code
+                {i18n.t("game.joinGamePage.errorJoining")}
               </div>
             )}
             <button
@@ -50,7 +49,7 @@ function JoinGamePage(props) {
               type="submit"
               disabled={code === ""}
             >
-              Join
+              {i18n.t("game.joinGamePage.join")}
             </button>
           </form>
         </div>

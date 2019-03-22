@@ -5,11 +5,15 @@ import { connect } from "react-redux";
 import PropTypes from "prop-types";
 import { bindActionCreators } from "redux";
 import * as actions from "../../actions";
+import i18n from "../../helpers/i18n";
 
 export class HeaderControl extends React.Component {
   constructor(props, context) {
     super(props, context);
 
+    this.state = {
+      lng: i18n.languages[0]
+    };
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.setLanguageCode = this.setLanguageCode.bind(this);
   }
@@ -19,7 +23,8 @@ export class HeaderControl extends React.Component {
   }
 
   setLanguageCode(lang) {
-    this.props.actions.setLanguage(lang);
+    i18n.changeLanguage(lang);
+    this.setState({ lng: lang });
     localStorage.setItem("localizationState.languageCode", lang);
   }
 
@@ -39,12 +44,14 @@ export class HeaderControl extends React.Component {
       </Link>
     );
 
+    const { lng } = this.state;
+
     return (
       <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
         <h5 className="my-0 mr-md-auto font-weight-normal" />
         <nav className="my-2 my-md-0 mr-md-3">
           <Link className="p-2 text-dark" to="/">
-            Home
+            {i18n.t("common.header.home", { lng })}
           </Link>
           Lang:{" "}
           <a href="#" onClick={() => this.setLanguageCode("ru")}>

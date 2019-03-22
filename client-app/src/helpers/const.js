@@ -64,5 +64,3 @@ export const ApiMode = {
   WEB: "WEB",
   MOCK: "MOCK"
 };
-
-export const SET_LANGUAGE = "SET_LANGUAGE";
