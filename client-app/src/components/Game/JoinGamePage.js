@@ -61,12 +61,14 @@ function JoinGamePage(props) {
 JoinGamePage.propTypes = {
   joinGameError: PropTypes.bool.isRequired,
   gameAccessCode: PropTypes.string,
+  lng: PropTypes.string,
   actions: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
   joinGameError: state.gameState.multiplayer.joinGameError,
-  gameAccessCode: state.gameState.multiplayer.gameAccessCode
+  gameAccessCode: state.gameState.multiplayer.gameAccessCode,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 function mapDispatchToProps(dispatch) {

@@ -37,12 +37,14 @@ function MoveSemaphore(props) {
 
 MoveSemaphore.propTypes = {
   myBoardLocked: PropTypes.bool.isRequired,
-  isServerTurn: PropTypes.bool.isRequired
+  isServerTurn: PropTypes.bool.isRequired,
+  lng: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => ({
   myBoardLocked: state.gameState.myBoardLocked,
-  isServerTurn: state.gameState.isServerTurn
+  isServerTurn: state.gameState.isServerTurn,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 export default connect(mapStateToProps)(MoveSemaphore);

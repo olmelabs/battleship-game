@@ -62,10 +62,13 @@ ShipDefinition.propTypes = {
   active: PropTypes.bool.isRequired,
   currentShip: PropTypes.number.isRequired,
   index: PropTypes.number.isRequired,
+  lng: PropTypes.string,
   actions: PropTypes.object.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({});
+const mapStateToProps = (state, ownProps) => ({
+  lng: state.localizationState.languageCode //required to switch anf on the fly
+});
 
 function mapDispatchToProps(dispatch) {
   return {

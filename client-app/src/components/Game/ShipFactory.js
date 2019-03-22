@@ -98,6 +98,7 @@ ShipFactory.propTypes = {
   myShips: PropTypes.array.isRequired,
   myShipsCurrent: PropTypes.number.isRequired,
   currentState: PropTypes.string.isRequired,
+  lng: PropTypes.string,
   actions: PropTypes.object.isRequired
 };
 
@@ -107,7 +108,8 @@ const mapStateToProps = (state, ownProps) => ({
   startGameSuccess: state.gameState.multiplayer.startGameSuccess,
   myShips: state.gameState.myShips,
   myShipsCurrent: state.gameState.myShipsCurrent,
-  currentState: state.gameState.currentState
+  currentState: state.gameState.currentState,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 function mapDispatchToProps(dispatch) {

@@ -23,11 +23,13 @@ class BoardStatus extends React.Component {
 }
 
 BoardStatus.propTypes = {
-  isMyBoardValid: PropTypes.bool.isRequired
+  isMyBoardValid: PropTypes.bool.isRequired,
+  lng: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  isMyBoardValid: state.gameState.isMyBoardValid
+  isMyBoardValid: state.gameState.isMyBoardValid,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 export default connect(mapStateToProps)(BoardStatus);

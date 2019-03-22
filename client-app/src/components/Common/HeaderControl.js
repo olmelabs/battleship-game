@@ -11,9 +11,6 @@ export class HeaderControl extends React.Component {
   constructor(props, context) {
     super(props, context);
 
-    this.state = {
-      lng: i18n.languages[0]
-    };
     this.handleLogoutClick = this.handleLogoutClick.bind(this);
     this.setLanguageCode = this.setLanguageCode.bind(this);
   }
@@ -24,7 +21,7 @@ export class HeaderControl extends React.Component {
 
   setLanguageCode(lang) {
     i18n.changeLanguage(lang);
-    this.setState({ lng: lang });
+    this.props.actions.setLanguage(lang);
     localStorage.setItem("localizationState.languageCode", lang);
   }
 
@@ -44,14 +41,12 @@ export class HeaderControl extends React.Component {
       </Link>
     );
 
-    const { lng } = this.state;
-
     return (
       <div className="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom box-shadow">
         <h5 className="my-0 mr-md-auto font-weight-normal" />
         <nav className="my-2 my-md-0 mr-md-3">
           <Link className="p-2 text-dark" to="/">
-            {i18n.t("common.header.home", { lng })}
+            {i18n.t("common.header.home")}
           </Link>
           Lang:{" "}
           <a href="#" onClick={() => this.setLanguageCode("ru")}>
@@ -72,12 +67,15 @@ export class HeaderControl extends React.Component {
 }
 
 HeaderControl.propTypes = {
+  lng: PropTypes.string,
+  onLanguageChanged: PropTypes.func,
   authenticated: PropTypes.bool.isRequired,
   actions: PropTypes.object.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  authenticated: state.authState.authenticated
+  authenticated: state.authState.authenticated,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 function mapDispatchToProps(dispatch) {

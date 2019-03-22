@@ -63,14 +63,16 @@ GameMenu.propTypes = {
   gameType: PropTypes.string.isRequired,
   isFriendConnected: PropTypes.bool.isRequired,
   startGameSuccess: PropTypes.bool.isRequired,
-  currentState: PropTypes.string.isRequired
+  currentState: PropTypes.string.isRequired,
+  lng: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => ({
   gameType: state.gameState.gameType,
   isFriendConnected: state.gameState.multiplayer.isFriendConnected,
   startGameSuccess: state.gameState.multiplayer.startGameSuccess,
-  currentState: state.gameState.currentState
+  currentState: state.gameState.currentState,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 export default connect(mapStateToProps)(GameMenu);

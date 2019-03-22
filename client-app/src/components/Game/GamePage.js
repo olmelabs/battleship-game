@@ -133,6 +133,7 @@ GamePage.propTypes = {
   connectionId: PropTypes.string,
   authenticated: PropTypes.bool.isRequired,
   isFriendConnected: PropTypes.bool.isRequired,
+  lng: PropTypes.string,
   actions: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired
 };
@@ -143,7 +144,8 @@ const mapStateToProps = (state, ownProps) => ({
   gameAccessCode: state.gameState.multiplayer.gameAccessCode,
   connectionId: state.signalrState.connectionId,
   authenticated: state.authState.authenticated,
-  isFriendConnected: state.gameState.multiplayer.isFriendConnected
+  isFriendConnected: state.gameState.multiplayer.isFriendConnected,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 function mapDispatchToProps(dispatch) {

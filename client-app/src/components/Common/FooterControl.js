@@ -31,11 +31,13 @@ class FooterControl extends React.Component {
 }
 
 FooterControl.propTypes = {
-  isLoading: PropTypes.bool.isRequired
+  isLoading: PropTypes.bool.isRequired,
+  lng: PropTypes.string
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  isLoading: state.ajaxState.ajaxCallIsnProgress > 0
+  isLoading: state.ajaxState.ajaxCallIsnProgress > 0,
+  lng: state.localizationState.languageCode //required to switch anf on the fly
 });
 
 export default connect(mapStateToProps)(FooterControl);
