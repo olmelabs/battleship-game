@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using olmelabs.battleship.api.BackgroundServices;
 using olmelabs.battleship.api.Logic;
 using olmelabs.battleship.api.Middleware;
@@ -15,10 +16,7 @@ using olmelabs.battleship.api.Repositories;
 using olmelabs.battleship.api.Services.Implementations;
 using olmelabs.battleship.api.Services.Interfaces;
 using olmelabs.battleship.api.SignalRHubs;
-using Swashbuckle.AspNetCore.Swagger;
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -47,7 +45,7 @@ namespace olmelabs.battleship.api
                 loggingBuilder.AddDebug();
             });
 
-            services.AddAutoMapper();
+            services.AddAutoMapper(GetType().Assembly);
 
             /*
                 After updating to signalr 1.1.0 withCredentials heade is hardocded to true in js. 
@@ -120,25 +118,31 @@ namespace olmelabs.battleship.api
 
             services.AddSwaggerGen(options =>
             {
-                options.SwaggerDoc("v1", new Info { Title = "Omelabs Battle Ship Game API V1", Version = "v1" });
+                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Omelabs Battle Ship Game API V1", Version = "v1" });
 
-                options.AddSecurityDefinition("Bearer", new ApiKeyScheme
-                {
-                    Description = "JWT Authorization header. Example: \"Authorization: Bearer {token}\"",
-                    Name = "Authorization",
-                    In = "header",
-                    Type = "apiKey"
-                });
+                //options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                //{
+                //    Description = "JWT Authorization header. Example: \"Authorization: Bearer {token}\"",
+                //    In = ParameterLocation.Header,
+                //    Name = "Authorization",
+                //    Type = SecuritySchemeType.ApiKey,
+                //});
 
-                options.AddSecurityRequirement(new Dictionary<string, IEnumerable<string>> {
-                    { "Bearer", Enumerable.Empty<string>() },
-                });
+                //options.AddSecurityRequirement(new OpenApiSecurityRequirement
+                //{
+                //    {
+                //        new OpenApiSecurityScheme
+                //        {
+                //            Reference = new OpenApiReference { Type = ReferenceType.SecurityScheme, Id = "Bearer" }
+                //        },
+                //        new string[]{}
+                //    }
+                //});
             });
-
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, Microsoft.AspNetCore.Hosting.IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
             {
@@ -156,11 +160,12 @@ namespace olmelabs.battleship.api
 
             app.UseAuthentication();
 
-            app.UseMvc();
+            app.UseRouting();
 
-            app.UseSignalR(routes =>
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapHub<GameHub>("/game-hub");
+                endpoints.MapControllers();
+                endpoints.MapHub<GameHub>("/game-hub");
             });
 
             app.UseSwagger();
