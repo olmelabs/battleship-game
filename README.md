@@ -82,7 +82,7 @@ npm run build
 User accounts are currently disabled, but login credentials for demo user: **user@domain.com / password**
 
 ## Release notes 
-## 0.3.4:
+## 0.3.5:
  - added localization
  - added move "traffic lights"
 ## 0.3.4:
