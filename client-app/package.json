@@ -57,7 +57,7 @@
     "expect": "^24.1.0",
     "express": "^4.16.3",
     "file-loader": "^0.8.5",
-    "jsdom": "^12.1.0",
+    "jsdom": "^16.5.0",
     "mini-css-extract-plugin": "^0.4.2",
     "mocha": "^5.2.0",
     "npm-run-all": "^4.1.3",
