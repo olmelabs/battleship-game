@@ -55,7 +55,7 @@
     "eslint-plugin-react": "^7.11.1",
     "eslint-watch": "^3.1.5",
     "expect": "^24.1.0",
-    "express": "^4.16.3",
+    "express": "^4.17.3",
     "file-loader": "^0.8.5",
     "jsdom": "^12.1.0",
     "mini-css-extract-plugin": "^0.4.2",
